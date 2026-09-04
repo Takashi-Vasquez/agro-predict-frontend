@@ -1,0 +1,33 @@
+/node_modules
+/dist
+/.angular
+/coverage
+/.pnpm-store
+/.vscode
+/.idea
+/.fleet
+
+# Resultados temporales de pruebas y herramientas
+/test-results
+/playwright-report
+/.cache
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# Configuración local y secretos
+.env
+.env.*
+!.env.example
+
+# Manuales y documentación que se administran fuera de Git
+/docs/
+/tools/manual_build/
+*.docx
+*.pdf
+*.pptx
+~$*
+
+# Archivos del sistema operativo
+.DS_Store
+Thumbs.db

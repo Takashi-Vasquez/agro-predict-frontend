@@ -1,0 +1,621 @@
+:host {
+  display: block;
+}
+.app-shell {
+  --sidebar-size: 248px;
+}
+.sidebar {
+  position: fixed;
+  inset: 0 auto 0 0;
+  width: var(--sidebar-size);
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  padding: 27px 16px 0;
+  z-index: 40;
+  transition: width 0.22s;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 13px 29px;
+  white-space: nowrap;
+}
+.brand-mark {
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  background: #276247;
+  border-radius: 9px;
+  color: #dbefa8;
+  flex-shrink: 0;
+}
+.brand-mark agro-icon {
+  width: 23px;
+  height: 23px;
+}
+.brand-name {
+  font-size: 1.3125rem;
+  font-weight: 650;
+  letter-spacing: -1px;
+}
+.brand-dot {
+  font-size: 0.75rem;
+  vertical-align: top;
+  display: inline-block;
+  margin: 4px 0 0 2px;
+}
+.workspace-switch {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px;
+  text-align: left;
+  margin-bottom: 30px;
+  color: var(--text);
+}
+.workspace-icon {
+  display: grid;
+  place-items: center;
+  width: 29px;
+  height: 29px;
+  flex-shrink: 0;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  font-size: 0.75rem;
+  color: var(--primary);
+  background: var(--green-soft);
+}
+.workspace-text {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  flex: 1;
+  white-space: nowrap;
+}
+.workspace-text strong {
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+.workspace-text small {
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+.workspace-switch > agro-icon {
+  width: 13px;
+  height: 13px;
+  color: var(--muted);
+}
+.nav-label {
+  font-size: 0.75rem;
+  letter-spacing: 1.2px;
+  color: var(--muted);
+  font-weight: 550;
+  margin: 0 12px 12px;
+}
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  position: relative;
+  min-height: 41px;
+  border-radius: 7px;
+  margin: 4px 0;
+  padding: 10px 12px;
+  color: var(--muted);
+  font-size: 0.75rem;
+  white-space: nowrap;
+  transition:
+    background 0.18s,
+    color 0.18s;
+}
+.nav-item:hover {
+  background: var(--surface-alt);
+  color: var(--text);
+}
+.nav-item > agro-icon {
+  width: 17px;
+  height: 17px;
+}
+.nav-item.active {
+  color: var(--primary);
+  background: var(--green-soft);
+  font-weight: 600;
+}
+.nav-item.active::before {
+  content: '';
+  position: absolute;
+  left: -16px;
+  width: 3px;
+  height: 23px;
+  border-radius: 0 3px 3px 0;
+  background: var(--primary);
+}
+.ai-badge {
+  font-size: 0.75rem;
+  margin-left: auto;
+  background: var(--green-soft);
+  color: var(--primary);
+  padding: 2px 5px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+}
+.monitoring-label {
+  margin-top: 29px;
+}
+.climate-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #cf9d46;
+  margin-left: auto;
+  margin-right: 7px;
+}
+.sidebar-bottom {
+  margin-top: auto;
+  padding-top: 25px;
+}
+.field-note {
+  padding: 17px 14px;
+  background: var(--green-soft);
+  border-radius: 9px;
+  margin-bottom: 22px;
+  position: relative;
+  overflow: hidden;
+}
+.field-note-icon {
+  color: var(--primary);
+  display: block;
+  margin-bottom: 10px;
+}
+.field-note-icon agro-icon {
+  width: 19px;
+  height: 19px;
+}
+.field-note strong {
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+.field-note p {
+  font-size: 0.75rem;
+  line-height: 1.7;
+  margin: 6px 0 13px;
+}
+.field-note a {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-size: 0.75rem;
+  font-weight: 550;
+  color: var(--primary);
+}
+.field-note a agro-icon {
+  width: 13px;
+  height: 13px;
+}
+.account-nav {
+  padding-bottom: 13px;
+}
+.sidebar-user {
+  border-top: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 18px 0;
+  min-height: 79px;
+}
+.user-link {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  min-width: 0;
+  flex: 1;
+}
+.user-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+.user-info strong {
+  font-size: 0.75rem;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 120px;
+}
+.user-info small {
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+.sidebar-user > .icon-button {
+  width: 29px;
+  flex-shrink: 0;
+}
+.sidebar-user > .icon-button agro-icon {
+  width: 15px;
+  height: 15px;
+}
+.workspace-main {
+  margin-left: var(--sidebar-size);
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+  transition: margin-left 0.22s;
+}
+.topbar {
+  height: 76px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 32px;
+  border-bottom: 1px solid var(--border);
+  background: color-mix(in srgb, var(--surface) 90%, transparent);
+  backdrop-filter: blur(16px);
+  gap: 24px;
+  position: sticky;
+  top: 0;
+  z-index: 30;
+}
+.topbar-left,
+.topbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+.topbar-left {
+  min-width: 0;
+  gap: 12px;
+}
+.topbar-actions {
+  gap: 9px;
+}
+.header-divider {
+  height: 20px;
+  width: 1px;
+  background: var(--border);
+  flex-shrink: 0;
+}
+.breadcrumbs {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  font-size: 0.75rem;
+  white-space: nowrap;
+}
+.breadcrumbs > span {
+  color: var(--muted);
+}
+.breadcrumbs agro-icon {
+  width: 10px;
+  height: 10px;
+  color: var(--muted);
+}
+.breadcrumbs strong {
+  font-weight: 500;
+}
+.global-search {
+  display: flex;
+  gap: 9px;
+  align-items: center;
+  position: relative;
+  margin-right: 12px;
+}
+.global-search > agro-icon {
+  width: 16px;
+  height: 16px;
+  color: var(--muted);
+}
+.global-search input {
+  width: 171px;
+  background: transparent;
+  border: none;
+  color: var(--text);
+  outline: none;
+  font-size: 0.75rem;
+  padding: 10px 0;
+}
+.global-search input::placeholder {
+  color: var(--muted);
+}
+.search-results {
+  position: absolute;
+  top: 42px;
+  right: 0;
+  width: 300px;
+  background: var(--surface);
+  box-shadow: var(--shadow);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 6px;
+  z-index: 80;
+}
+.search-results a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 13px;
+  font-size: 0.75rem;
+  border-radius: 5px;
+}
+.search-results a:hover {
+  background: var(--green-soft);
+}
+.search-results a agro-icon:last-child {
+  margin-left: auto;
+}
+.search-results p {
+  padding: 16px;
+}
+.notification-button {
+  position: relative;
+}
+.notification-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  position: absolute;
+  right: 10px;
+  top: 8px;
+  background: #d5a75f;
+  border: 1px solid var(--surface);
+}
+.avatar-button {
+  border: 0;
+  width: 31px;
+  height: 31px;
+  margin-left: 5px;
+  font-size: 0.75rem;
+}
+main {
+  flex: 1;
+  padding: 31px 33px 24px;
+  min-width: 0;
+  outline: none;
+  max-width: 1800px;
+  width: 100%;
+  margin: 0 auto;
+  animation: enter 0.35s ease;
+}
+.app-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  color: var(--muted);
+  font-size: 0.75rem;
+  margin: 0 33px;
+  padding: 19px 0;
+  border-top: 1px solid var(--border);
+}
+.app-footer > span:first-child {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.footer-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #86a889;
+}
+.footer-divider {
+  margin: 0 8px;
+}
+.popover-title {
+  padding: 13px 16px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+.drawer-backdrop {
+  display: none;
+}
+.is-collapsed {
+  --sidebar-size: 80px;
+}
+.is-collapsed .sidebar {
+  padding-left: 14px;
+  padding-right: 14px;
+}
+.is-collapsed .brand {
+  margin: 0 9px 29px;
+}
+.is-collapsed .brand-name,
+.is-collapsed .workspace-text,
+.is-collapsed .workspace-switch > agro-icon,
+.is-collapsed .nav-label,
+.is-collapsed .nav-item > span,
+.is-collapsed .ai-badge,
+.is-collapsed .climate-dot,
+.is-collapsed .field-note,
+.is-collapsed .user-info,
+.is-collapsed .sidebar-user > .icon-button {
+  display: none;
+}
+.is-collapsed .workspace-switch {
+  padding: 10px;
+  justify-content: center;
+}
+.is-collapsed .nav-item {
+  justify-content: center;
+  padding: 12px;
+}
+.is-collapsed .account-nav {
+  margin-top: 26px;
+}
+.is-collapsed .sidebar-user {
+  justify-content: center;
+}
+.is-collapsed .user-link {
+  flex: none;
+}
+.is-collapsed .monitoring-label {
+  display: block;
+  height: 1px;
+  background: var(--border);
+  font-size: 0;
+  margin: 25px 7px 15px;
+}
+@media (min-height: 1000px) {
+  .field-note {
+    margin-bottom: 40px;
+  }
+}
+@media (max-width: 1200px) {
+  .global-search {
+    display: none;
+  }
+  .topbar {
+    padding: 0 24px;
+  }
+  main {
+    padding: 27px 24px 22px;
+  }
+  .app-footer {
+    margin: 0 24px;
+  }
+  .field-note {
+    display: none;
+  }
+}
+@media (max-width: 900px) {
+  .app-shell {
+    --sidebar-size: 248px;
+  }
+  .sidebar {
+    transform: translateX(-100%);
+    transition: transform 0.22s;
+  }
+  .workspace-main {
+    margin-left: 0;
+  }
+  .drawer-open .sidebar {
+    transform: translateX(0);
+  }
+  .drawer-backdrop {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: #10201766;
+    border: 0;
+    z-index: 39;
+    backdrop-filter: blur(3px);
+  }
+  .topbar {
+    height: 65px;
+    padding: 0 16px;
+  }
+  .field-note {
+    display: block;
+  }
+  .global-search {
+    display: none;
+  }
+}
+@media (max-width: 600px) {
+  main {
+    padding: 23px 16px 18px;
+  }
+  .topbar {
+    gap: 6px;
+  }
+  .breadcrumbs > span,
+  .breadcrumbs > agro-icon,
+  .messages-button {
+    display: none;
+  }
+  .topbar-left {
+    gap: 8px;
+  }
+  .topbar-actions {
+    gap: 1px;
+  }
+  .breadcrumbs strong {
+    font-size: 0.75rem;
+    max-width: 135px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .app-footer {
+    margin: 0 16px;
+    font-size: 0.75rem;
+    flex-wrap: wrap;
+  }
+  .app-footer > span:last-child {
+    display: none;
+  }
+}
+:host .nav-item {
+  font-size: 0.875rem;
+}
+:host .workspace-text {
+  min-width: 0;
+}
+:host .workspace-text strong {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+:host .user-info strong {
+  font-size: 0.875rem;
+}
+:host .breadcrumbs {
+  font-size: 0.8125rem;
+}
+:host .global-search input {
+  width: 190px;
+  font-size: 0.8125rem;
+}
+:host .field-note strong {
+  font-size: 0.8125rem;
+}
+:host .field-note p,
+:host .field-note a {
+  font-size: 0.75rem;
+}
+:host .brand-name {
+  font-size: 1.3125rem;
+}
+:host .sidebar-user {
+  gap: 8px;
+}
+@media (min-width: 901px) and (max-height: 850px) {
+  .field-note {
+    display: none;
+  }
+}
+@media (max-width: 600px) {
+  .topbar-actions .icon-button {
+    min-width: 40px;
+    min-height: 40px;
+  }
+}
+:host .compact-search {
+  display: none;
+}
+@media (max-width: 1200px) {
+  :host .compact-search {
+    display: inline-flex;
+  }
+}
+@media (max-width: 600px) {
+  :host .breadcrumbs strong {
+    max-width: 90px;
+  }
+}
+@media (max-width: 380px) {
+  :host .breadcrumbs,
+  :host .topbar-left > .header-divider {
+    display: none;
+  }
+}

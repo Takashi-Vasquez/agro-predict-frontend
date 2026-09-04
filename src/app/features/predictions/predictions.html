@@ -1,0 +1,586 @@
+<agro-page-header
+  title="Modelo predictivo de rendimiento"
+  description="Entrena con campañas históricas y proyecta la cosecha individual o masivamente."
+  eyebrow="INTELIGENCIA AGRÍCOLA"
+>
+  <a agroButton routerLink="/historial">
+    <agro-icon name="history" />
+    Ver historial
+  </a>
+</agro-page-header>
+
+<div class="demo-note prediction-disclaimer">
+  <agro-icon name="info" />
+  <span>
+    <strong>Modo demostración.</strong>
+    Los datos, métricas y recomendaciones son ficticios. La fórmula local sólo ilustra la
+    experiencia que tendrá el futuro modelo entrenado y no debe usarse como asesoría agronómica.
+  </span>
+</div>
+
+<agro-card class="model-overview">
+  <div class="model-identity">
+    <span class="model-icon"><agro-icon name="sparkles" /></span>
+    <div>
+      <span class="eyebrow">MODELO ACTIVO</span>
+      <h2>{{ store.model().name }}</h2>
+      <p>{{ store.model().version }} · Entrenado con información histórica de La Libertad</p>
+    </div>
+  </div>
+  <div class="model-metrics">
+    <div>
+      <span>Registros</span>
+      <strong>{{ store.model().records | number }}</strong>
+    </div>
+    <div>
+      <span>Campañas</span>
+      <strong>{{ store.model().campaigns }}</strong>
+    </div>
+    <div>
+      <span>Cultivos</span>
+      <strong>{{ store.model().crops }}</strong>
+    </div>
+    <div>
+      <span>R² demo</span>
+      <strong>{{ store.model().r2 * 100 | number:'1.0-1' }}%</strong>
+    </div>
+    <span class="status" [class.amber]="store.model().status !== 'Entrenado'">
+      {{ store.model().status }}
+    </span>
+  </div>
+</agro-card>
+
+<div class="workflow" aria-label="Flujo del modelo predictivo">
+  <div>
+    <span>1</span>
+    <strong>Datos históricos</strong>
+    <small>Resultados reales</small>
+  </div>
+  <agro-icon name="arrow" />
+  <div>
+    <span>2</span>
+    <strong>Entrenamiento</strong>
+    <small>AgroModel</small>
+  </div>
+  <agro-icon name="arrow" />
+  <div>
+    <span>3</span>
+    <strong>Predicción</strong>
+    <small>Individual o masiva</small>
+  </div>
+  <agro-icon name="arrow" />
+  <div>
+    <span>4</span>
+    <strong>Acción</strong>
+    <small>Brecha y sugerencias</small>
+  </div>
+</div>
+
+<div class="view-tabs" role="tablist" aria-label="Operaciones del modelo">
+  <button
+    type="button"
+    role="tab"
+    [class.active]="view() === 'individual'"
+    [attr.aria-selected]="view() === 'individual'"
+    (click)="selectView('individual')"
+  >
+    <agro-icon name="sparkles" />
+    Predicción individual
+  </button>
+  <button
+    type="button"
+    role="tab"
+    [class.active]="view() === 'batch'"
+    [attr.aria-selected]="view() === 'batch'"
+    (click)="selectView('batch')"
+  >
+    <agro-icon name="layers" />
+    Predicción masiva
+  </button>
+  <button
+    type="button"
+    role="tab"
+    [class.active]="view() === 'training'"
+    [attr.aria-selected]="view() === 'training'"
+    (click)="selectView('training')"
+  >
+    <agro-icon name="chart" />
+    Datos y entrenamiento
+  </button>
+</div>
+
+@if (view() === 'individual') {
+<div class="prediction-grid">
+  <agro-card>
+    <div class="card-header">
+      <div>
+        <h2>Condiciones de la campaña</h2>
+        <p>Completa las variables que el modelo utilizará para proyectar el rendimiento.</p>
+      </div>
+      <span class="form-icon"><agro-icon name="sensor" /></span>
+    </div>
+    <form class="panel-body" [formGroup]="form" (ngSubmit)="submit()">
+      <div class="form-field">
+        <label for="prediction-plot">Parcela y cultivo</label>
+        <select
+          agroInput
+          id="prediction-plot"
+          formControlName="plotId"
+          (change)="loadPlotDefaults()"
+        >
+          <option value="" disabled>Selecciona una parcela</option>
+          @for (plot of store.plots(); track plot.id) {
+          <option [value]="plot.id">{{ plot.name }} · {{ plot.crop }} · {{ plot.area }} ha</option>
+          }
+        </select>
+        @if (form.controls.plotId.touched && form.controls.plotId.invalid) {
+        <span class="field-error">Selecciona una parcela disponible.</span>
+        }
+      </div>
+      <div class="form-grid three-columns">
+        <div class="form-field">
+          <label for="prediction-soil">Tipo de suelo</label>
+          <select agroInput id="prediction-soil" formControlName="soilType">
+            <option>Arenoso</option>
+            <option>Franco arenoso</option>
+            <option>Franco</option>
+            <option>Arcilloso</option>
+          </select>
+        </div>
+        <div class="form-field">
+          <label for="prediction-temp">Temperatura (°C)</label>
+          <input
+            agroInput
+            id="prediction-temp"
+            type="number"
+            formControlName="temperature"
+            min="0"
+            max="45"
+          />
+          @if (form.controls.temperature.touched && form.controls.temperature.invalid) {
+          <span class="field-error">Valor permitido: 0 a 45 °C.</span>
+          }
+        </div>
+        <div class="form-field">
+          <label for="prediction-humidity">Humedad del suelo (%)</label>
+          <input
+            agroInput
+            id="prediction-humidity"
+            type="number"
+            formControlName="soilHumidity"
+            min="0"
+            max="100"
+          />
+          @if (form.controls.soilHumidity.touched && form.controls.soilHumidity.invalid) {
+          <span class="field-error">Valor permitido: 0 a 100%.</span>
+          }
+        </div>
+        <div class="form-field">
+          <label for="prediction-ph">pH del suelo</label>
+          <input
+            agroInput
+            id="prediction-ph"
+            type="number"
+            step="0.1"
+            formControlName="soilPh"
+            min="3"
+            max="10"
+          />
+          @if (form.controls.soilPh.touched && form.controls.soilPh.invalid) {
+          <span class="field-error">Valor permitido: 3 a 10.</span>
+          }
+        </div>
+        <div class="form-field">
+          <label for="prediction-nitrogen">Nitrógeno (kg/ha)</label>
+          <input
+            agroInput
+            id="prediction-nitrogen"
+            type="number"
+            formControlName="nitrogen"
+            min="0"
+            max="500"
+          />
+          @if (form.controls.nitrogen.touched && form.controls.nitrogen.invalid) {
+          <span class="field-error">Valor permitido: 0 a 500 kg/ha.</span>
+          }
+        </div>
+        <div class="form-field">
+          <label for="prediction-rain">Precipitación (mm)</label>
+          <input
+            agroInput
+            id="prediction-rain"
+            type="number"
+            formControlName="rainfall"
+            min="0"
+            max="500"
+          />
+          @if (form.controls.rainfall.touched && form.controls.rainfall.invalid) {
+          <span class="field-error">Valor permitido: 0 a 500 mm.</span>
+          }
+        </div>
+      </div>
+      <div class="target-field form-field">
+        <div>
+          <label for="prediction-target">Meta esperada (t/ha)</label>
+          <small>El resultado se comparará con este objetivo de negocio.</small>
+        </div>
+        <input
+          agroInput
+          id="prediction-target"
+          type="number"
+          step="0.1"
+          formControlName="expectedYield"
+          min="0.1"
+          max="250"
+        />
+        @if (form.controls.expectedYield.touched && form.controls.expectedYield.invalid) {
+        <span class="field-error">Ingresa una meta mayor a 0 y menor o igual a 250.</span>
+        }
+      </div>
+      <button
+        agroButton="primary"
+        class="generate"
+        type="submit"
+        [disabled]="pending() || !store.demo || !store.plots().length"
+      >
+        @if (pending()) {
+        <span class="spinner"></span>
+        Ejecutando predicción… } @else {
+        <agro-icon name="sparkles" />
+        Predecir rendimiento }
+      </button>
+    </form>
+  </agro-card>
+
+  <agro-card class="result-card" [class.has-result]="result()" aria-live="polite">
+    @if (pending()) {
+    <div class="result-empty">
+      <span class="result-symbol spinning"><agro-icon name="sparkles" /></span>
+      <h2>Analizando las variables…</h2>
+      <p>Comparando el escenario contra el histórico de demostración.</p>
+    </div>
+    } @else if (result(); as prediction) {
+    <div class="result-content">
+      <span class="result-badge" [class.warning]="!prediction.meetsExpectation">
+        <agro-icon [name]="prediction.meetsExpectation ? 'check' : 'alert'" />
+        {{ prediction.meetsExpectation ? 'La proyección cumple la meta' : 'La proyección está bajo
+        la meta' }}
+      </span>
+      <h2>{{ prediction.crop }} · {{ prediction.plot }}</h2>
+      <p>Rendimiento proyectado</p>
+      <div class="result-value">
+        {{ prediction.yield | number:'1.1-1' }}
+        <span>t/ha</span>
+      </div>
+      <div class="result-details">
+        <div>
+          <span>Producción total</span>
+          <strong>{{ prediction.yield * prediction.area | number:'1.1-1' }} t</strong>
+        </div>
+        <div>
+          <span>Meta</span>
+          <strong>{{ prediction.expectedYield }} t/ha</strong>
+        </div>
+        <div>
+          <span>Brecha</span>
+          <strong [class.negative]="prediction.gap < 0">
+            {{ prediction.gap > 0 ? '+' : '' }}{{ prediction.gap }} t/ha
+          </strong>
+        </div>
+      </div>
+      <div class="recommendations">
+        <span class="eyebrow">SUGERENCIAS DEL ESCENARIO</span>
+        @for (recommendation of prediction.recommendations; track recommendation) {
+        <div>
+          <agro-icon name="check" />
+          <span>{{ recommendation }}</span>
+        </div>
+        }
+      </div>
+      <div class="result-confidence">
+        <agro-icon name="shield" />
+        Confianza ilustrativa: {{ prediction.confidence }}%
+      </div>
+    </div>
+    } @else {
+    <div class="result-empty">
+      <span class="result-symbol"><agro-icon name="sparkles" /></span>
+      <span class="eyebrow">DE LOS DATOS A LA DECISIÓN</span>
+      <h2>¿Cuánto podrías cosechar?</h2>
+      <p>Ingresa las condiciones actuales y una meta para identificar la brecha antes de actuar.</p>
+      <div class="empty-stats">
+        <span>
+          <agro-icon name="sprout" />
+          Rendimiento
+        </span>
+        <span>
+          <agro-icon name="chart" />
+          Brecha
+        </span>
+        <span>
+          <agro-icon name="sparkles" />
+          Sugerencias
+        </span>
+      </div>
+    </div>
+    }
+  </agro-card>
+</div>
+} @if (view() === 'batch') {
+<div class="batch-grid">
+  <agro-card>
+    <div class="card-header">
+      <div>
+        <h2>Predicción masiva</h2>
+        <p>Procesa hasta 20 parcelas en una sola demostración.</p>
+      </div>
+      <span class="form-icon"><agro-icon name="layers" /></span>
+    </div>
+    <form class="panel-body" [formGroup]="batchForm" (ngSubmit)="submitBatch()">
+      <div class="batch-format">
+        <strong>Formato por fila</strong>
+        <code>parcela, temperatura, humedad, pH, nitrógeno, precipitación, meta</code>
+      </div>
+      <div class="form-field">
+        <label for="batch-rows">Lote de escenarios</label>
+        <textarea
+          agroInput
+          id="batch-rows"
+          rows="9"
+          formControlName="rows"
+          spellcheck="false"
+        ></textarea>
+        @if (batchForm.controls.rows.touched && batchForm.controls.rows.invalid) {
+        <span class="field-error">Ingresa el lote sin superar 5000 caracteres.</span>
+        }
+      </div>
+      @if (batchError()) {
+      <div class="inline-error" role="alert">
+        <agro-icon name="alert" />
+        {{ batchError() }}
+      </div>
+      }
+      <button agroButton="primary" class="generate" type="submit" [disabled]="batchPending()">
+        @if (batchPending()) {
+        <span class="spinner"></span>
+        Procesando lote… } @else {
+        <agro-icon name="sparkles" />
+        Ejecutar lote demo }
+      </button>
+    </form>
+  </agro-card>
+  <agro-card class="batch-summary">
+    <span class="result-symbol"><agro-icon name="chart" /></span>
+    @if (batchResults().length) {
+    <span class="eyebrow">LOTE COMPLETADO</span>
+    <h2>{{ batchResults().length }} predicciones generadas</h2>
+    <p>{{ batchMetCount() }} cumplen la meta y {{ batchAdjustmentCount() }} requieren ajustes.</p>
+    <div class="batch-result-list">
+      @for (item of batchResults(); track item.id) {
+      <div>
+        <span>
+          <strong>{{ item.crop }}</strong>
+          <small>{{ item.plot }}</small>
+        </span>
+        <span [class.negative]="item.gap < 0">
+          {{ item.gap > 0 ? '+' : '' }}{{ item.gap }} t/ha
+        </span>
+      </div>
+      }
+    </div>
+    } @else {
+    <span class="eyebrow">PROCESAMIENTO POR LOTES</span>
+    <h2>Compara muchas parcelas a la vez</h2>
+    <p>
+      El resultado consolidado mostrará cuáles cumplen la expectativa y cuáles necesitan atención.
+    </p>
+    }
+  </agro-card>
+</div>
+} @if (view() === 'training') {
+<div class="training-grid">
+  <agro-card>
+    <div class="card-header">
+      <div>
+        <h2>Registrar resultado histórico</h2>
+        <p>La cosecha real es la variable con la que aprende el modelo.</p>
+      </div>
+      <span class="form-icon"><agro-icon name="history" /></span>
+    </div>
+    <form class="panel-body" [formGroup]="historicalForm" (ngSubmit)="addHistoricalRecord()">
+      <div class="form-grid three-columns">
+        <div class="form-field">
+          <label for="history-crop">Cultivo</label>
+          <select agroInput id="history-crop" formControlName="crop">
+            @for (crop of store.crops(); track crop.id) {
+            <option [value]="crop.name">{{ crop.name }}</option>
+            }
+          </select>
+        </div>
+        <div class="form-field">
+          <label for="history-campaign">Campaña</label>
+          <input agroInput id="history-campaign" formControlName="campaign" maxlength="20" />
+        </div>
+        <div class="form-field">
+          <label for="history-location">Ubicación</label>
+          <input agroInput id="history-location" formControlName="location" maxlength="80" />
+        </div>
+        <div class="form-field">
+          <label for="history-soil">Suelo</label>
+          <select agroInput id="history-soil" formControlName="soilType">
+            <option>Arenoso</option>
+            <option>Franco arenoso</option>
+            <option>Franco</option>
+            <option>Arcilloso</option>
+          </select>
+        </div>
+        <div class="form-field">
+          <label for="history-temp">Temperatura (°C)</label>
+          <input
+            agroInput
+            id="history-temp"
+            type="number"
+            formControlName="temperature"
+            min="0"
+            max="45"
+          />
+        </div>
+        <div class="form-field">
+          <label for="history-humidity">Humedad (%)</label>
+          <input
+            agroInput
+            id="history-humidity"
+            type="number"
+            formControlName="soilHumidity"
+            min="0"
+            max="100"
+          />
+        </div>
+        <div class="form-field">
+          <label for="history-ph">pH</label>
+          <input
+            agroInput
+            id="history-ph"
+            type="number"
+            step="0.1"
+            formControlName="soilPh"
+            min="3"
+            max="10"
+          />
+        </div>
+        <div class="form-field">
+          <label for="history-nitrogen">Nitrógeno (kg/ha)</label>
+          <input
+            agroInput
+            id="history-nitrogen"
+            type="number"
+            formControlName="nitrogen"
+            min="0"
+            max="500"
+          />
+        </div>
+        <div class="form-field">
+          <label for="history-rainfall">Precipitación (mm)</label>
+          <input
+            agroInput
+            id="history-rainfall"
+            type="number"
+            formControlName="rainfall"
+            min="0"
+            max="500"
+          />
+        </div>
+      </div>
+      <div class="target-field form-field actual-yield">
+        <div>
+          <label for="history-yield">Cosecha real obtenida (t/ha)</label>
+          <small>Dato objetivo confirmado al cierre de campaña.</small>
+        </div>
+        <input
+          agroInput
+          id="history-yield"
+          type="number"
+          step="0.1"
+          formControlName="actualYield"
+          min="0.1"
+          max="250"
+        />
+      </div>
+      @if (historicalForm.touched && historicalForm.invalid) {
+      <span class="field-error form-error">
+        Revisa los campos: hay valores vacíos o fuera del rango permitido.
+      </span>
+      }
+      <button agroButton="primary" class="generate" type="submit">
+        <agro-icon name="plus" />
+        Agregar al histórico
+      </button>
+    </form>
+  </agro-card>
+  <agro-card class="training-status">
+    <span class="model-icon large"><agro-icon name="sparkles" /></span>
+    <span class="eyebrow">ESTADO DEL MODELO</span>
+    <h2>{{ store.model().status }}</h2>
+    <p>
+      Última versión: {{ store.model().version }}
+      <br />
+      Error medio demo: ±{{ store.model().mae }} t/ha
+    </p>
+    <div class="training-count">
+      <strong>{{ store.model().records | number }}</strong>
+      <span>registros disponibles</span>
+    </div>
+    @if (trainingMessage()) {
+    <div class="training-message" aria-live="polite">{{ trainingMessage() }}</div>
+    }
+    <button
+      agroButton="primary"
+      type="button"
+      (click)="trainModel()"
+      [disabled]="trainingPending() || store.model().status === 'Entrenado'"
+    >
+      @if (trainingPending()) {
+      <span class="spinner"></span>
+      Entrenando… } @else {
+      <agro-icon name="sparkles" />
+      Entrenar nueva versión }
+    </button>
+    <small class="safety-note">
+      En producción este proceso llamará al servicio de entrenamiento y validará calidad, sesgos y
+      métricas antes de publicar.
+    </small>
+  </agro-card>
+</div>
+<agro-card class="history-card">
+  <div class="card-header">
+    <div>
+      <h2>Muestra de datos históricos</h2>
+      <p>Campañas de arándano, espárrago, palta y otros cultivos de La Libertad.</p>
+    </div>
+    <span class="status neutral">DEMO</span>
+  </div>
+  <agro-data-table
+    [columns]="historicalColumns"
+    [rows]="historicalRows()"
+    caption="Muestra histórica usada para el entrenamiento demo"
+  />
+</agro-card>
+} @if (view() !== 'training') {
+<agro-card class="recent-card">
+  <div class="card-header">
+    <div>
+      <h2>Últimas predicciones</h2>
+      <p>Rendimiento proyectado frente a la expectativa definida.</p>
+    </div>
+    <a routerLink="/historial" class="text-link">
+      Ver todas
+      <agro-icon name="arrow" />
+    </a>
+  </div>
+  <agro-data-table
+    [columns]="predictionColumns"
+    [rows]="rows()"
+    caption="Últimas predicciones de demostración"
+  />
+</agro-card>
+}

@@ -1,0 +1,405 @@
+:host {
+  display: block;
+}
+.login-shell {
+  display: grid;
+  min-height: 100dvh;
+  grid-template-columns: 1fr 1fr;
+}
+.brand-panel {
+  background: #183e31;
+  color: #f6f8f0;
+  padding: 44px 9%;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+}
+.brand-panel::after {
+  content: '';
+  position: absolute;
+  width: 600px;
+  height: 600px;
+  border: 1px solid #ffffff08;
+  border-radius: 50%;
+  left: -370px;
+  bottom: -300px;
+  box-shadow:
+    0 0 0 75px #ffffff03,
+    0 0 0 150px #ffffff03;
+  pointer-events: none;
+}
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  font-size: 1.5rem;
+  font-weight: 600;
+  letter-spacing: -1px;
+}
+.brand-mark {
+  width: 38px;
+  height: 38px;
+  background: #345c42;
+  border-radius: 11px;
+  display: grid;
+  place-items: center;
+  color: #d5ef9c;
+}
+.brand-mark agro-icon {
+  width: 25px;
+  height: 25px;
+}
+.brand-dot {
+  font-size: 0.75rem;
+  align-self: flex-start;
+  margin: 9px 0 0 -7px;
+}
+.brand-story {
+  margin: auto 0;
+  padding: 65px 0;
+  max-width: 450px;
+  animation: enter 0.6s ease;
+}
+.intro-badge {
+  font-size: 0.75rem;
+  letter-spacing: 1.8px;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  color: #c7d6c9;
+}
+.intro-badge > span {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #d5ef9c;
+}
+.brand-story h1 {
+  font-size: clamp(34px, 3.8vw, 58px);
+  line-height: 1.16;
+  letter-spacing: -2.6px;
+  margin: 25px 0 22px;
+}
+.brand-story em {
+  font-style: normal;
+  color: #d5ef9c;
+}
+.brand-story > p {
+  color: #aebfb3;
+  font-size: 0.9375rem;
+  max-width: 330px;
+  line-height: 1.8;
+}
+.insight-preview {
+  background: linear-gradient(130deg, #ffffff0c, #ffffff03);
+  border: 1px solid #ffffff17;
+  border-radius: 16px;
+  padding: 22px 24px;
+  margin-top: 40px;
+  max-width: 385px;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 18px 45px #071b1320;
+}
+.preview-top {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+.preview-top > span:first-child {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #dbe7dc;
+  font-size: 0.75rem;
+}
+.preview-top agro-icon {
+  width: 16px;
+  height: 16px;
+  color: #d5ef9c;
+}
+.preview-tag {
+  font-size: 0.75rem;
+  letter-spacing: 1px;
+  color: #baceb9;
+  border: 1px solid #ffffff20;
+  padding: 4px 6px;
+  border-radius: 4px;
+}
+.preview-metric {
+  display: flex;
+  align-items: baseline;
+  font-size: 2.5rem;
+  letter-spacing: -2px;
+  margin-top: 22px;
+  font-weight: 500;
+}
+.preview-metric > span:first-child {
+  font-size: 1.5rem;
+  letter-spacing: 0;
+  color: #9ab39f;
+}
+.preview-trend {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.75rem;
+  letter-spacing: 0;
+  margin-left: 14px;
+  color: #d5ef9c;
+}
+.preview-trend agro-icon {
+  width: 14px;
+  height: 14px;
+}
+.insight-preview > p {
+  color: #a9bcae;
+  font-size: 0.75rem;
+  margin: 3px 0 20px;
+}
+.preview-footer {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  color: #a2b4a6;
+  margin-top: 10px;
+}
+.brand-bottom {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  color: #a4b8aa;
+  font-size: 0.75rem;
+}
+.brand-bottom > span:first-child {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.brand-bottom agro-icon {
+  width: 15px;
+  height: 15px;
+}
+.form-panel {
+  position: relative;
+  padding: 80px 9% 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: var(--surface);
+}
+.theme-toggle {
+  position: absolute;
+  right: 28px;
+  top: 25px;
+}
+.login-form-wrap {
+  width: 100%;
+  max-width: 360px;
+  margin: auto;
+  animation: enter 0.6s ease 0.1s both;
+}
+.welcome-icon {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  color: var(--primary);
+  background: var(--green-soft);
+  margin-bottom: 26px;
+}
+.welcome-icon agro-icon {
+  width: 25px;
+  height: 25px;
+}
+.login-form-wrap h2 {
+  font-size: 1.75rem;
+  font-weight: 650;
+  letter-spacing: -1.1px;
+}
+.login-description {
+  font-size: 0.8125rem;
+  margin-top: 10px;
+  margin-bottom: 32px;
+}
+.input-with-icon {
+  position: relative;
+}
+.input-with-icon > agro-icon {
+  position: absolute;
+  top: 15px;
+  left: 14px;
+  width: 16px;
+  height: 16px;
+  color: var(--muted);
+}
+.input-with-icon input {
+  padding-left: 40px;
+  padding-right: 40px;
+  height: 46px;
+  font-size: 0.75rem;
+}
+.password-toggle {
+  position: absolute;
+  top: 4px;
+  right: 5px;
+}
+.password-toggle agro-icon {
+  width: 16px;
+  height: 16px;
+}
+.form-options {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: -7px 0 24px;
+  gap: 5px;
+}
+.forgot {
+  border: 0;
+  padding: 4px;
+  background: transparent;
+  color: var(--primary);
+  font-size: 0.75rem;
+}
+.login-submit,
+.demo-button {
+  width: 100%;
+  min-height: 46px;
+}
+.login-submit {
+  justify-content: center;
+  position: relative;
+}
+.login-submit agro-icon {
+  position: absolute;
+  right: 16px;
+}
+.login-divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--muted);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 1px;
+  margin: 28px 0 22px;
+}
+.login-divider span {
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+.demo-note {
+  margin-top: 20px;
+  font-size: 0.75rem;
+  background: var(--surface-alt);
+  color: var(--muted);
+  padding: 12px;
+}
+.login-footer {
+  margin-top: 60px;
+  display: flex;
+  gap: 7px;
+  align-items: center;
+  color: var(--muted);
+  font-size: 0.75rem;
+}
+.login-footer agro-icon {
+  width: 13px;
+  height: 13px;
+}
+.mobile-brand {
+  display: none;
+}
+@media (min-width: 1500px) {
+  .brand-panel {
+    padding-left: 15%;
+  }
+  .form-panel {
+    padding-right: 15%;
+  }
+}
+@media (max-width: 850px) {
+  .login-shell {
+    grid-template-columns: 1fr;
+  }
+  .brand-panel {
+    display: none;
+  }
+  .form-panel {
+    padding: 80px 24px 24px;
+    min-height: 100dvh;
+  }
+  .mobile-brand {
+    display: flex;
+    gap: 8px;
+    color: var(--primary);
+    font-size: 1.375rem;
+    font-weight: 600;
+    margin-bottom: 40px;
+  }
+  .login-form-wrap {
+    max-width: 390px;
+  }
+  .welcome-icon {
+    display: none;
+  }
+  .login-description {
+    font-size: 0.875rem;
+  }
+  .input-with-icon input {
+    font-size: 1rem;
+  }
+  .forgot {
+    font-size: 0.75rem;
+  }
+}
+:host .login-description {
+  font-size: 0.875rem;
+}
+:host .input-with-icon input {
+  font-size: 0.875rem;
+}
+:host .forgot {
+  font-size: 0.8125rem;
+}
+:host .login-divider {
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
+}
+:host .login-footer {
+  font-size: 0.75rem;
+}
+@media (max-width: 850px) {
+  :host .input-with-icon input {
+    font-size: 1rem;
+  }
+}
+.login-error {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 13px 14px;
+  margin: 0 0 22px;
+  border: 1px solid color-mix(in srgb, var(--danger) 35%, transparent);
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--danger) 6%, var(--surface));
+  color: var(--danger);
+  font-size: 0.8125rem;
+  line-height: 1.6;
+}
+.login-error agro-icon {
+  width: 17px;
+  height: 17px;
+  margin-top: 2px;
+}
+.login-submit .spinner {
+  width: 16px;
+  height: 16px;
+  border-color: #ffffff55;
+  border-top-color: currentColor;
+}

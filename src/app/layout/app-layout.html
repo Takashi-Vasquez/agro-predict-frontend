@@ -1,0 +1,252 @@
+<a class="skip-link" href="#main-content">Saltar al contenido</a>
+<div
+  class="app-shell"
+  [class.is-collapsed]="collapsed() && !mobile()"
+  [class.drawer-open]="drawer()"
+>
+  @if (drawer()) {
+  <button class="drawer-backdrop" aria-label="Cerrar menú" (click)="drawer.set(false)"></button>
+  }
+  <aside
+    class="sidebar"
+    aria-label="Navegación principal"
+    [cdkTrapFocus]="drawer() && mobile()"
+    [cdkTrapFocusAutoCapture]="drawer() && mobile()"
+    [attr.inert]="mobile() && !drawer() ? '' : null"
+    (keydown.escape)="drawer.set(false)"
+  >
+    <a routerLink="/dashboard" class="brand" aria-label="AgroPredict, inicio">
+      <span class="brand-mark"><agro-icon name="sprout" /></span>
+      <span class="brand-name">
+        AgroPredict
+        <span class="brand-dot">®</span>
+      </span>
+    </a>
+    <button class="workspace-switch" [matMenuTriggerFor]="workspaceMenu">
+      <span class="workspace-icon">A</span>
+      <span class="workspace-text">
+        <strong>{{ preferences.value().workspaceName }}</strong>
+        <small>{{ auth.isDemo() ? 'Acceso de demostración' : 'Workspace con datos demo' }}</small>
+      </span>
+      <agro-icon name="down" />
+    </button>
+    <mat-menu #workspaceMenu="matMenu">
+      <a mat-menu-item routerLink="/configuracion">Configurar este espacio</a>
+    </mat-menu>
+    <nav>
+      <div class="nav-label">PRINCIPAL</div>
+      @for (item of mainNav; track item.path) {
+      <a
+        class="nav-item"
+        [routerLink]="item.path"
+        routerLinkActive="active"
+        [matTooltip]="collapsed() ? item.label : ''"
+        matTooltipPosition="right"
+        [attr.aria-label]="item.label"
+      >
+        <agro-icon [name]="item.icon" />
+        <span>{{ item.label }}</span>
+        @if (item.badge) {
+        <small class="ai-badge">{{ item.badge }}</small>
+        }
+      </a>
+      }
+      <div class="nav-label monitoring-label">MONITOREO</div>
+      @for (item of monitorNav; track item.path) {
+      <a
+        class="nav-item"
+        [routerLink]="item.path"
+        routerLinkActive="active"
+        [matTooltip]="collapsed() ? item.label : ''"
+        matTooltipPosition="right"
+        [attr.aria-label]="item.label"
+      >
+        <agro-icon [name]="item.icon" />
+        <span>{{ item.label }}</span>
+        @if (item.path === '/clima') {
+        <small class="climate-dot"></small>
+        }
+      </a>
+      }
+    </nav>
+    <div class="sidebar-bottom">
+      <div class="field-note">
+        <span class="field-note-icon"><agro-icon name="sparkles" /></span>
+        <strong>El poder de anticiparte</strong>
+        <p>
+          Planifica hoy lo que
+          <br />
+          cosecharás mañana.
+        </p>
+        <a routerLink="/predicciones">
+          Explorar predicciones
+          <agro-icon name="arrow" />
+        </a>
+      </div>
+      <nav class="account-nav">
+        @for (item of accountNav; track item.path) {
+        <a
+          class="nav-item"
+          [routerLink]="item.path"
+          routerLinkActive="active"
+          [attr.aria-label]="item.label"
+          [matTooltip]="collapsed() ? item.label : ''"
+        >
+          <agro-icon [name]="item.icon" />
+          <span>{{ item.label }}</span>
+        </a>
+        }
+      </nav>
+      <div class="sidebar-user">
+        <a routerLink="/perfil" class="user-link">
+          <span class="avatar">
+            @if (auth.user()?.avatar) {
+            <img [src]="auth.user()?.avatar" alt="Foto de perfil" />
+            } @else { {{ initials() }} }
+          </span>
+          <span class="user-info">
+            <strong>{{ auth.user()?.name }}</strong>
+            <small>{{ auth.user()?.role }}</small>
+          </span>
+        </a>
+        <button
+          class="icon-button"
+          (click)="logout()"
+          aria-label="Cerrar sesión"
+          matTooltip="Cerrar sesión"
+        >
+          <agro-icon name="logout" />
+        </button>
+      </div>
+    </div>
+  </aside>
+  <div class="workspace-main" [attr.inert]="drawer() && mobile() ? '' : null">
+    <header class="topbar">
+      <div class="topbar-left">
+        <button
+          class="icon-button"
+          (click)="toggleMenu()"
+          [attr.aria-label]="mobile() ? 'Abrir menú' : 'Colapsar o expandir menú'"
+          [attr.aria-expanded]="mobile() ? drawer() : !collapsed()"
+        >
+          <agro-icon [name]="mobile() ? 'menu' : 'panel'" />
+        </button>
+        <span class="header-divider"></span>
+        <nav class="breadcrumbs" aria-label="Ruta de navegación">
+          <span>Workspace</span>
+          <agro-icon name="chevron" />
+          <strong aria-current="page">{{ title() }}</strong>
+        </nav>
+      </div>
+      <div class="topbar-actions">
+        <button
+          class="icon-button compact-search"
+          (click)="openSearch()"
+          aria-label="Buscar páginas"
+        >
+          <agro-icon name="search" />
+        </button>
+        <div class="global-search" (keydown.escape)="search.set('')">
+          <agro-icon name="search" />
+          <input
+            type="search"
+            placeholder="Buscar en AgroPredict…"
+            aria-label="Buscar páginas"
+            [ngModel]="search()"
+            (ngModelChange)="search.set($event)"
+          />
+          @if (search()) {
+          <div class="search-results">
+            @for (item of searchResults(); track item.path) {
+            <a [routerLink]="item.path">
+              <agro-icon [name]="item.icon" />
+              {{ item.label }}
+              <agro-icon name="arrow" />
+            </a>
+            } @empty {
+            <p>No encontramos esa página.</p>
+            }
+          </div>
+          }
+        </div>
+        <button
+          class="icon-button"
+          (click)="theme.toggle()"
+          [attr.aria-label]="theme.dark() ? 'Activar modo claro' : 'Activar modo oscuro'"
+          [matTooltip]="theme.dark() ? 'Modo claro' : 'Modo oscuro'"
+        >
+          <agro-icon [name]="theme.dark() ? 'sun' : 'moon'" />
+        </button>
+        <button
+          class="icon-button messages-button"
+          [matMenuTriggerFor]="messagesMenu"
+          aria-label="Mensajes"
+        >
+          <agro-icon name="message" />
+        </button>
+        <button
+          class="icon-button notification-button"
+          [matMenuTriggerFor]="notificationsMenu"
+          (menuOpened)="unread.set(false)"
+          aria-label="Notificaciones"
+        >
+          <agro-icon name="bell" />
+          @if (unread()) {
+          <span class="notification-dot"></span>
+          }
+        </button>
+        <span class="header-divider"></span>
+        <button
+          class="avatar avatar-button"
+          [matMenuTriggerFor]="userMenu"
+          aria-label="Opciones de usuario"
+        >
+          @if (auth.user()?.avatar) {
+          <img [src]="auth.user()?.avatar" alt="Foto de perfil" />
+          } @else { {{ initials() }} }
+        </button>
+      </div>
+      <mat-menu #userMenu="matMenu">
+        <a mat-menu-item routerLink="/perfil">Mi perfil</a>
+        <a mat-menu-item routerLink="/configuracion">Configuración</a>
+        <button mat-menu-item (click)="logout()">Cerrar sesión</button>
+      </mat-menu>
+      <mat-menu #notificationsMenu="matMenu">
+        <div class="popover-title">Notificaciones · Demo</div>
+        <a mat-menu-item routerLink="/clima">Lluvias previstas para el sábado</a>
+        <a mat-menu-item routerLink="/sensores">Un sensor requiere atención</a>
+      </mat-menu>
+      <mat-menu #messagesMenu="matMenu">
+        <div class="popover-title">Mensajes</div>
+        <button mat-menu-item disabled>No tienes mensajes nuevos.</button>
+      </mat-menu>
+    </header>
+    <main id="main-content" tabindex="-1">
+      @if (store.loading()) {
+      <agro-loader />
+      } @else if (store.error()) {
+      <agro-empty
+        icon="cloud"
+        title="No pudimos cargar tus datos"
+        description="Intenta conectar de nuevo."
+      >
+        <button agroButton="primary" (click)="store.load()">Reintentar</button>
+      </agro-empty>
+      } @else {
+      <router-outlet />
+      }
+    </main>
+    <footer class="app-footer">
+      <span>
+        <span class="footer-dot"></span>
+        {{ auth.isDemo() ? 'Sesión de demostración' : 'Frontend conectado' }} · Datos agrícolas
+        simulados
+      </span>
+      <span>
+        {{ today | date:'dd/MM/yyyy' }}
+        <span class="footer-divider">·</span>
+        AgroPredict v1.0
+      </span>
+    </footer>
+  </div>
+</div>

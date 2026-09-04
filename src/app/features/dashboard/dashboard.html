@@ -1,0 +1,340 @@
+<agro-page-header
+  [title]="'Hola, ' + (auth.user()?.name?.split(' ')?.[0] || 'Alex') + ' 👋'"
+  description="Del histórico a la proyección: así se comportan tus metas de rendimiento."
+  eyebrow="CADA DATO, UNA MEJOR DECISIÓN"
+>
+  <button
+    agroButton
+    (click)="period.set(period() === '6 resultados' ? '8 resultados' : '6 resultados')"
+  >
+    <agro-icon name="calendar" />
+    Últimos {{ period() }}
+    <agro-icon name="down" />
+  </button>
+  <a agroButton="primary" routerLink="/predicciones">
+    <agro-icon name="plus" />
+    Nueva predicción
+  </a>
+</agro-page-header>
+@if (store.loading()) {
+<agro-loader />
+} @else if (store.error()) {
+<agro-empty
+  icon="cloud"
+  title="No pudimos cargar tus datos"
+  description="Intenta conectar de nuevo."
+>
+  <button agroButton="primary" (click)="store.load()">Reintentar</button>
+</agro-empty>
+} @else {
+<section class="kpi-grid" aria-label="Indicadores principales">
+  <agro-card class="kpi">
+    <div class="kpi-label">
+      Cultivos activos
+      <span class="kpi-icon"><agro-icon name="sprout" /></span>
+    </div>
+    <div class="kpi-value">
+      {{ store.crops().length.toString().padStart(2, '0') }}
+      <span class="mini-chart">
+        <i style="height: 30%"></i>
+        <i style="height: 45%"></i>
+        <i style="height: 38%"></i>
+        <i style="height: 65%"></i>
+        <i style="height: 60%"></i>
+        <i style="height: 85%"></i>
+        <i style="height: 100%"></i>
+      </span>
+    </div>
+    <div class="kpi-foot">
+      <span>{{ store.crops().length }} variedades</span>
+      <span>de La Libertad</span>
+    </div>
+  </agro-card>
+  <agro-card class="kpi">
+    <div class="kpi-label">
+      Registros históricos
+      <span class="kpi-icon"><agro-icon name="history" /></span>
+    </div>
+    <div class="kpi-value">
+      {{ store.model().records | number }}
+      <span class="kpi-trend"><agro-icon name="trend" /></span>
+    </div>
+    <div class="kpi-foot">
+      <span>{{ store.model().campaigns }} campañas</span>
+      <span>para entrenamiento</span>
+    </div>
+  </agro-card>
+  <agro-card class="kpi">
+    <div class="kpi-label">
+      Predicciones realizadas
+      <span class="kpi-icon"><agro-icon name="sparkles" /></span>
+    </div>
+    <div class="kpi-value">
+      {{ store.predictions().length.toString().padStart(2, '0') }}
+      <span class="kpi-unit">{{ metRate() | number:'1.0-0' }}% meta</span>
+    </div>
+    <div class="kpi-foot">
+      <span class="neutral-foot">Individual y masiva</span>
+      <span>en demo</span>
+    </div>
+  </agro-card>
+  <agro-card class="kpi">
+    <div class="kpi-label">
+      Requieren ajustes
+      <span class="kpi-icon amber-icon"><agro-icon name="alert" /></span>
+    </div>
+    <div class="kpi-value">
+      {{ needsAdjustment().toString().padStart(2, '0') }}
+      <span class="alert-pill">Atención</span>
+    </div>
+    <div class="kpi-foot">
+      <span class="amber-text">Bajo la meta definida</span>
+      <a routerLink="/predicciones">
+        Revisar
+        <agro-icon name="arrow" />
+      </a>
+    </div>
+  </agro-card>
+  <agro-card class="kpi accuracy-kpi">
+    <div class="kpi-label">
+      Calidad del modelo
+      <span class="kpi-icon"><agro-icon name="shield" /></span>
+    </div>
+    <div class="kpi-value">
+      {{ store.model().r2 * 100 | number:'1.0-1' }}
+      <span class="percent">%</span>
+    </div>
+    <div class="kpi-foot">
+      <span>
+        <agro-icon name="check" />
+        R² ilustrativo
+      </span>
+      <span>{{ store.model().version }}</span>
+    </div>
+  </agro-card>
+</section>
+<div class="main-grid">
+  <div class="main-column">
+    <agro-card class="yield-card">
+      <div class="card-header">
+        <div>
+          <h2>Cumplimiento de la meta</h2>
+          <p>Rendimiento proyectado frente a la expectativa de cada cultivo.</p>
+        </div>
+        <span class="chart-unit">%</span>
+      </div>
+      <div class="chart-summary">
+        <span class="chart-stat">
+          {{ latestAchievement() | number:'1.1-1' }}
+          <small>% de la meta</small>
+        </span>
+        <span class="chart-change">
+          <agro-icon name="trend" />
+          {{ metRate() | number:'1.0-0' }}% cumplen
+        </span>
+        <span class="chart-context">escenarios de demostración</span>
+        <div class="chart-legend">
+          <span>
+            <i></i>
+            Proyectado
+          </span>
+          <span>
+            <i></i>
+            Meta (100%)
+          </span>
+        </div>
+      </div>
+      <div class="yield-chart">
+        <agro-line-chart
+          [values]="values()"
+          [comparison]="targetValues()"
+          [labels]="chartLabels()"
+          label="Porcentaje de cumplimiento de la meta por predicción demo"
+        />
+      </div>
+      <div class="chart-caption">
+        <agro-icon name="info" />
+        Serie de ejemplo. Cada punto compara la predicción demo con la meta configurada.
+      </div>
+    </agro-card>
+    <agro-card class="plots-card">
+      <div class="card-header">
+        <div class="title-with-count">
+          <h2>Resultados predictivos recientes</h2>
+          <span>{{ store.predictions().length }}</span>
+        </div>
+        <a class="text-link" routerLink="/predicciones">
+          Ver todas
+          <agro-icon name="arrow" />
+        </a>
+      </div>
+      <agro-data-table
+        [columns]="columns"
+        [rows]="rows()"
+        caption="Predicciones recientes frente a su meta"
+      />
+      <div class="plots-bottom">
+        <span>Mostrando {{ rows().length }} de {{ store.predictions().length }} resultados</span>
+        <a routerLink="/predicciones">
+          Ejecutar otra predicción
+          <agro-icon name="arrow" />
+        </a>
+      </div>
+    </agro-card>
+  </div>
+  <div class="side-column">
+    <section class="weather-card" aria-label="Clima simulado">
+      <div class="weather-heading">
+        <span>
+          <agro-icon name="location" />
+          Chao, La Libertad
+        </span>
+        <span class="live-tag">DEMO</span>
+      </div>
+      <div class="weather-main">
+        <div class="temperature">
+          24
+          <span>°</span>
+          <p>Mayormente soleado</p>
+        </div>
+        <agro-icon class="weather-sun" name="sun" />
+      </div>
+      <div class="weather-details">
+        <span>
+          <agro-icon name="drop" />
+          64%
+          <small>Humedad</small>
+        </span>
+        <span>
+          <agro-icon name="wind" />
+          12 km/h
+          <small>Viento</small>
+        </span>
+        <span>
+          <agro-icon name="rain" />
+          10%
+          <small>Lluvia</small>
+        </span>
+      </div>
+      <a class="weather-link" routerLink="/clima">
+        Ver pronóstico completo
+        <agro-icon name="arrow" />
+      </a>
+    </section>
+    <agro-card class="distribution-card">
+      <div class="card-header">
+        <h2>Distribución de cultivos</h2>
+        <agro-icon name="sprout" />
+      </div>
+      <div class="distribution-content">
+        <div class="donut-wrap">
+          <svg
+            class="donut"
+            viewBox="0 0 120 120"
+            role="img"
+            [attr.aria-label]="distributionLabel()"
+          >
+            <circle cx="60" cy="60" r="47" fill="none" stroke="var(--border)" stroke-width="12" />
+            @for (segment of donutSegments(); track segment.name) {
+            <circle
+              cx="60"
+              cy="60"
+              r="47"
+              fill="none"
+              pathLength="100"
+              [attr.stroke]="segment.color"
+              stroke-width="12"
+              [attr.stroke-dasharray]="segment.length + ' 100'"
+              [attr.stroke-dashoffset]="segment.offset"
+              transform="rotate(-90 60 60)"
+            />
+            }
+          </svg>
+          <div class="donut-center">
+            <strong>{{ store.totalArea() | number:'1.0-1' }}</strong>
+            <span>hectáreas</span>
+          </div>
+        </div>
+        <div class="distribution-legend">
+          @for (crop of distribution(); track crop.name) {
+          <div>
+            <i [style.background]="crop.color"></i>
+            <span>{{ crop.name }}</span>
+            <strong>
+              {{ crop.area | number:'1.0-1' }}
+              <small>ha</small>
+            </strong>
+          </div>
+          }
+        </div>
+      </div>
+    </agro-card>
+    <agro-card class="insight-card">
+      <div class="insight-heading">
+        <span>
+          <agro-icon name="sparkles" />
+          AgroInsight
+        </span>
+        <small>IA · DEMO</small>
+      </div>
+      <h3>
+        {{ latestAttention()?.crop || 'Tu próxima cosecha' }}
+        <br />
+        necesita una decisión informada.
+      </h3>
+      <p>
+        {{ latestAttention()?.recommendations?.[0] || 'Explora escenarios de rendimiento para cada
+        una de tus parcelas.' }}
+      </p>
+      <a routerLink="/predicciones">
+        Revisar con el modelo IA
+        <agro-icon name="arrow" />
+      </a>
+    </agro-card>
+  </div>
+</div>
+<div class="bottom-grid">
+  <agro-card class="bar-card">
+    <div class="card-header">
+      <div>
+        <h2>Rendimiento proyectado por cultivo</h2>
+        <p>Último escenario disponible · toneladas por hectárea</p>
+      </div>
+      <a routerLink="/reportes" class="text-link">
+        Ver reportes
+        <agro-icon name="arrow" />
+      </a>
+    </div>
+    <div class="bar-chart">
+      @for (bar of yieldBars(); track bar.name) {
+      <div class="bar-row">
+        <span>{{ bar.name }}</span>
+        <div><i [style.width.%]="bar.percent" [style.background]="bar.color"></i></div>
+        <strong>{{ bar.value }}</strong>
+      </div>
+      }
+    </div>
+  </agro-card>
+  <agro-card>
+    <div class="card-header">
+      <h2>Actividad reciente</h2>
+      <a routerLink="/historial" class="text-link">
+        Ver historial
+        <agro-icon name="arrow" />
+      </a>
+    </div>
+    <div class="activity-list">
+      @for (activity of store.activities().slice(0, 3); track activity.id) {
+      <div class="activity-item">
+        <span><agro-icon [name]="activity.type" /></span>
+        <div>
+          <strong>{{ activity.title }}</strong>
+          <p>{{ activity.detail }}</p>
+        </div>
+        <agro-icon name="check" />
+      </div>
+      }
+    </div>
+  </agro-card>
+</div>
+}
