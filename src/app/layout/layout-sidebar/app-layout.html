@@ -1,0 +1,25 @@
+<a class="skip-link" href="#main-content">Saltar al contenido</a>
+<div class="app-shell" [class.is-collapsed]="collapsed() && !mobile()" [class.drawer-open]="drawer()">
+  @if (drawer()) {
+  <button class="drawer-backdrop" aria-label="Cerrar menú" (click)="drawer.set(false)"></button>
+  }
+  <app-sidebar></app-sidebar>
+
+  <div class="workspace-main" [attr.inert]="drawer() && mobile() ? '' : null">
+    <app-header-sidebar></app-header-sidebar>
+
+    <main id="main-content" tabindex="-1">
+      @if (store.loading()) {
+      <agro-loader />
+      } @else if (store.error()) {
+      <agro-empty icon="cloud" title="No pudimos cargar tus datos" description="Intenta conectar de nuevo.">
+        <button agroButton="primary" (click)="store.load()">Reintentar</button>
+      </agro-empty>
+      } @else {
+      <router-outlet />
+      }
+    </main>
+
+    <app-footer></app-footer>
+  </div>
+</div>

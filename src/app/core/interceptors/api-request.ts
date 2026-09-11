@@ -9,6 +9,6 @@ export function isLoginRequest(requestUrl: string, documentUrl: string): boolean
   return (
     isApiRequest(requestUrl, documentUrl) &&
     new URL(requestUrl, documentUrl).pathname ===
-      new URL(`${environment.apiUrl}/auth/login`, documentUrl).pathname
+    new URL(`${environment.apiUrl}/auth/signin`, documentUrl).pathname
   );
 }

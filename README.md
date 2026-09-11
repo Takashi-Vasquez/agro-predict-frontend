@@ -45,7 +45,7 @@ Versiones compatibles: [documentación de Angular](https://angular.dev/reference
 Este repositorio no contiene el backend. El servicio Python debe exponer:
 
 ```http
-POST http://localhost:8150/api/v1/auth/login
+POST http://localhost:8150/api/v1/auth/signin
 Content-Type: application/json
 ```
 
@@ -71,7 +71,7 @@ El JWT debe contener una expiración `exp` válida. Las credenciales del ejemplo
 
 ## Login conectado
 
-- `POST /api/v1/auth/login` envía JSON con **solo** `email` y `password`.
+- `POST /api/v1/auth/signin` envía JSON con **solo** `email` y `password`.
 - `proxy.conf.json` reenvía `/api/**` a `http://localhost:8150` durante `pnpm start`, para que el navegador use su mismo origen sin requerir CORS en desarrollo. Reinicia el servidor Angular si modificas el proxy.
 - Respuesta esperada: `access_token` (JWT con `exp`) y `token_type: "bearer"`. Se rechazan respuestas incompletas, tipos de token no soportados y tokens vencidos o sin expiración válida.
 - El correo es obligatorio, se recortan sus espacios externos y se valida formato/longitud (254 caracteres). La contraseña es obligatoria y no acepta solo espacios; **no se recorta, convierte ni se le imponen reglas nuevas de complejidad o longitud mínima**. OpenAPI del backend no define esas reglas para iniciar sesión.

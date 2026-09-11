@@ -1,0 +1,244 @@
+:host {
+  display: block;
+}
+
+.sidebar {
+  position: fixed;
+  inset: 0 auto 0 0;
+  width: var(--sidebar-size);
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  padding: 27px 16px 0;
+  z-index: 40;
+  transition: width 0.22s;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 13px 29px;
+  white-space: nowrap;
+}
+
+.brand-mark {
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  background: #276247;
+  border-radius: 9px;
+  color: #dbefa8;
+  flex-shrink: 0;
+
+  agro-icon {
+    width: 23px;
+    height: 23px;
+  }
+}
+
+.brand-name {
+  font-size: 1.3125rem;
+  font-weight: 650;
+  letter-spacing: -1px;
+}
+
+.brand-dot {
+  font-size: 0.75rem;
+  vertical-align: top;
+  display: inline-block;
+  margin: 4px 0 0 2px;
+}
+
+.workspace-switch {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px;
+  text-align: left;
+  margin-bottom: 30px;
+  color: var(--text);
+
+  > agro-icon {
+    width: 13px;
+    height: 13px;
+    color: var(--muted);
+  }
+}
+
+.workspace-icon {
+  display: grid;
+  place-items: center;
+  width: 29px;
+  height: 29px;
+  flex-shrink: 0;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  font-size: 0.75rem;
+  color: var(--primary);
+  background: var(--green-soft);
+}
+
+.workspace-text {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  flex: 1;
+  white-space: nowrap;
+  min-width: 0;
+
+  strong {
+    font-size: 0.75rem;
+    font-weight: 600;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  small {
+    font-size: 0.75rem;
+    color: var(--muted);
+  }
+}
+
+.nav-group {
+  margin: 0 12px;
+  padding-bottom: 12px;
+  margin-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+}
+
+.nav-label {
+  font-size: 0.75rem;
+  letter-spacing: 1.2px;
+  color: var(--muted);
+  font-weight: 550;
+  margin: 0 12px 12px;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  position: relative;
+  min-height: 41px;
+  border-radius: 7px;
+  margin: 4px 0;
+  padding: 10px 12px;
+  color: var(--muted);
+  font-size: 0.875rem;
+  white-space: nowrap;
+  transition:
+    background 0.18s,
+    color 0.18s;
+
+  &:hover {
+    background: var(--surface-alt);
+    color: var(--text);
+  }
+
+  > agro-icon {
+    width: 17px;
+    height: 17px;
+  }
+
+  &.active {
+    color: var(--primary);
+    background: var(--green-soft);
+    font-weight: 600;
+
+    &::before {
+      content: '';
+      position: absolute;
+      left: -16px;
+      width: 3px;
+      height: 23px;
+      border-radius: 0 3px 3px 0;
+      background: var(--primary);
+    }
+  }
+}
+
+.ai-badge {
+  font-size: 0.75rem;
+  margin-left: auto;
+  background: var(--green-soft);
+  color: var(--primary);
+  padding: 2px 5px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+}
+
+.monitoring-label {
+  margin-top: 29px;
+}
+
+.climate-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #cf9d46;
+  margin-left: auto;
+  margin-right: 7px;
+}
+
+// Collapsed state
+:host-context(.is-collapsed) {
+  .sidebar {
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+
+  .brand {
+    margin: 0 9px 29px;
+  }
+
+  .brand-name,
+  .workspace-text,
+  .workspace-switch > agro-icon,
+  .nav-label,
+  .nav-item > span,
+  .ai-badge,
+  .climate-dot {
+    display: none;
+  }
+
+  .workspace-switch {
+    padding: 10px;
+    justify-content: center;
+  }
+
+  .nav-item {
+    justify-content: center;
+    padding: 12px;
+  }
+
+  .monitoring-label {
+    display: block;
+    height: 1px;
+    background: var(--border);
+    font-size: 0;
+    margin: 25px 7px 15px;
+  }
+}
+
+// Responsive
+@media (max-width: 900px) {
+  :host {
+    .sidebar {
+      transform: translateX(-100%);
+      transition: transform 0.22s;
+    }
+
+    :host-context(.drawer-open) .sidebar {
+      transform: translateX(0);
+    }
+  }
+}

@@ -1,24 +1,28 @@
 import { inject, Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable, delay, of } from 'rxjs';
+import { Observable, delay, of, map } from 'rxjs';
 import { WorkspaceData } from '../models/agro.models';
+import { ApiResponse } from '../models/response.model';
 import { MOCK_WORKSPACE } from '../data/mock-data';
-import { environment } from '../../../environments/environment';
+import { ApiService } from './api.service';
 
 export abstract class AgroRepository {
   abstract loadWorkspace(): Observable<WorkspaceData>;
 }
+
 @Injectable({ providedIn: 'root' })
 export class MockAgroRepository implements AgroRepository {
   loadWorkspace(): Observable<WorkspaceData> {
     return of(structuredClone(MOCK_WORKSPACE)).pipe(delay(300));
   }
 }
-/** Proposed REST contract. Implement the endpoint in the future backend before enabling. */
+
 @Injectable({ providedIn: 'root' })
 export class ApiAgroRepository implements AgroRepository {
-  private readonly http = inject(HttpClient);
+  private readonly api = inject(ApiService);
+
   loadWorkspace(): Observable<WorkspaceData> {
-    return this.http.get<WorkspaceData>(`${environment.apiUrl}/workspace`);
+    return this.api.get<ApiResponse<WorkspaceData>>('workspace').pipe(
+      map(res => res.data)
+    );
   }
 }

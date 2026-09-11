@@ -1,8 +1,8 @@
-import { ApplicationConfig, LOCALE_ID, provideBrowserGlobalErrorListeners } from '@angular/core';
 import { registerLocaleData } from '@angular/common';
-import localeEs from '@angular/common/locales/es';
-import { provideRouter, withInMemoryScrolling } from '@angular/router';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import localeEs from '@angular/common/locales/es';
+import { ApplicationConfig, LOCALE_ID, provideBrowserGlobalErrorListeners } from '@angular/core';
+import { provideRouter, withInMemoryScrolling } from '@angular/router';
 import { routes } from './app.routes';
 import { apiErrorInterceptor } from './core/interceptors/api-error.interceptor';
 import { authInterceptor } from './core/interceptors/auth.interceptor';

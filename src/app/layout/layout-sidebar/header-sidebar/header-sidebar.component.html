@@ -1,0 +1,53 @@
+<header class="topbar">
+  <div class="topbar-left">
+    <button class="icon-button" (click)="toggleMenu()"
+      [attr.aria-label]="mobile() ? 'Abrir menú' : 'Colapsar o expandir menú'"
+      [attr.aria-expanded]="mobile() ? drawer() : !collapsed()">
+      <agro-icon [name]="mobile() ? 'menu' : 'panel'" />
+    </button>
+    <span class="header-divider"></span>
+    <nav class="breadcrumbs" aria-label="Ruta de navegación">
+      <span>Workspace</span>
+      <agro-icon name="chevron" />
+      <strong aria-current="page">{{ title() }}</strong>
+    </nav>
+  </div>
+  <div class="topbar-actions">
+
+    <button class="icon-button" (click)="theme.toggle()"
+      [attr.aria-label]="theme.dark() ? 'Activar modo claro' : 'Activar modo oscuro'"
+      [matTooltip]="theme.dark() ? 'Modo claro' : 'Modo oscuro'">
+      <agro-icon [name]="theme.dark() ? 'sun' : 'moon'" />
+    </button>
+    <button class="icon-button messages-button" [matMenuTriggerFor]="messagesMenu" aria-label="Mensajes">
+      <agro-icon name="message" />
+    </button>
+    <button class="icon-button notification-button" [matMenuTriggerFor]="notificationsMenu"
+      (menuOpened)="unread.set(false)" aria-label="Notificaciones">
+      <agro-icon name="bell" />
+      @if (unread()) {
+      <span class="notification-dot"></span>
+      }
+    </button>
+    <span class="header-divider"></span>
+    <button class="avatar avatar-button" [matMenuTriggerFor]="userMenu" aria-label="Opciones de usuario">
+      @if (authService.user()?.photoUrl) {
+      <img [src]="authService.user()?.photoUrl" alt="Foto de perfil" />
+      } @else { {{ initials() }} }
+    </button>
+  </div>
+  <mat-menu #userMenu="matMenu">
+    <a mat-menu-item routerLink="/perfil">Mi perfil</a>
+    <a mat-menu-item routerLink="/configuracion">Configuración</a>
+    <button mat-menu-item (click)="logout()">Cerrar sesión</button>
+  </mat-menu>
+  <mat-menu #notificationsMenu="matMenu">
+    <div class="popover-title">Notificaciones · Demo</div>
+    <a mat-menu-item routerLink="/clima">Lluvias previstas para el sábado</a>
+    <a mat-menu-item routerLink="/sensores">Un sensor requiere atención</a>
+  </mat-menu>
+  <mat-menu #messagesMenu="matMenu">
+    <div class="popover-title">Mensajes</div>
+    <button mat-menu-item disabled>No tienes mensajes nuevos.</button>
+  </mat-menu>
+</header>

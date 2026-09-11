@@ -1,0 +1,158 @@
+<main class="login-shell">
+  <section class="brand-panel" aria-label="AgroPredict">
+    <a class="brand" href="auth/signin">
+      <span class="brand-mark"><agro-icon name="sprout" /></span>
+      AgroPredict
+      <span class="brand-dot">®</span>
+    </a>
+    <div class="brand-story">
+      <span class="intro-badge">
+        <span></span>
+        EL FUTURO SE CULTIVA HOY
+      </span>
+      <h1>
+        Mejores decisiones.
+        <br />
+        Mejores
+        <em>cosechas.</em>
+      </h1>
+      <p>Modelo predictivo para la planificación inteligente de cultivos.</p>
+      <div class="insight-preview">
+        <div class="preview-top">
+          <span>
+            <agro-icon name="sparkles" />
+            Inteligencia que da frutos
+          </span>
+          <span class="preview-tag">DEMO</span>
+        </div>
+        <div class="preview-metric">
+          91.0
+          <span>%</span>
+          <span class="preview-trend">
+            <agro-icon name="trend" />
+            +2.4%
+          </span>
+        </div>
+        <p>R² ilustrativo del modelo de rendimiento</p>
+        <svg viewBox="0 0 390 95" aria-label="Gráfico ilustrativo de mejora del modelo" role="img">
+          <defs>
+            <linearGradient id="login-fill" x1="0" y1="0" x2="0" y2="1">
+              <stop stop-color="#cde99d" stop-opacity=".22" />
+              <stop offset="1" stop-color="#cde99d" stop-opacity="0" />
+            </linearGradient>
+          </defs>
+          <path d="M0 77 35 72 70 80 105 52 140 62 175 35 210 45 245 21 280 32 315 11 350 22 390 4V95H0Z"
+            fill="url(#login-fill)" />
+          <path d="m0 77 35-5 35 8 35-28 35 10 35-27 35 10 35-24 35 11 35-21 35 11 40-18" fill="none" stroke="#d5ef9c"
+            stroke-width="2.5" />
+        </svg>
+        <div class="preview-footer">
+          <span>Ene 2026</span>
+          <span>Sep 2026</span>
+        </div>
+      </div>
+    </div>
+    <div class="brand-bottom">
+      <span>
+        <agro-icon name="sprout" />
+        Cultiva con información. Crece con confianza.
+      </span>
+      <span>© 2026 AgroPredict</span>
+    </div>
+  </section>
+  <section class="form-panel">
+    <button class="icon-button theme-toggle" (click)="theme.toggle()"
+      [attr.aria-label]="theme.dark() ? 'Activar modo claro' : 'Activar modo oscuro'">
+      <agro-icon [name]="theme.dark() ? 'sun' : 'moon'" />
+    </button>
+    <div class="login-form-wrap">
+      <div class="mobile-brand">
+        <agro-icon name="sprout" />
+        AgroPredict
+      </div>
+      <span class="welcome-icon"><agro-icon name="sprout" /></span>
+      <h2>Bienvenido de nuevo</h2>
+      <p class="login-description">Tu próxima gran cosecha comienza aquí.</p>
+      @if (error()) {
+      <div class="login-error" role="alert">
+        <agro-icon name="alert" />
+        <span>{{ error() }}</span>
+      </div>
+      }
+      <form [formGroup]="form" (ngSubmit)="submit()" [attr.aria-busy]="pending()" novalidate>
+        <div class="form-field">
+          <label for="email">Correo electrónico</label>
+          <div class="input-with-icon">
+            <agro-icon name="mail" />
+            <input agroInput id="email" type="email" formControlName="email" placeholder="nombre@empresa.com"
+              autocomplete="username" maxlength="254" autocapitalize="none" spellcheck="false" (blur)="normalizeEmail()"
+              [attr.aria-invalid]="form.controls.email.touched && form.controls.email.invalid"
+              [attr.aria-describedby]="form.controls.email.touched && form.controls.email.invalid ? 'email-error' : null" />
+          </div>
+          @if (form.controls.email.touched && form.controls.email.invalid) {
+          <span class="field-error" id="email-error">
+            {{ form.controls.email.hasError('required') ? 'El correo electrónico es obligatorio.' :
+            form.controls.email.hasError('server') ? 'El servidor no reconoce este formato de
+            correo.' : 'Ingresa un correo electrónico válido (máximo 254 caracteres).' }}
+          </span>
+          }
+        </div>
+        <div class="form-field">
+          <label for="password">Contraseña</label>
+          <div class="input-with-icon">
+            <agro-icon name="lock" />
+            <input agroInput id="password" [type]="showPassword() ? 'text' : 'password'" formControlName="password"
+              placeholder="Ingresa tu contraseña" autocomplete="current-password"
+              [attr.aria-invalid]="form.controls.password.touched && form.controls.password.invalid"
+              [attr.aria-describedby]="form.controls.password.touched && form.controls.password.invalid ? 'password-error' : null" />
+            <button type="button" class="icon-button password-toggle" [disabled]="pending()"
+              (click)="showPassword.set(!showPassword())"
+              [attr.aria-label]="showPassword() ? 'Ocultar contraseña' : 'Mostrar contraseña'">
+              <agro-icon [name]="showPassword() ? 'eyeOff' : 'eye'" />
+            </button>
+          </div>
+          @if (form.controls.password.touched && form.controls.password.invalid) {
+          <span class="field-error" id="password-error">
+            {{ form.controls.password.hasError('server') ? 'El servidor no pudo validar la
+            contraseña.' : 'La contraseña es obligatoria y no puede contener solo espacios.' }}
+          </span>
+          }
+        </div>
+        <div class="form-options">
+          <mat-checkbox formControlName="remember">Recordarme</mat-checkbox>
+          <button type="button" class="forgot" (click)="forgot()" [disabled]="pending()">
+            Olvidé mi contraseña
+          </button>
+        </div>
+        <button agroButton="primary" type="submit" class="login-submit" [disabled]="pending()">
+          {{ pending() ? 'Ingresando…' : 'Iniciar sesión' }} @if (pending()) {
+          <span class="spinner" aria-hidden="true"></span>
+          } @else {
+          <agro-icon name="arrow" />
+          }
+        </button>
+      </form>
+      <div class="login-divider">
+        <span></span>
+        O PRUEBA EL SISTEMA
+        <span></span>
+      </div>
+      <button agroButton type="button" class="demo-button" (click)="startDemo()" [disabled]="pending()">
+        <agro-icon name="sparkles" />
+        Explorar con datos demo
+      </button>
+      <div class="demo-note">
+        <agro-icon name="info" />
+        <span>
+          Usa tu cuenta de AgroPredict. Marca «Recordarme» solo en un dispositivo de confianza. Los
+          módulos agrícolas utilizan datos simulados. El acceso demo no envía credenciales ni genera
+          un token de API.
+        </span>
+      </div>
+    </div>
+    <footer class="login-footer">
+      <agro-icon name="shield" />
+      Planificación agrícola, en un solo lugar.
+    </footer>
+  </section>
+</main>

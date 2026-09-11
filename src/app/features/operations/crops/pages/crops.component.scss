@@ -1,0 +1,124 @@
+      .crop-filters {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        justify-content: space-between;
+        margin-bottom: 24px;
+      }
+
+      .crop-filters>span {
+        font-size: 0.8125rem;
+        color: var(--muted);
+      }
+
+      .crop-card {
+        overflow: hidden;
+      }
+
+      .crop-banner {
+        height: 128px;
+        background: color-mix(in srgb, var(--crop-color) 17%, var(--surface));
+        position: relative;
+        padding: 23px;
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        overflow: hidden;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .crop-initial {
+        font-size: 3.3rem;
+        font-weight: 600;
+        letter-spacing: -3px;
+        color: var(--crop-color);
+        align-self: center;
+      }
+
+      .crop-category {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        padding: 5px 9px;
+        border-radius: 5px;
+        font-size: 0.75rem;
+        color: var(--muted);
+      }
+
+      .crop-banner>agro-icon {
+        position: absolute;
+        bottom: -18px;
+        right: 35px;
+        color: var(--crop-color);
+        width: 100px;
+        height: 100px;
+        opacity: 0.16;
+      }
+
+      .crop-body {
+        padding: 24px;
+      }
+
+      .crop-body h2 {
+        font-size: 1.25rem;
+      }
+
+      .crop-body>p {
+        font-size: 0.8125rem;
+        margin-top: 6px;
+      }
+
+      dl {
+        margin: 23px 0;
+      }
+
+      dl>div {
+        display: flex;
+        justify-content: space-between;
+        gap: 10px;
+        margin: 17px 0;
+        font-size: 0.8125rem;
+      }
+
+      dt {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        color: var(--muted);
+      }
+
+      dt agro-icon {
+        width: 16px;
+        height: 16px;
+      }
+
+      dd {
+        margin: 0;
+        font-weight: 500;
+        white-space: nowrap;
+      }
+
+      .crop-action {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border-top: 1px solid var(--border);
+        padding-top: 18px;
+        font-size: 0.8125rem;
+        color: var(--primary);
+      }
+
+      .crop-action agro-icon {
+        width: 15px;
+        height: 15px;
+      }
+
+      .crop-note {
+        margin-top: 26px;
+      }
+
+      @media (max-width: 600px) {
+        .crop-filters {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+      }

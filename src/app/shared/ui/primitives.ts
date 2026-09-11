@@ -17,7 +17,7 @@ export class Button {
   selector: 'input[agroInput], select[agroInput], textarea[agroInput]',
   host: { class: 'form-control' },
 })
-export class Input {}
+export class Input { }
 
 @Component({
   selector: 'agro-card',
@@ -25,7 +25,7 @@ export class Input {}
   host: { class: 'card' },
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class Card {}
+export class Card { }
 
 @Component({
   selector: 'agro-page-header',
@@ -61,5 +61,5 @@ export class Empty {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Loader {
-  readonly label = input('Cargando tu espacio de trabajo…');
+  readonly label = input('Cargando...');
 }

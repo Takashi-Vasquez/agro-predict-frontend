@@ -1,0 +1,50 @@
+:host {
+  display: block;
+}
+
+.app-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  color: var(--muted);
+  font-size: 0.75rem;
+  margin: 0 33px;
+  padding: 19px 0;
+  border-top: 1px solid var(--border);
+
+  > span:first-child {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+}
+
+.footer-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #86a889;
+}
+
+.footer-divider {
+  margin: 0 8px;
+}
+
+@media (max-width: 1200px) {
+  .app-footer {
+    margin: 0 24px;
+  }
+}
+
+@media (max-width: 600px) {
+  .app-footer {
+    margin: 0 16px;
+    font-size: 0.75rem;
+    flex-wrap: wrap;
+
+    > span:last-child {
+      display: none;
+    }
+  }
+}

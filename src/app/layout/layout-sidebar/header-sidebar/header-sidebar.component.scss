@@ -1,0 +1,220 @@
+:host {
+  display: block;
+}
+
+.topbar {
+  height: 76px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 32px;
+  border-bottom: 1px solid var(--border);
+  background: color-mix(in srgb, var(--surface) 90%, transparent);
+  backdrop-filter: blur(16px);
+  gap: 24px;
+  position: sticky;
+  top: 0;
+  z-index: 30;
+}
+
+.topbar-left,
+.topbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.topbar-left {
+  min-width: 0;
+  gap: 12px;
+}
+
+.topbar-actions {
+  gap: 9px;
+}
+
+.header-divider {
+  height: 20px;
+  width: 1px;
+  background: var(--border);
+  flex-shrink: 0;
+}
+
+.breadcrumbs {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  font-size: 0.8125rem;
+  white-space: nowrap;
+
+  > span {
+    color: var(--muted);
+  }
+
+  agro-icon {
+    width: 10px;
+    height: 10px;
+    color: var(--muted);
+  }
+
+  strong {
+    font-weight: 500;
+  }
+}
+
+.global-search {
+  display: flex;
+  gap: 9px;
+  align-items: center;
+  position: relative;
+  margin-right: 12px;
+
+  > agro-icon {
+    width: 16px;
+    height: 16px;
+    color: var(--muted);
+  }
+
+  input {
+    width: 190px;
+    background: transparent;
+    border: none;
+    color: var(--text);
+    outline: none;
+    font-size: 0.8125rem;
+    padding: 10px 0;
+
+    &::placeholder {
+      color: var(--muted);
+    }
+  }
+}
+
+.search-results {
+  position: absolute;
+  top: 42px;
+  right: 0;
+  width: 300px;
+  background: var(--surface);
+  box-shadow: var(--shadow);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 6px;
+  z-index: 80;
+
+  a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 13px;
+    font-size: 0.75rem;
+    border-radius: 5px;
+
+    &:hover {
+      background: var(--green-soft);
+    }
+
+    &:last-child {
+      margin-left: auto;
+    }
+  }
+
+  p {
+    padding: 16px;
+  }
+}
+
+.notification-button {
+  position: relative;
+}
+
+.notification-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  position: absolute;
+  right: 10px;
+  top: 8px;
+  background: #d5a75f;
+  border: 1px solid var(--surface);
+}
+
+.avatar-button {
+  border: 0;
+  width: 31px;
+  height: 31px;
+  margin-left: 5px;
+  font-size: 0.75rem;
+}
+
+.popover-title {
+  padding: 13px 16px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.compact-search {
+  display: none;
+}
+
+// Responsive
+@media (max-width: 1200px) {
+  .global-search {
+    display: none;
+  }
+
+  .topbar {
+    padding: 0 24px;
+  }
+
+  .compact-search {
+    display: inline-flex;
+  }
+}
+
+@media (max-width: 600px) {
+  .topbar {
+    height: 65px;
+    padding: 0 16px;
+    gap: 6px;
+  }
+
+  .breadcrumbs {
+    > span,
+    > agro-icon {
+      display: none;
+    }
+
+    strong {
+      font-size: 0.75rem;
+      max-width: 90px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+
+  .topbar-left {
+    gap: 8px;
+  }
+
+  .topbar-actions {
+    gap: 1px;
+
+    .icon-button {
+      min-width: 40px;
+      min-height: 40px;
+    }
+  }
+
+  .messages-button {
+    display: none;
+  }
+}
+
+@media (max-width: 380px) {
+  .breadcrumbs,
+  .topbar-left > .header-divider {
+    display: none;
+  }
+}

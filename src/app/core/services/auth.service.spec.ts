@@ -1,15 +1,15 @@
-import { TestBed } from '@angular/core/testing';
 import { provideHttpClient } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
-import { Router, provideRouter } from '@angular/router';
-import { AUTH_SESSION_KEY, AuthService } from './auth.service';
-import { AuthResponseError } from '../models/auth.models';
+import { TestBed } from '@angular/core/testing';
+import { provideRouter, Router } from '@angular/router';
 import {
   authenticate,
   clearAuthStorage,
   fakeToken,
   TEST_CREDENTIALS,
 } from '../../testing/auth-test-helpers';
+import { AuthResponseError } from '../models/auth.models';
+import { AUTH_SESSION_KEY, AuthService } from './auth.service';
 
 describe('AuthService: API de autenticación', () => {
   beforeEach(() => {
@@ -43,12 +43,12 @@ describe('AuthService: API de autenticación', () => {
     expect(auth.user()?.role).toBe('Explorador de negocio');
     expect(sessionStorage.getItem(AUTH_SESSION_KEY)).toContain('"mode":"demo"');
     expect(localStorage.getItem(AUTH_SESSION_KEY)).toBeNull();
-    TestBed.inject(HttpTestingController).expectNone('/api/v1/auth/login');
+    TestBed.inject(HttpTestingController).expectNone('/api/v1/auth/signin');
   });
   it('envía solo email/password, conserva exactamente la contraseña y guarda el token temporal', () => {
     const auth = TestBed.inject(AuthService);
     auth.login({ email: ' user@example.com ', password: ' test password ' }, false).subscribe();
-    const request = TestBed.inject(HttpTestingController).expectOne('/api/v1/auth/login');
+    const request = TestBed.inject(HttpTestingController).expectOne('/api/v1/auth/signin');
     expect(request.request.method).toBe('POST');
     expect(request.request.body).toEqual({
       email: 'user@example.com',
@@ -107,7 +107,7 @@ describe('AuthService: API de autenticación', () => {
     const auth = TestBed.inject(AuthService);
     const error = vi.fn();
     auth.login(TEST_CREDENTIALS).subscribe({ error });
-    TestBed.inject(HttpTestingController).expectOne('/api/v1/auth/login').flush(response);
+    TestBed.inject(HttpTestingController).expectOne('/api/v1/auth/signin').flush(response);
     expect(error.mock.calls[0][0]).toBeInstanceOf(AuthResponseError);
     expect(auth.isAuthenticated()).toBe(false);
   });
@@ -115,7 +115,7 @@ describe('AuthService: API de autenticación', () => {
     const auth = TestBed.inject(AuthService);
     auth.login(TEST_CREDENTIALS).subscribe({ error: () => undefined });
     TestBed.inject(HttpTestingController)
-      .expectOne('/api/v1/auth/login')
+      .expectOne('/api/v1/auth/signin')
       .flush({}, { status: 401, statusText: 'Unauthorized' });
     expect(auth.isAuthenticated()).toBe(false);
     expect(sessionStorage.getItem(AUTH_SESSION_KEY)).toBeNull();
@@ -126,7 +126,7 @@ describe('AuthService: API de autenticación', () => {
     authenticate(false, fakeToken(Date.now() + 10_000));
     vi.advanceTimersByTime(10_001);
     expect(TestBed.inject(AuthService).user()).toBeNull();
-    expect(navigate).toHaveBeenCalledWith(['/login'], {
+    expect(navigate).toHaveBeenCalledWith(['auth/signin'], {
       queryParams: { reason: 'expired', returnUrl: '/' },
     });
   });

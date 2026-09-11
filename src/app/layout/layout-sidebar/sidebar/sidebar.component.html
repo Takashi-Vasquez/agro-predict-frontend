@@ -1,0 +1,32 @@
+<aside class="sidebar" aria-label="Navegación principal" [cdkTrapFocus]="drawer() && mobile()"
+  [cdkTrapFocusAutoCapture]="drawer() && mobile()" [attr.inert]="mobile() && !drawer() ? '' : null"
+  (keydown.escape)="drawer.set(false)">
+  <a routerLink="/panel-general/dashboard" class="brand" aria-label="AgroPredict, inicio">
+    <span class="brand-mark"><agro-icon name="sprout" /></span>
+    <span class="brand-name">
+      AgroPredict
+      <span class="brand-dot">®</span>
+    </span>
+  </a>
+
+  <nav>
+
+    @for (item of menu(); track $index) {
+    <div class="nav-group">
+
+      <div class="nav-label">{{item.name | uppercase}}</div>
+      @for (item of item.children; track item.route) {
+      <a class="nav-item" [routerLink]="item.route" routerLinkActive="active"
+        [matTooltip]="collapsed() ? item.name : ''" matTooltipPosition="right" [attr.aria-label]="item.name">
+        <agro-icon [name]="item.icon" />
+        <span>{{ item.name }}</span>
+        @if (item.badge) {
+        <small class="ai-badge">{{ item.badge }}</small>
+        }
+      </a>
+      }
+    </div>
+    }
+
+  </nav>
+</aside>

@@ -1,0 +1,56 @@
+.app-shell {
+  --sidebar-size: 248px;
+}
+
+.workspace-main {
+  margin-left: var(--sidebar-size);
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+  transition: margin-left 0.22s;
+}
+
+main {
+  flex: 1;
+  padding: 31px 33px 24px;
+  min-width: 0;
+  outline: none;
+  max-width: 1800px;
+  width: 100%;
+  margin: 0 auto;
+  animation: enter 0.35s ease;
+}
+
+.drawer-backdrop {
+  display: none;
+}
+
+.is-collapsed {
+  --sidebar-size: 80px;
+}
+
+@media (max-width: 900px) {
+  .app-shell {
+    --sidebar-size: 248px;
+  }
+
+  .workspace-main {
+    margin-left: 0;
+  }
+
+  .drawer-backdrop {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: #10201766;
+    border: 0;
+    z-index: 39;
+    backdrop-filter: blur(3px);
+  }
+}
+
+@media (max-width: 600px) {
+  main {
+    padding: 23px 16px 18px;
+  }
+}

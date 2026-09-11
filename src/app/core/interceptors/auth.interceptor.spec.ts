@@ -1,16 +1,16 @@
-import { TestBed } from '@angular/core/testing';
 import { DOCUMENT } from '@angular/common';
 import { HttpClient, provideHttpClient, withInterceptors } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
-import { Router, provideRouter } from '@angular/router';
-import { authInterceptor } from './auth.interceptor';
-import { AuthService } from '../services/auth.service';
+import { TestBed } from '@angular/core/testing';
+import { provideRouter, Router } from '@angular/router';
 import {
   authenticate,
   clearAuthStorage,
   fakeToken,
   TEST_CREDENTIALS,
 } from '../../testing/auth-test-helpers';
+import { AuthService } from '../services/auth.service';
+import { authInterceptor } from './auth.interceptor';
 
 describe('authInterceptor', () => {
   beforeEach(() => {
@@ -54,7 +54,7 @@ describe('authInterceptor', () => {
   it('no envía un token existente al endpoint público de login', () => {
     authenticate();
     TestBed.inject(AuthService).login(TEST_CREDENTIALS).subscribe();
-    const request = TestBed.inject(HttpTestingController).expectOne('/api/v1/auth/login');
+    const request = TestBed.inject(HttpTestingController).expectOne('/api/v1/auth/signin');
     expect(request.request.headers.has('Authorization')).toBe(false);
     request.flush({ access_token: fakeToken(), token_type: 'bearer' });
   });

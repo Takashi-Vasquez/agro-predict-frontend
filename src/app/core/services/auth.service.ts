@@ -1,23 +1,33 @@
 import { DestroyRef, Injectable, computed, inject, signal } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { Observable, map, timeout } from 'rxjs';
-import { environment } from '../../../environments/environment';
-import { AuthResponseError, AuthSession, AuthUser, LoginRequest } from '../models/auth.models';
+import { Observable, map, switchMap, tap, timeout } from 'rxjs';
+import {
+  AuthResponseError,
+  AuthSession,
+  AuthUser,
+  LoginRequest,
+  LoginResponse,
+} from '../models/auth.models';
+import { ApiResponse } from '../models/response.model';
+import { ApiService } from './api.service';
 import { readStorage, writeStorage } from './browser-storage';
 import { jwtExpiresAt } from './jwt';
+import { MenuService } from './menu.service';
 
 export const AUTH_SESSION_KEY = 'agro.auth-session';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private readonly http = inject(HttpClient);
+  private readonly api = inject(ApiService);
+  private readonly menuService = inject(MenuService);
   private readonly router = inject(Router);
-  private readonly session = signal<AuthSession | null>(null);
+  private readonly _session = signal<AuthSession | null>(null);
+  readonly session = this._session.asReadonly();
+
   private persistent = false;
   private expiryTimer: ReturnType<typeof setTimeout> | undefined;
-  readonly user = computed(() => this.session()?.user ?? null);
-  readonly isDemo = computed(() => this.session()?.mode === 'demo');
+
+  readonly user = computed(() => this._session()?.user ?? null);
 
   constructor() {
     // Remove the obsolete demo identity format; the current demo uses the validated session shape.
@@ -28,43 +38,64 @@ export class AuthService {
   }
 
   login(credentials: LoginRequest, remember = false): Observable<void> {
-    return this.http
-      .post<unknown>(environment.apiUrl + '/auth/login', {
-        email: credentials.email.trim(),
-        password: credentials.password,
-      })
+    return this.api.post<ApiResponse<LoginResponse>>('auth/login', {
+      email: credentials.email.trim(),
+      password: credentials.password,
+    })
       .pipe(
         timeout(15_000),
+        map((response) => response.data),
         map((response) => {
           if (
             typeof response !== 'object' ||
             response === null ||
-            !('access_token' in response) ||
-            typeof response.access_token !== 'string' ||
-            !('token_type' in response) ||
-            typeof response.token_type !== 'string' ||
-            response.token_type.toLowerCase() !== 'bearer'
+            !('accessToken' in response) ||
+            typeof response.accessToken !== 'string' ||
+            !('tokenType' in response) ||
+            typeof response.tokenType !== 'string' ||
+            response.tokenType.toLowerCase() !== 'bearer'
           ) {
             throw new AuthResponseError('invalid-response');
           }
-          const expiresAt = jwtExpiresAt(response.access_token);
+          const expiresAt = jwtExpiresAt(response.accessToken);
           if (!expiresAt) throw new AuthResponseError('invalid-response');
           if (expiresAt <= Date.now()) throw new AuthResponseError('expired-token');
           this.logout();
           this.persistent = remember;
-          this.session.set({
-            accessToken: response.access_token,
-            expiresAt,
-            mode: 'api',
-            user: {
-              email: credentials.email.trim(),
-              name: credentials.email.trim().split('@')[0],
-              role: 'No informado',
-              avatar: null,
-            },
+          this._session.set({
+            accessToken: response.accessToken,
+            expiresAt
           });
           this.save();
           this.scheduleExpiry();
+        }),
+        switchMap(() => this.getUser()),
+        map((): void => undefined),
+      );
+  }
+
+  getUser(): Observable<AuthUser> {
+    return this.api
+      .get<ApiResponse<AuthUser>>('auth/user')
+      .pipe(
+        timeout(15_000),
+        map((response) => response.data),
+        tap((result) => {
+
+          const current = this._session();
+
+          if (current) {
+            this._session.set({
+              ...current,
+              user: {
+                ...result,
+                roles: result.isAdmin ? ['Admin'] : result.roles,
+              },
+            });
+            const menus = this._session().user.menus ?? [];
+            this.menuService.setMenu(menus);
+            this.save();
+          }
         }),
       );
   }
@@ -73,23 +104,31 @@ export class AuthService {
   startDemo(): void {
     this.logout();
     this.persistent = false;
-    this.session.set({
+    const demoUser: AuthUser = {
+      id: 99999,
+      firstName: 'Invitado Demo',
+      lastName: '',
+      fullName: 'Invitado',
+      email: 'demo@agropredict.local',
+      photoUrl: null,
+      status: 'active',
+      isAdmin: false,
+      phone: "98885547",
+      age: 18,
+      roles: ['Explorador de negocio'],
+      menus: []
+    };
+    this._session.set({
       accessToken: null,
       expiresAt: Date.now() + 8 * 60 * 60 * 1000,
-      mode: 'demo',
-      user: {
-        name: 'Invitado Demo',
-        email: 'demo@agropredict.local',
-        role: 'Explorador de negocio',
-        avatar: null,
-      },
+      user: demoUser,
     });
     this.save();
     this.scheduleExpiry();
   }
 
   isAuthenticated(): boolean {
-    const current = this.session();
+    const current = this._session();
     if (!current) return false;
     if (current.expiresAt <= Date.now()) {
       this.logout();
@@ -99,25 +138,25 @@ export class AuthService {
   }
 
   getAccessToken(): string | null {
-    const hadSession = this.session() !== null;
-    if (this.isAuthenticated()) return this.session()?.accessToken ?? null;
+    const hadSession = this._session() !== null;
+    if (this.isAuthenticated()) return this._session()?.accessToken ?? null;
     // A background tab may execute an HTTP request before its throttled expiry timer.
     if (hadSession) this.expireSession();
     return null;
   }
 
   /** Profile changes stay local until a profile endpoint is supplied. */
-  updateProfile(update: Pick<AuthUser, 'name' | 'avatar'>): void {
-    const current = this.session();
+  updateProfile(update: Pick<AuthUser, 'firstName' | 'photoUrl'>): void {
+    const current = this._session();
     if (current) {
-      this.session.set({ ...current, user: { ...current.user, ...update } });
+      this._session.set({ ...current, user: { ...current.user, ...update } });
       this.save();
     }
   }
 
   logout(): void {
     clearTimeout(this.expiryTimer);
-    this.session.set(null);
+    this._session.set(null);
     writeStorage(AUTH_SESSION_KEY, null);
     writeStorage(AUTH_SESSION_KEY, null, false);
   }
@@ -125,13 +164,13 @@ export class AuthService {
   expireSession(): void {
     const returnUrl = this.router.url;
     this.logout();
-    if (!returnUrl.startsWith('/login')) {
-      void this.router.navigate(['/login'], { queryParams: { reason: 'expired', returnUrl } });
+    if (!returnUrl.startsWith('/auth/signin')) {
+      void this.router.navigate(['/auth/signin'], { queryParams: { reason: 'expired', returnUrl } });
     }
   }
 
   private save(): void {
-    const current = this.session();
+    const current = this._session();
     if (!current) return;
     // API sessions honor remember-me; demo access always remains in sessionStorage.
     writeStorage(
@@ -139,7 +178,6 @@ export class AuthService {
       JSON.stringify({
         accessToken: current.accessToken,
         expiresAt: current.expiresAt,
-        mode: current.mode,
         user: { ...current.user, avatar: null },
       }),
       this.persistent,
@@ -161,31 +199,24 @@ export class AuthService {
           value.user !== null &&
           'email' in value.user &&
           typeof value.user.email === 'string' &&
-          'name' in value.user &&
-          typeof value.user.name === 'string'
+          'expiresAt' in value &&
+          typeof value.expiresAt === 'number'
         ) {
-          const mode = 'mode' in value && value.mode === 'demo' ? 'demo' : 'api';
           const accessToken = typeof value.accessToken === 'string' ? value.accessToken : null;
-          const expiresAt =
-            mode === 'demo' && 'expiresAt' in value && typeof value.expiresAt === 'number'
-              ? value.expiresAt
-              : accessToken
-                ? jwtExpiresAt(accessToken)
-                : null;
+          const expiresAt = accessToken
+            ? jwtExpiresAt(accessToken)
+            : value.expiresAt;
           if (expiresAt && expiresAt > Date.now()) {
             this.persistent = persistent;
-            this.session.set({
+            this._session.set({
               accessToken,
               expiresAt,
-              mode,
-              user: {
-                email: value.user.email,
-                name: value.user.name,
-                role: mode === 'demo' ? 'Explorador de negocio' : 'No informado',
-                avatar: null,
-              },
+              user: value.user as AuthUser,
             });
+            const menus = this._session().user.menus ?? [];
+            this.menuService.setMenu(menus);
             this.scheduleExpiry();
+
             return;
           }
         }
@@ -198,7 +229,7 @@ export class AuthService {
 
   private scheduleExpiry(): void {
     clearTimeout(this.expiryTimer);
-    const expiresAt = this.session()?.expiresAt;
+    const expiresAt = this._session()?.expiresAt;
     if (!expiresAt) return;
     this.expiryTimer = setTimeout(
       () => {
