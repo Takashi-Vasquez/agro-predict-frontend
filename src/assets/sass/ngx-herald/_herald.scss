@@ -1,0 +1,85 @@
+// ============================================
+// ngx-herald — Configuración visual del toast
+// ============================================
+
+:root {
+  --ngx-toast-z-index: 9999;
+  --ngx-toast-width: 360px;
+  --ngx-toast-gap: 8px;
+  --ngx-toast-padding: 12px 16px;
+  --ngx-toast-border-radius: 8px;
+  --ngx-toast-offset: 16px;
+  --ngx-toast-font-family: 'Inter Variable', sans-serif;
+  --ngx-toast-font-size: 14px;
+  --ngx-toast-message-weight: 500;
+  --ngx-toast-message-color: var(--text);
+  --ngx-toast-description-color: var(--muted);
+  --ngx-toast-bg: var(--surface);
+  --ngx-toast-border: 1px solid var(--border);
+  --ngx-toast-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  --ngx-toast-success-color: var(--primary);
+  --ngx-toast-error-color: var(--danger);
+  --ngx-toast-warning-color: var(--amber);
+  --ngx-toast-info-color: var(--blue);
+  --ngx-toast-progress-height: 3px;
+  --ngx-toast-progress-opacity: 0.3;
+}
+
+// --- Progress bar ---
+ngx-herald-item .ngx-herald-item__progress {
+  height: 2px !important;
+  opacity: 1 !important;
+}
+
+// --- Success ---
+ngx-herald-item:has(.ngx-herald-item__icon--success) {
+  background-color: var(--surface) !important;
+  box-shadow:
+    0 4px 15px 0 rgba(0, 0, 0, 0.1),
+    0 1px 2px 0 rgba(0, 0, 0, 0.1),
+    inset 0 2px 0 0 #4CAF50 !important;
+}
+ngx-herald-item:has(.ngx-herald-item__icon--success) .ngx-herald-item__progress {
+  background: #4CAF50 !important;
+}
+
+// --- Error ---
+ngx-herald-item:has(.ngx-herald-item__icon--error) {
+  background-color: var(--surface) !important;
+  box-shadow:
+    0 4px 15px 0 rgba(0, 0, 0, 0.1),
+    0 1px 2px 0 rgba(0, 0, 0, 0.1),
+    inset 0 2px 0 0 var(--ngx-toast-error-color) !important;
+}
+ngx-herald-item:has(.ngx-herald-item__icon--error) .ngx-herald-item__progress {
+  background: var(--ngx-toast-error-color) !important;
+}
+
+// --- Warning ---
+ngx-herald-item:has(.ngx-herald-item__icon--warning) {
+  background-color: var(--surface) !important;
+  box-shadow:
+    0 4px 15px 0 rgba(0, 0, 0, 0.1),
+    0 1px 2px 0 rgba(0, 0, 0, 0.1),
+    inset 0 2px 0 0 var(--ngx-toast-warning-color) !important;
+}
+ngx-herald-item:has(.ngx-herald-item__icon--warning) .ngx-herald-item__progress {
+  background: var(--ngx-toast-warning-color) !important;
+}
+
+// --- Info ---
+ngx-herald-item:has(.ngx-herald-item__icon--info) {
+  background-color: var(--surface) !important;
+  box-shadow:
+    0 4px 15px 0 rgba(0, 0, 0, 0.1),
+    0 1px 2px 0 rgba(0, 0, 0, 0.1),
+    inset 0 2px 0 0 var(--ngx-toast-info-color) !important;
+}
+ngx-herald-item:has(.ngx-herald-item__icon--info) .ngx-herald-item__progress {
+  background: var(--ngx-toast-info-color) !important;
+}
+
+html.dark {
+  --ngx-toast-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+

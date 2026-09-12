@@ -1,0 +1,40 @@
+@media (max-width: 1100px) {
+  .section-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 700px) {
+  .page-header {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 18px;
+    margin-bottom: 22px;
+  }
+
+  .page-actions {
+    width: 100%;
+  }
+
+  .section-grid,
+  .form-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .card-header {
+    padding: 18px;
+  }
+
+  .panel-body {
+    padding: 0 18px 18px;
+  }
+
+  .toolbar {
+    padding: 16px;
+    flex-wrap: wrap;
+  }
+
+  .form-control {
+    font-size: 1rem;
+  }
+}

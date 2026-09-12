@@ -8,7 +8,6 @@ import {
   LoginRequest,
   LoginResponse,
 } from '../models/auth.models';
-import { ApiResponse } from '../models/response.model';
 import { ApiService } from './api.service';
 import { readStorage, writeStorage } from './browser-storage';
 import { jwtExpiresAt } from './jwt';
@@ -38,13 +37,13 @@ export class AuthService {
   }
 
   login(credentials: LoginRequest, remember = false): Observable<void> {
-    return this.api.post<ApiResponse<LoginResponse>>('auth/login', {
-      email: credentials.email.trim(),
-      password: credentials.password,
-    })
+    return this.api
+      .post<LoginResponse>('auth/login', {
+        email: credentials.email.trim(),
+        password: credentials.password,
+      })
       .pipe(
         timeout(15_000),
-        map((response) => response.data),
         map((response) => {
           if (
             typeof response !== 'object' ||
@@ -75,29 +74,24 @@ export class AuthService {
   }
 
   getUser(): Observable<AuthUser> {
-    return this.api
-      .get<ApiResponse<AuthUser>>('auth/user')
-      .pipe(
-        timeout(15_000),
-        map((response) => response.data),
-        tap((result) => {
-
-          const current = this._session();
-
-          if (current) {
-            this._session.set({
-              ...current,
-              user: {
-                ...result,
-                roles: result.isAdmin ? ['Admin'] : result.roles,
-              },
-            });
-            const menus = this._session().user.menus ?? [];
-            this.menuService.setMenu(menus);
-            this.save();
-          }
-        }),
-      );
+    return this.api.get<AuthUser>('auth/user').pipe(
+      timeout(15_000),
+      tap((result) => {
+        const current = this._session();
+        if (current) {
+          this._session.set({
+            ...current,
+            user: {
+              ...result,
+              roles: result.isAdmin ? ['Admin'] : result.roles,
+            },
+          });
+          const menus = this._session().user.menus ?? [];
+          this.menuService.setMenu(menus);
+          this.save();
+        }
+      }),
+    );
   }
 
   /** Opens a short-lived, local-only session without calling or impersonating the API. */

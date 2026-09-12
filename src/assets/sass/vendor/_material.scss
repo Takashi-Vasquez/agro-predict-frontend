@@ -1,0 +1,43 @@
+.cdk-overlay-pane .mat-mdc-dialog-surface {
+  border-radius: 16px;
+  background: var(--surface);
+  color: var(--text);
+}
+
+.cdk-overlay-pane .mat-mdc-menu-panel {
+  background: var(--surface);
+  color: var(--text);
+}
+
+.mat-mdc-menu-item {
+  color: var(--text) !important;
+}
+
+.dialog-content {
+  padding: 26px;
+  min-width: 0;
+}
+
+.dialog-content h2 {
+  font-size: 1.2rem;
+  margin-bottom: 8px;
+}
+
+.dialog-content > p {
+  margin-bottom: 24px;
+}
+
+.dialog-content .mat-mdc-dialog-title {
+  padding: 0;
+}
+
+.dialog-content .mat-mdc-dialog-title::before {
+  display: none;
+}
+
+.dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 24px;
+}

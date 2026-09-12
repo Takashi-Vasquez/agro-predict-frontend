@@ -1,0 +1,35 @@
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border-radius: 5px;
+  background: var(--green-soft);
+  color: var(--green-text);
+  padding: 5px 8px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.status::before {
+  content: '';
+  height: 5px;
+  width: 5px;
+  background: currentColor;
+  border-radius: 50%;
+}
+
+.status.amber {
+  background: var(--amber-soft);
+  color: var(--amber);
+}
+
+.status.blue {
+  background: var(--blue-soft);
+  color: var(--blue);
+}
+
+.status.neutral {
+  background: var(--surface-alt);
+  color: var(--muted);
+}

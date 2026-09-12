@@ -1,0 +1,54 @@
+@use '@angular/material' as mat;
+
+html {
+  color-scheme: light;
+  @include mat.theme(
+    (
+      color: (
+        primary: mat.$green-palette,
+        tertiary: mat.$yellow-palette,
+      ),
+      typography: 'Inter Variable',
+      density: -1,
+    )
+  );
+  --bg: #f6f8f7;
+  --surface: #fff;
+  --surface-alt: #f9faf9;
+  --text: #1a2923;
+  --muted: #657168;
+  --border: #e6eae7;
+  --primary: #29724e;
+  --primary-hover: #1e5a3c;
+  --green-soft: #edf5ee;
+  --green-text: #2b7546;
+  --lime: #d5ef9c;
+  --amber: #91600f;
+  --amber-soft: #fff6e6;
+  --blue: #386aa2;
+  --blue-soft: #edf3fc;
+  --danger: #b04a43;
+  --shadow: 0 3px 12px #192f2110;
+  --sidebar-width: 248px;
+  --radius: 14px;
+}
+
+html.dark {
+  color-scheme: dark;
+  --bg: #111b16;
+  --surface: #1b2720;
+  --surface-alt: #202e25;
+  --text: #edf3ee;
+  --muted: #a1b1a6;
+  --border: #314238;
+  --primary: #8ac998;
+  --primary-hover: #a4d7af;
+  --green-soft: #263e2d;
+  --green-text: #9bd4a5;
+  --amber: #e9bd70;
+  --amber-soft: #3c3222;
+  --blue: #98bcef;
+  --blue-soft: #24344a;
+  --danger: #f29d97;
+  --shadow: 0 3px 12px #0002;
+}

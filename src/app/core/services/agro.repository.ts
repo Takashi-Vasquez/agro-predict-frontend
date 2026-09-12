@@ -1,7 +1,6 @@
 import { inject, Injectable } from '@angular/core';
-import { Observable, delay, of, map } from 'rxjs';
+import { Observable, delay, of } from 'rxjs';
 import { WorkspaceData } from '../models/agro.models';
-import { ApiResponse } from '../models/response.model';
 import { MOCK_WORKSPACE } from '../data/mock-data';
 import { ApiService } from './api.service';
 
@@ -21,8 +20,6 @@ export class ApiAgroRepository implements AgroRepository {
   private readonly api = inject(ApiService);
 
   loadWorkspace(): Observable<WorkspaceData> {
-    return this.api.get<ApiResponse<WorkspaceData>>('workspace').pipe(
-      map(res => res.data)
-    );
+    return this.api.get<WorkspaceData>('workspace');
   }
 }
