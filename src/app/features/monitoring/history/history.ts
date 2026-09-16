@@ -1,9 +1,12 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { WorkspaceStore } from '../../../core/services/workspace.store';
-import { DataTable, TableColumn, TableRow } from '../../../shared/ui/data-table';
+import { Button } from '../../../shared/directives/agro-button.directive';
+import { Card } from '../../../shared/directives/agro-card.directive';
+import { Input } from '../../../shared/directives/agro-input.directive';
+import { PageHeader } from '../../../shared/ui/agro-page-header/agro-page-header.component';
+import { DataTable, TableColumn, TableRow } from '../../../shared/ui/data-table/data-table.component';
 import { Icon } from '../../../shared/ui/icon';
-import { Button, Card, Input, PageHeader } from '../../../shared/ui/primitives';
 import { downloadCsv } from '../../../shared/utils/csv';
 @Component({
   selector: 'agro-history',
@@ -129,56 +132,56 @@ export class History {
   readonly columns = computed<TableColumn[]>(() =>
     this.tab() === 'predictions'
       ? [
-          { key: 'date', label: 'FECHA' },
-          { key: 'crop', label: 'CULTIVO', kind: 'emphasis' },
-          { key: 'plot', label: 'PARCELA' },
-          { key: 'yield', label: 'PREDICCIÓN' },
-          { key: 'target', label: 'META' },
-          { key: 'gap', label: 'BRECHA' },
-          { key: 'status', label: 'RESULTADO', kind: 'status' },
-        ]
+        { key: 'date', label: 'FECHA' },
+        { key: 'crop', label: 'CULTIVO', kind: 'emphasis' },
+        { key: 'plot', label: 'PARCELA' },
+        { key: 'yield', label: 'PREDICCIÓN' },
+        { key: 'target', label: 'META' },
+        { key: 'gap', label: 'BRECHA' },
+        { key: 'status', label: 'RESULTADO', kind: 'status' },
+      ]
       : this.tab() === 'training'
         ? [
-            { key: 'campaign', label: 'CAMPAÑA' },
-            { key: 'crop', label: 'CULTIVO', kind: 'emphasis' },
-            { key: 'location', label: 'UBICACIÓN' },
-            { key: 'conditions', label: 'CONDICIONES' },
-            { key: 'yield', label: 'COSECHA REAL' },
-          ]
+          { key: 'campaign', label: 'CAMPAÑA' },
+          { key: 'crop', label: 'CULTIVO', kind: 'emphasis' },
+          { key: 'location', label: 'UBICACIÓN' },
+          { key: 'conditions', label: 'CONDICIONES' },
+          { key: 'yield', label: 'COSECHA REAL' },
+        ]
         : [
-            { key: 'date', label: 'FECHA' },
-            { key: 'title', label: 'ACTIVIDAD', kind: 'emphasis' },
-            { key: 'detail', label: 'DETALLE' },
-          ],
+          { key: 'date', label: 'FECHA' },
+          { key: 'title', label: 'ACTIVIDAD', kind: 'emphasis' },
+          { key: 'detail', label: 'DETALLE' },
+        ],
   );
   readonly rows = computed<TableRow[]>(() => {
     const source: TableRow[] =
       this.tab() === 'predictions'
         ? this.store.predictions().map((item) => ({
-            id: item.id,
-            date: this.formatDate(item.date),
-            crop: item.crop,
-            plot: item.plot,
-            yield: `${item.yield} t/ha`,
-            target: `${item.expectedYield} t/ha`,
-            gap: `${item.gap > 0 ? '+' : ''}${item.gap} t/ha`,
-            status: item.meetsExpectation ? 'Cumple meta' : 'Requiere ajuste',
-          }))
+          id: item.id,
+          date: this.formatDate(item.date),
+          crop: item.crop,
+          plot: item.plot,
+          yield: `${item.yield} t/ha`,
+          target: `${item.expectedYield} t/ha`,
+          gap: `${item.gap > 0 ? '+' : ''}${item.gap} t/ha`,
+          status: item.meetsExpectation ? 'Cumple meta' : 'Requiere ajuste',
+        }))
         : this.tab() === 'training'
           ? this.store.historicalRecords().map((item) => ({
-              id: item.id,
-              campaign: item.campaign,
-              crop: item.crop,
-              location: item.location,
-              conditions: `${item.soilHumidity}% hum. · pH ${item.soilPh} · ${item.temperature} °C`,
-              yield: `${item.actualYield} t/ha`,
-            }))
+            id: item.id,
+            campaign: item.campaign,
+            crop: item.crop,
+            location: item.location,
+            conditions: `${item.soilHumidity}% hum. · pH ${item.soilPh} · ${item.temperature} °C`,
+            yield: `${item.actualYield} t/ha`,
+          }))
           : this.store.activities().map((item) => ({
-              id: item.id,
-              date: this.formatDate(item.date),
-              title: item.title,
-              detail: item.detail,
-            }));
+            id: item.id,
+            date: this.formatDate(item.date),
+            title: item.title,
+            detail: item.detail,
+          }));
     return source.filter((row) =>
       Object.values(row)
         .join(' ')

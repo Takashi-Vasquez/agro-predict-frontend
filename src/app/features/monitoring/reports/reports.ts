@@ -1,9 +1,11 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { WorkspaceStore } from '../../../core/services/workspace.store';
-import { DataTable, TableColumn, TableRow } from '../../../shared/ui/data-table';
+import { Button } from '../../../shared/directives/agro-button.directive';
+import { Card } from '../../../shared/directives/agro-card.directive';
+import { PageHeader } from '../../../shared/ui/agro-page-header/agro-page-header.component';
+import { DataTable, TableColumn, TableRow } from '../../../shared/ui/data-table/data-table.component';
 import { Icon } from '../../../shared/ui/icon';
-import { Button, Card, PageHeader } from '../../../shared/ui/primitives';
 import { downloadCsv } from '../../../shared/utils/csv';
 type ReportType = 'plots' | 'predictions' | 'plans';
 @Component({
@@ -197,55 +199,55 @@ export class Reports {
   readonly columns = computed<TableColumn[]>(() =>
     this.selected() === 'plots'
       ? [
-          { key: 'name', label: 'PARCELA', kind: 'emphasis' },
-          { key: 'crop', label: 'CULTIVO' },
-          { key: 'area', label: 'SUPERFICIE (HA)' },
-          { key: 'status', label: 'ESTADO', kind: 'status' },
-        ]
+        { key: 'name', label: 'PARCELA', kind: 'emphasis' },
+        { key: 'crop', label: 'CULTIVO' },
+        { key: 'area', label: 'SUPERFICIE (HA)' },
+        { key: 'status', label: 'ESTADO', kind: 'status' },
+      ]
       : this.selected() === 'predictions'
         ? [
-            { key: 'crop', label: 'CULTIVO', kind: 'emphasis' },
-            { key: 'plot', label: 'PARCELA' },
-            { key: 'yield', label: 'PREDICCIÓN (T/HA)' },
-            { key: 'target', label: 'META (T/HA)' },
-            { key: 'gap', label: 'BRECHA (T/HA)' },
-            { key: 'result', label: 'RESULTADO' },
-          ]
+          { key: 'crop', label: 'CULTIVO', kind: 'emphasis' },
+          { key: 'plot', label: 'PARCELA' },
+          { key: 'yield', label: 'PREDICCIÓN (T/HA)' },
+          { key: 'target', label: 'META (T/HA)' },
+          { key: 'gap', label: 'BRECHA (T/HA)' },
+          { key: 'result', label: 'RESULTADO' },
+        ]
         : [
-            { key: 'crop', label: 'CULTIVO', kind: 'emphasis' },
-            { key: 'plot', label: 'PARCELA' },
-            { key: 'startDate', label: 'SIEMBRA' },
-            { key: 'endDate', label: 'COSECHA PREVISTA' },
-            { key: 'status', label: 'ESTADO', kind: 'status' },
-          ],
+          { key: 'crop', label: 'CULTIVO', kind: 'emphasis' },
+          { key: 'plot', label: 'PARCELA' },
+          { key: 'startDate', label: 'SIEMBRA' },
+          { key: 'endDate', label: 'COSECHA PREVISTA' },
+          { key: 'status', label: 'ESTADO', kind: 'status' },
+        ],
   );
   readonly rows = computed<TableRow[]>(() =>
     this.selected() === 'plots'
       ? this.store.plots().map((item) => ({
-          id: item.id,
-          name: item.name,
-          crop: item.crop,
-          area: item.area,
-          status: item.status,
-        }))
+        id: item.id,
+        name: item.name,
+        crop: item.crop,
+        area: item.area,
+        status: item.status,
+      }))
       : this.selected() === 'predictions'
         ? this.store.predictions().map((item) => ({
-            id: item.id,
-            crop: item.crop,
-            plot: item.plot,
-            yield: item.yield,
-            target: item.expectedYield,
-            gap: item.gap,
-            result: item.meetsExpectation ? 'Cumple meta' : 'Requiere ajuste',
-          }))
+          id: item.id,
+          crop: item.crop,
+          plot: item.plot,
+          yield: item.yield,
+          target: item.expectedYield,
+          gap: item.gap,
+          result: item.meetsExpectation ? 'Cumple meta' : 'Requiere ajuste',
+        }))
         : this.store.plans().map((item) => ({
-            id: item.id,
-            crop: item.crop,
-            plot: item.plot,
-            startDate: item.startDate,
-            endDate: item.endDate,
-            status: item.status,
-          })),
+          id: item.id,
+          crop: item.crop,
+          plot: item.plot,
+          startDate: item.startDate,
+          endDate: item.endDate,
+          status: item.status,
+        })),
   );
   download(): void {
     downloadCsv(

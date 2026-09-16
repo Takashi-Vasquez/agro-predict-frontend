@@ -15,7 +15,9 @@ import {
 import { AuthService } from '../../core/services/auth.service';
 import { MenuService } from '../../core/services/menu.service';
 import { WorkspaceStore } from '../../core/services/workspace.store';
-import { Button, Empty, Loader } from '../../shared/ui/primitives';
+import { Button } from '../../shared/directives/agro-button.directive';
+import { Empty } from '../../shared/ui/agro-empty/agro-empty.component';
+import { Loader } from '../../shared/ui/agro-loader/agro-loader.component';
 import { FooterComponent } from '../components/footer/footer.component';
 import { HeaderSidebarComponent } from './header-sidebar/header-sidebar.component';
 import { SidebarComponent } from './sidebar/sidebar.component';

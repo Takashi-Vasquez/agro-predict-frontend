@@ -1,8 +1,9 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { WEATHER } from '../../../core/data/mock-data';
+import { Card } from '../../../shared/directives/agro-card.directive';
+import { PageHeader } from '../../../shared/ui/agro-page-header/agro-page-header.component';
 import { LineChart } from '../../../shared/ui/chart';
 import { Icon } from '../../../shared/ui/icon';
-import { Card, PageHeader } from '../../../shared/ui/primitives';
 @Component({
   selector: 'agro-weather',
   imports: [Icon, Card, PageHeader, LineChart],

@@ -1,0 +1,11 @@
+<div class="search-field">
+  <ng-icon name="heroMagnifyingGlassMicro"></ng-icon>
+  <input
+    agroInput
+    type="search"
+    [placeholder]="placeholder()"
+    [attr.aria-label]="ariaLabel()"
+    [value]="term()"
+    (input)="onInput($event)"
+  />
+</div>

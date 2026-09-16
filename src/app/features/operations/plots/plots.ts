@@ -5,9 +5,13 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { RouterLink } from '@angular/router';
 import { WorkspaceStore } from '../../../core/services/workspace.store';
+import { Button } from '../../../shared/directives/agro-button.directive';
+import { Card } from '../../../shared/directives/agro-card.directive';
+import { Input } from '../../../shared/directives/agro-input.directive';
+import { Empty } from '../../../shared/ui/agro-empty/agro-empty.component';
+import { PageHeader } from '../../../shared/ui/agro-page-header/agro-page-header.component';
 import { Icon } from '../../../shared/ui/icon';
 import { KpiCard } from '../../../shared/ui/kpi-card';
-import { Button, Card, Empty, Input, PageHeader } from '../../../shared/ui/primitives';
 import { PlotDialog } from './plot-dialog';
 @Component({
   selector: 'agro-plots',

@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { DataTable } from './data-table';
+import { DataTable } from './data-table.component';
 describe('DataTable', () => {
   it('pagina los registros y acota la página al cambiar el filtro', () => {
     const fixture = TestBed.createComponent(DataTable);

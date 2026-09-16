@@ -2,7 +2,6 @@
   "name": "agro-predict-frontend",
   "version": "1.0.0",
   "private": true,
-  "packageManager": "pnpm@11.19.0",
   "scripts": {
     "start": "ng serve --host 127.0.0.1",
     "build": "ng build",
@@ -22,8 +21,13 @@
     "@angular/platform-browser": "22.1.5",
     "@angular/router": "22.1.5",
     "@fontsource-variable/inter": "^5.2.8",
+    "@ng-icons/core": "^36.0.0",
+    "@ng-icons/heroicons": "^36.0.0",
+    "@tailwindcss/postcss": "^4.3.3",
     "ngx-herald": "^1.0.1",
+    "postcss": "^8.5.28",
     "rxjs": "~7.8.2",
+    "tailwindcss": "^4.3.3",
     "tslib": "^2.8.1"
   },
   "devDependencies": {

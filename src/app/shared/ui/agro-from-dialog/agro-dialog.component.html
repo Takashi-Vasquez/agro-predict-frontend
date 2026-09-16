@@ -1,0 +1,28 @@
+<div class="dialog-content" [class]="modalSize()" [style.height]="height()">
+  <h2 mat-dialog-title>{{ title() }}</h2>
+  <p>{{ description() }}</p>
+
+  <!-- Contenido Formulario -->
+  <ng-content />
+
+  <!-- Footer -->
+  @if (actions()) {
+    <div class="dialog-actions">
+      <ng-container *ngTemplateOutlet="actions()!" />
+    </div>
+  } @else {
+    <div class="dialog-actions">
+      <button agroButton type="button" [disabled]="saving()" (click)="cancel.emit()">
+        <span class="btn-label">{{ btnCancelLabel() }}</span>
+      </button>
+      <button
+        agroButton="primary"
+        [btnLoader]="saving()"
+        [loadingText]="savingLabel()"
+        type="submit"
+      >
+        <span class="btn-label">{{ btnSaveLabel() }}</span>
+      </button>
+    </div>
+  }
+</div>

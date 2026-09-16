@@ -1,11 +1,11 @@
 import { DecimalPipe } from '@angular/common';
 import {
-    ChangeDetectionStrategy,
-    Component,
-    DestroyRef,
-    computed,
-    inject,
-    signal,
+  ChangeDetectionStrategy,
+  Component,
+  DestroyRef,
+  computed,
+  inject,
+  signal,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -13,9 +13,12 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { timer } from 'rxjs';
 import { AgronomicInputs, Plot, Prediction } from '../../../core/models/agro.models';
 import { WorkspaceStore } from '../../../core/services/workspace.store';
-import { DataTable, TableColumn, TableRow } from '../../../shared/ui/data-table';
+import { Button } from '../../../shared/directives/agro-button.directive';
+import { Card } from '../../../shared/directives/agro-card.directive';
+import { Input } from '../../../shared/directives/agro-input.directive';
+import { PageHeader } from '../../../shared/ui/agro-page-header/agro-page-header.component';
+import { DataTable, TableColumn, TableRow } from '../../../shared/ui/data-table/data-table.component';
 import { Icon } from '../../../shared/ui/icon';
-import { Button, Card, Input, PageHeader } from '../../../shared/ui/primitives';
 import { simulateYield } from './simulation';
 
 type PredictionView = 'individual' | 'batch' | 'training';

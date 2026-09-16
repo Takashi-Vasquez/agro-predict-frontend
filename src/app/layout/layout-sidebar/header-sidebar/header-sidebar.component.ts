@@ -7,7 +7,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
 import { ThemeService } from '../../../core/services/theme.service';
-import { ConfirmDialog } from '../../../shared/ui/confirm-dialog';
+import { ConfirmDialog } from '../../../shared/ui/confirm-dialog/confirm-dialog.component';
 import { Icon } from '../../../shared/ui/icon';
 import { AppLayoutComponent } from '../app-layout';
 // import { ALL_NAV } from './navigation';

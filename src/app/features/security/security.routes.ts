@@ -6,6 +6,14 @@ export const SecurityRoutes: Routes = [
     path: '',
     children: [
       {
+        path: 'roles',
+        title: 'Roles · AgroPredict',
+        loadComponent: () => import('./roles/pages/roles.component').then((m) => m.RolesComponent),
+        canActivate: [permissionGuard],
+        canMatch: [permissionMatchGuard],
+        data: { menuCode: 'SECURITY.ROLES', permission: 'READ' },
+      },
+      {
         path: 'configuracion',
         title: 'Configuración · AgroPredict',
         loadComponent: () => import('./settings/settings').then((m) => m.SettingsComponent),

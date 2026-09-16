@@ -4,9 +4,12 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Plan } from '../../../core/models/agro.models';
 import { WorkspaceStore } from '../../../core/services/workspace.store';
-import { ConfirmDialog } from '../../../shared/ui/confirm-dialog';
+import { Button } from '../../../shared/directives/agro-button.directive';
+import { Card } from '../../../shared/directives/agro-card.directive';
+import { Empty } from '../../../shared/ui/agro-empty/agro-empty.component';
+import { PageHeader } from '../../../shared/ui/agro-page-header/agro-page-header.component';
+import { ConfirmDialog } from '../../../shared/ui/confirm-dialog/confirm-dialog.component';
 import { Icon } from '../../../shared/ui/icon';
-import { Button, Card, Empty, PageHeader } from '../../../shared/ui/primitives';
 import { PlanDialog } from './plan-dialog';
 @Component({
   selector: 'agro-planning',

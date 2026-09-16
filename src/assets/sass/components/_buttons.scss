@@ -64,3 +64,44 @@
   background: var(--green-soft);
   color: var(--primary);
 }
+
+.has-loader {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+.has-loader.is-loading {
+  pointer-events: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+}
+
+.has-loader.is-loading .btn-label {
+  visibility: hidden;
+  position: absolute;
+}
+
+.has-loader.is-loading::before {
+  content: '';
+  width: 14px;
+  height: 14px;
+  color: #fff;
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  border-top-color: currentColor;
+  border-radius: 50%;
+  animation: btn-spin 0.6s linear infinite;
+}
+
+.has-loader.is-loading::after {
+  content: attr(data-loading-text);
+  color: #fff;
+}
+
+@keyframes btn-spin {
+  to { transform: rotate(360deg); }
+}

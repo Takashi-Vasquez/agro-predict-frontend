@@ -1,8 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { Button, Empty } from '../../../shared/ui/primitives';
-import { AUTH_SESSION_KEY } from '../../services/auth.service';
-import { readStorage } from '../../services/browser-storage';
+import { Button } from '../../../shared/directives/agro-button.directive';
+import { Empty } from '../../../shared/ui/agro-empty/agro-empty.component';
 import { MenuService } from '../../services/menu.service';
 @Component({
   selector: 'agro-not-found',
@@ -15,12 +14,5 @@ export class NotFoundComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    const raw = readStorage(AUTH_SESSION_KEY, true);
-    const raw2 = readStorage(AUTH_SESSION_KEY, false);
-    console.log('raw :>> ', raw);
-    console.log('raw2 :>> ', raw2);
-
-    const menu = this.menuService.menuTree();
-
   }
 }

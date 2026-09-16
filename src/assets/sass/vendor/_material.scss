@@ -41,3 +41,12 @@
   gap: 10px;
   margin-top: 24px;
 }
+
+
+//Dialog size
+
+.dialog-sm { width: clamp(300px, 90vw, 380px); }
+.dialog-md { width: clamp(300px, 92vw, 460px); }
+.dialog-lg { width: clamp(300px, 94vw, 640px); }
+.dialog-xl { width: clamp(300px, 96vw, 840px); }
+.dialog-xl-no-resize { width: clamp(300px, 96vw, 1280px); }

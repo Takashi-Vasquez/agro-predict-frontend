@@ -2,7 +2,8 @@ import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { WorkspaceStore } from '../../../core/services/workspace.store';
-import { Button, Input } from '../../../shared/ui/primitives';
+import { Button } from '../../../shared/directives/agro-button.directive';
+import { Input } from '../../../shared/directives/agro-input.directive';
 @Component({
   selector: 'agro-plot-dialog',
   imports: [ReactiveFormsModule, MatDialogModule, Button, Input],

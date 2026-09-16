@@ -1,0 +1,61 @@
+@if (rows().length) {
+  <div class="table-scroll" tabindex="0" [attr.aria-label]="caption()">
+    <table>
+      <caption class="sr-only">{{ caption() }}</caption>
+      <thead>
+        <tr>
+          @for (column of columns(); track column.key) {
+            <th scope="col" [style.width]="column.width ?? null">{{ column.label }}</th>
+          }
+        </tr>
+      </thead>
+      <tbody>
+        @for (row of visibleRows(); track row.id) {
+          <tr>
+            @for (column of columns(); track column.key) {
+              <td [class.emphasis]="column.kind === 'emphasis'">
+                @if (column.kind === 'status') {
+                  <span class="status" [class]="row[column.key] | statusType">
+                    {{ row[column.key] | statusLabel }}
+                  </span>
+                } @else if (column.kind === 'actions') {
+                  <ng-container
+                    *ngTemplateOutlet="actionsTemplate(); context: { $implicit: row }"
+                  />
+                } @else {
+                  {{ row[column.key] }}
+                }
+              </td>
+            }
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+  @if (paginate()) {
+    <div class="table-pagination">
+      <span>{{ rows().length }} registros</span>
+      <div>
+        <button
+          agroButton="ghost"
+          aria-label="Página anterior"
+          [disabled]="currentPage() === 0"
+          (click)="page.set(currentPage() - 1)"
+        >
+          Anterior
+        </button>
+        <span>{{ currentPage() + 1 }} / {{ pageCount() }}</span>
+        <button
+          agroButton="ghost"
+          aria-label="Página siguiente"
+          [disabled]="currentPage() >= pageCount() - 1"
+          (click)="page.set(currentPage() + 1)"
+        >
+          Siguiente
+        </button>
+      </div>
+    </div>
+  }
+} @else {
+  <agro-empty />
+}

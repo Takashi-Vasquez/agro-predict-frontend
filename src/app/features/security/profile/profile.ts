@@ -2,8 +2,11 @@ import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@a
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AuthService } from '../../../core/services/auth.service';
+import { Button } from '../../../shared/directives/agro-button.directive';
+import { Card } from '../../../shared/directives/agro-card.directive';
+import { Input } from '../../../shared/directives/agro-input.directive';
+import { PageHeader } from '../../../shared/ui/agro-page-header/agro-page-header.component';
 import { Icon } from '../../../shared/ui/icon';
-import { Button, Card, Input, PageHeader } from '../../../shared/ui/primitives';
 @Component({
   selector: 'agro-profile',
   imports: [ReactiveFormsModule, Icon, Button, Card, Input, PageHeader],

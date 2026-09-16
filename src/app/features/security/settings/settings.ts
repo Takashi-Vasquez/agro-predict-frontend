@@ -4,8 +4,11 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { PreferencesService } from '../../../core/services/preferences.service';
 import { ThemeService } from '../../../core/services/theme.service';
+import { Button } from '../../../shared/directives/agro-button.directive';
+import { Card } from '../../../shared/directives/agro-card.directive';
+import { Input } from '../../../shared/directives/agro-input.directive';
+import { PageHeader } from '../../../shared/ui/agro-page-header/agro-page-header.component';
 import { Icon } from '../../../shared/ui/icon';
-import { Button, Card, Input, PageHeader } from '../../../shared/ui/primitives';
 @Component({
   selector: 'agro-settings',
   imports: [ReactiveFormsModule, MatSlideToggleModule, Icon, Button, Card, Input, PageHeader],

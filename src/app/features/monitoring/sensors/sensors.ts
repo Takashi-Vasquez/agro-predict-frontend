@@ -3,10 +3,14 @@ import { FormsModule } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { Sensor } from '../../../core/models/agro.models';
 import { WorkspaceStore } from '../../../core/services/workspace.store';
-import { ConfirmDialog } from '../../../shared/ui/confirm-dialog';
+import { Button } from '../../../shared/directives/agro-button.directive';
+import { Card } from '../../../shared/directives/agro-card.directive';
+import { Input } from '../../../shared/directives/agro-input.directive';
+import { Empty } from '../../../shared/ui/agro-empty/agro-empty.component';
+import { PageHeader } from '../../../shared/ui/agro-page-header/agro-page-header.component';
+import { ConfirmDialog } from '../../../shared/ui/confirm-dialog/confirm-dialog.component';
 import { Icon } from '../../../shared/ui/icon';
 import { KpiCard } from '../../../shared/ui/kpi-card';
-import { Button, Card, Empty, Input, PageHeader } from '../../../shared/ui/primitives';
 @Component({
   selector: 'agro-sensors',
   imports: [FormsModule, Icon, Button, Card, Empty, Input, PageHeader, KpiCard],

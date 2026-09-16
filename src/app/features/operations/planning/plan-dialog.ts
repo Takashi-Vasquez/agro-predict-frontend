@@ -1,14 +1,15 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import {
-    AbstractControl,
-    FormBuilder,
-    ReactiveFormsModule,
-    ValidationErrors,
-    Validators,
+  AbstractControl,
+  FormBuilder,
+  ReactiveFormsModule,
+  ValidationErrors,
+  Validators,
 } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { WorkspaceStore } from '../../../core/services/workspace.store';
-import { Button, Input } from '../../../shared/ui/primitives';
+import { Button } from '../../../shared/directives/agro-button.directive';
+import { Input } from '../../../shared/directives/agro-input.directive';
 
 export function dateRangeValidator(control: AbstractControl): ValidationErrors | null {
   const start = control.get('startDate')?.value as string;

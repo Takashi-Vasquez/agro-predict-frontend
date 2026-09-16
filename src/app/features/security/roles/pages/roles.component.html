@@ -1,0 +1,54 @@
+<agro-page-header
+  title="Gestión de Roles"
+  description="Administra los roles del sistema."
+  eyebrow="SEGURIDAD"
+>
+  <button agroButton="primary" (click)="createOrUpdate()">
+    <ng-icon name="heroPlusMicro"></ng-icon>
+    Nuevo Rol
+  </button>
+</agro-page-header>
+
+<agro-card>
+  <div class="toolbar">
+    <agro-search-field
+      placeholder="Buscar roles…"
+      ariaLabel="Buscar roles"
+      (searchChange)="searchTerm.set($event)"
+    />
+
+    <div class="flex gap-2">
+      <button agroButton="ghost" class="mr-(2)" (click)="roles.reload()">
+        <ng-icon name="heroArrowPathSolid"></ng-icon>
+      </button>
+      <span class="text-xs muted content-center">{{ rows().length }} registros</span>
+    </div>
+  </div>
+
+  @if (roles.isLoading()) {
+    <agro-loader />
+  } @else if (roles.error()) {
+    <agro-empty title="Error" description="No se pudieron cargar los datos" />
+  } @else {
+    <agro-data-table
+      [columns]="columns()"
+      [rows]="rows()"
+      [actionsTemplate]="actionsTpl"
+      [paginate]="true"
+      caption="Roles del sistema"
+    />
+
+    @if (!roles.value().length) {
+      <agro-empty title="No encontramos roles" description="Aún no se han registrado roles." />
+    }
+  }
+</agro-card>
+
+<ng-template #actionsTpl let-row>
+  <button agroButton="ghost" (click)="createOrUpdate(row)" title="Editar">
+    <ng-icon name="heroPencil" agroColor="blue"></ng-icon>
+  </button>
+  <button agroButton="ghost" (click)="remove(row)" title="Eliminar">
+    <ng-icon name="heroTrash" agroColor="danger"></ng-icon>
+  </button>
+</ng-template>

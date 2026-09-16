@@ -9,9 +9,10 @@ import { finalize, TimeoutError } from 'rxjs';
 import { AuthResponseError } from '../../../core/models/auth.models';
 import { AuthService } from '../../../core/services/auth.service';
 import { ThemeService } from '../../../core/services/theme.service';
-import { ConfirmDialog } from '../../../shared/ui/confirm-dialog';
+import { Button } from '../../../shared/directives/agro-button.directive';
+import { Input } from '../../../shared/directives/agro-input.directive';
+import { ConfirmDialog } from '../../../shared/ui/confirm-dialog/confirm-dialog.component';
 import { Icon } from '../../../shared/ui/icon';
-import { Button, Input } from '../../../shared/ui/primitives';
 
 @Component({
   selector: 'agro-login',

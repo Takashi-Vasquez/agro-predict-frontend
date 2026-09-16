@@ -3,8 +3,8 @@ import { Injectable, inject } from '@angular/core';
 import { Observable, TimeoutError, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
-import { ApiResponse } from '../models/api-response.model';
 import { AppError } from '../models/api-error.model';
+import { ApiResponse } from '../models/api-response.model';
 
 @Injectable({ providedIn: 'root' })
 export class ApiService {
@@ -23,12 +23,16 @@ export class ApiService {
     return this.request<T>('put', path, body, opts);
   }
 
+  patch<T>(path: string, body: unknown, opts?: { silent?: boolean }): Observable<T> {
+    return this.request<T>('patch', path, body, opts);
+  }
+
   delete<T>(path: string, opts?: { silent?: boolean }): Observable<T> {
     return this.request<T>('delete', path, undefined, opts);
   }
 
   private request<T>(
-    method: 'get' | 'post' | 'put' | 'delete',
+    method: 'get' | 'post' | 'put' | 'patch' | 'delete',
     path: string,
     body?: unknown,
     opts?: { silent?: boolean },
@@ -46,6 +50,9 @@ export class ApiService {
         break;
       case 'put':
         request$ = this.http.put<ApiResponse<T>>(url, body, { headers });
+        break;
+      case 'patch':
+        request$ = this.http.patch<ApiResponse<T>>(url, body, { headers });
         break;
       case 'delete':
         request$ = this.http.delete<void>(url, { headers });

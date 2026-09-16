@@ -3,10 +3,14 @@ import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@a
 import { RouterLink } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
 import { WorkspaceStore } from '../../../core/services/workspace.store';
+import { Button } from '../../../shared/directives/agro-button.directive';
+import { Card } from '../../../shared/directives/agro-card.directive';
+import { Empty } from '../../../shared/ui/agro-empty/agro-empty.component';
+import { Loader } from '../../../shared/ui/agro-loader/agro-loader.component';
+import { PageHeader } from '../../../shared/ui/agro-page-header/agro-page-header.component';
 import { LineChart } from '../../../shared/ui/chart';
-import { DataTable, TableColumn, TableRow } from '../../../shared/ui/data-table';
+import { DataTable, TableColumn, TableRow } from '../../../shared/ui/data-table/data-table.component';
 import { Icon } from '../../../shared/ui/icon';
-import { Button, Card, Empty, Loader, PageHeader } from '../../../shared/ui/primitives';
 
 @Component({
   selector: 'agro-dashboard',

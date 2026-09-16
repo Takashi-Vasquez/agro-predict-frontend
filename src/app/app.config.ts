@@ -1,8 +1,10 @@
+import { OVERLAY_DEFAULT_CONFIG } from '@angular/cdk/overlay';
 import { registerLocaleData } from '@angular/common';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import localeEs from '@angular/common/locales/es';
 import { ApplicationConfig, LOCALE_ID, provideBrowserGlobalErrorListeners } from '@angular/core';
 import { provideRouter, withInMemoryScrolling } from '@angular/router';
+import { provideNgIconsConfig } from '@ng-icons/core';
 import { provideToaster } from 'ngx-herald';
 import { routes } from './app.routes';
 import { authInterceptor } from './core/interceptors/auth.interceptor';
@@ -14,6 +16,7 @@ export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     { provide: LOCALE_ID, useValue: 'es-PE' },
+    { provide: OVERLAY_DEFAULT_CONFIG, useValue: { usePopover: false } },
     provideRouter(routes, withInMemoryScrolling({ scrollPositionRestoration: 'top' })),
     provideHttpClient(withInterceptors([authInterceptor, successInterceptor, errorInterceptor])),
     provideToaster({
@@ -22,6 +25,9 @@ export const appConfig: ApplicationConfig = {
       progressBar: true,
       dismissible: true,
       maxToasts: 5,
+    }),
+    provideNgIconsConfig({
+      size: '1.2em',
     }),
   ],
 };

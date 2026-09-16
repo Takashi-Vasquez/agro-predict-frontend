@@ -1,0 +1,22 @@
+<div class="form-field">
+  <label>
+    {{ titleLabel() }} -
+    <span class="status-value">
+      {{ displayLabel() }}
+    </span>
+  </label>
+  <div class="toggle-wrapper">
+    <div class="toggle checkcross">
+      <input
+        [id]="id()"
+        type="checkbox"
+        [checked]="checked()"
+        (change)="toggle()"
+        (blur)="onTouched()"
+      />
+      <label class="toggle-item" [for]="id()">
+        <div class="check"></div>
+      </label>
+    </div>
+  </div>
+</div>

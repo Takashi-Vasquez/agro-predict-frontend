@@ -6,14 +6,26 @@
   padding: 20px 24px;
   border-bottom: 1px solid var(--border);
 }
-
-.search-field {
-  position: relative;
+agro-search-field {
   max-width: 360px;
   width: 100%;
 }
+.search-field {
+  position: relative;
+  // max-width: 360px;
+  // width: 100%;
+}
 
 .search-field agro-icon {
+  position: absolute;
+  left: 13px;
+  top: 13px;
+  color: var(--muted);
+  width: 17px;
+  height: 17px;
+}
+
+.search-field ng-icon {
   position: absolute;
   left: 13px;
   top: 13px;

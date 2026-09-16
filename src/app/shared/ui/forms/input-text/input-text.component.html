@@ -1,0 +1,22 @@
+<div class="form-field">
+  <label [for]="id()">
+    {{ label() }}
+    @if (required()) {
+      <span class="required">*</span>
+    }
+  </label>
+  <input
+    agroInput
+    [id]="id()"
+    [type]="type()"
+    [placeholder]="placeholder()"
+    [attr.maxlength]="maxlength()"
+    [value]="value()"
+    [disabled]="disabled()"
+    (input)="onInput($event)"
+    (blur)="onBlur()"
+  />
+  @if (error()) {
+    <span class="field-error">{{ error() }}</span>
+  }
+</div>

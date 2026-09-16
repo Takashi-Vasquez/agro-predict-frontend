@@ -1,0 +1,136 @@
+// ============================================
+// Toggle "checkcross" — Yes & No (estilo codepen)
+// ============================================
+
+.toggle-wrapper {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  width: fit-content;
+  --tt-w: 60px; // ancho del riel
+  --tt-h: 30px; // alto del riel
+  --knob-s: 25px; // diámetro del botoncito
+  --tt-r: 20px; // redondez del riel (menor = más recto)
+  --mark: #fff;
+  --mark-bar: calc(var(--knob-s) * 0.09); // grosor de las barras
+  --mark-x: calc(var(--knob-s) * 0.58); // largo barras del X
+  --mark-check-long: calc(var(--knob-s) * 0.54); // barra larga del ✓
+  --mark-check-short: calc(var(--knob-s) * 0.35); // cola del ✓
+}
+
+.toggle {
+  position: relative;
+  display: inline-block;
+}
+
+.toggle input {
+  position: absolute;
+  left: 0;
+  top: 0;
+  // width: 40px;
+  // height: 40px;
+    width: var(--tt-w);
+  height: var(--tt-h);
+  margin: 0;
+  opacity: 0;
+  z-index: 1;
+  cursor: pointer;
+}
+
+label.toggle-item {
+  width: var(--tt-w);
+  height: var(--tt-h);
+  border-radius: var(--tt-r);
+  display: inline-block;
+  background: var(--border);
+  position: relative;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.checkcross .check {
+  border-radius: 50%;
+  width: var(--knob-s);
+  height: var(--knob-s);
+  position: absolute;
+  background: var(--status-color, var(--danger)); // ← ahora No (desmarcado) = X roja
+  transition: 0.6s ease; // ← ACÁ se controla el tiempo del traslado
+  top: calc((var(--tt-h) - var(--knob-s)) / 2);
+  left: 4px;
+
+&::before,
+&::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: calc(var(--knob-s) * 0.65);
+  height: calc(var(--knob-s) * 0.65);
+  background-color: transparent; // ← fuerza que no haya fondo sólido
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  border: none;                  // ← elimina cualquier borde residual
+  border-radius: 0;
+  transform: translate(-50%, -50%);
+  transition: 0.6s ease;
+}
+
+  // X (No — desmarcado)
+  &::before {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cline x1='18' y1='6' x2='6' y2='18'%3E%3C/line%3E%3Cline x1='6' y1='6' x2='18' y2='18'%3E%3C/line%3E%3C/svg%3E");
+  }
+
+  &::after {
+    background-image: none;
+  }
+}
+
+// ✓ Yes (marcado)
+.toggle input:checked + label.toggle-item .check {
+  left: calc(var(--tt-w) - var(--knob-s) - 4px); // viaje al lado derecho (extrem der)
+  transform: rotate(360deg);
+  background: var(--status-color-checked, var(--primary));
+
+  &::before,
+  &::after {
+    width: 0;
+    height: 0;
+    background: transparent;
+  }
+  &::after {
+    top: 50%;
+    left: 50%;
+    width: calc(var(--knob-s) * 0.6);
+    height: calc(var(--knob-s) * 0.6);
+    background-color: transparent;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='5 13 9 18 20 6'%3E%3C/polyline%3E%3C/svg%3E");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    border: none;
+    border-radius: 0;
+    transform: translate(-50%, -50%);
+  }
+}
+
+.toggle input:focus-visible + label.toggle-item {
+  outline: 2px solid var(--primary);
+  outline-offset: 3px;
+}
+
+.status-value {
+  font: 600 0.8125rem 'Inter Variable', sans-serif;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: var(--status-color, var(--danger));
+  min-width: 52px; // evita que el layout salte al cambiar "Activo" ↔ "Inactivo"
+  text-align: left;
+  transition: color 0.3s ease;
+
+}
+
+.form-field:has(input:checked) .status-value {
+  color: var(--status-color-checked, var(--primary));
+}

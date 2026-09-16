@@ -1,5 +1,8 @@
-<agro-page-header title="Conoce lo que cultivas" description="Un catálogo de referencia para organizar tus campañas."
-  eyebrow="CATÁLOGO DE CULTIVOS">
+<agro-page-header
+  title="Conoce lo que cultivas"
+  description="Un catálogo de referencia para organizar tus campañas."
+  eyebrow="CATÁLOGO DE CULTIVOS"
+>
   <a agroButton="primary" routerLink="/planificacion">
     <agro-icon name="calendar" />
     Planificar cultivo
@@ -7,51 +10,60 @@
 </agro-page-header>
 
 @if (crops.isLoading()) {
-<agro-loader />
+  <agro-loader />
 } @else if (crops.error()) {
-<agro-empty title="Error" description="No se pudieron cargar los cultivos" />
+  <agro-empty title="Error" description="No se pudieron cargar los cultivos" />
 } @else {
-<div class="section-grid">
-  @for (crop of crops.value(); track crop.id) {
-  <agro-card class="crop-card">
-    <div class="crop-banner" [style.--crop-color]="crop.color">
-      <span class="crop-initial">{{ crop.name.slice(0, 2).toUpperCase() }}</span>
-      <span class="crop-category">{{ crop.category }}</span>
-      <agro-icon name="sprout" />
-    </div>
-    <div class="crop-body">
-      <h2>{{ crop.name }}</h2>
-      <p>{{ crop.variety }}</p>
-      <dl>
-        <div>
-          <dt><agro-icon name="calendar" /> Ciclo de referencia</dt>
-          <dd>{{ crop.cycle }} días</dd>
+  <div class="section-grid">
+    @for (crop of crops.value(); track crop.id) {
+      <agro-card class="crop-card">
+        <div class="crop-banner" [style.--crop-color]="crop.color">
+          <span class="crop-initial">{{ crop.name.slice(0, 2).toUpperCase() }}</span>
+          <span class="crop-category">{{ crop.category }}</span>
+          <agro-icon name="sprout" />
         </div>
-        <div>
-          <dt><agro-icon name="thermometer" /> Temperatura</dt>
-          <dd>{{ crop.temperature }}</dd>
+        <div class="crop-body">
+          <h2>{{ crop.name }}</h2>
+          <p>{{ crop.variety }}</p>
+          <dl>
+            <div>
+              <dt>
+                <agro-icon name="calendar" />
+                Ciclo de referencia
+              </dt>
+              <dd>{{ crop.cycle }} días</dd>
+            </div>
+            <div>
+              <dt>
+                <agro-icon name="thermometer" />
+                Temperatura
+              </dt>
+              <dd>{{ crop.temperature }}</dd>
+            </div>
+            <div>
+              <dt>
+                <agro-icon name="drop" />
+                Requerimiento hídrico
+              </dt>
+              <dd>{{ crop.water }}</dd>
+            </div>
+            <div>
+              <dt>
+                <agro-icon name="layers" />
+                Parcelas asignadas
+              </dt>
+              <dd>{{ 0 }}</dd>
+            </div>
+          </dl>
+          <a routerLink="/planificacion" class="crop-action">
+            Ver planificación
+            <agro-icon name="arrow" />
+          </a>
         </div>
-        <div>
-          <dt><agro-icon name="drop" /> Requerimiento hídrico</dt>
-          <dd>{{ crop.water }}</dd>
-        </div>
-        <div>
-          <dt><agro-icon name="layers" /> Parcelas asignadas</dt>
-          <dd>{{ plotCount(crop.name) }}</dd>
-        </div>
-      </dl>
-      <a routerLink="/planificacion" class="crop-action">
-        Ver planificación
-        <agro-icon name="arrow" />
-      </a>
-      <button agroButton="ghost" class="remove-plan" (click)="remove(crop)" [disabled]="">
-        Eliminar plan
-      </button>
-    </div>
-  </agro-card>
+      </agro-card>
+    }
+  </div>
+  @if (!crops.value().length) {
+    <agro-empty title="No encontramos cultivos" description="Aún no se han registrado cultivos." />
   }
-</div>
-@if (!crops.value().length) {
-<agro-empty title="No encontramos cultivos" description="Aún no se han registrado cultivos." />
-}
 }

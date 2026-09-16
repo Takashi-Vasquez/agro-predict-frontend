@@ -19,6 +19,11 @@
   border-radius: 50%;
 }
 
+.status.success {
+  background: var(--green-soft);
+  color: var(--green-text);
+}
+
 .status.amber {
   background: var(--amber-soft);
   color: var(--amber);
@@ -27,6 +32,11 @@
 .status.blue {
   background: var(--blue-soft);
   color: var(--blue);
+}
+
+.status.danger {
+  background: var(--danger-soft);
+  color: var(--danger);
 }
 
 .status.neutral {

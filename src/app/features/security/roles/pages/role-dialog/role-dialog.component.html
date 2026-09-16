@@ -1,0 +1,38 @@
+<form [formGroup]="form" (ngSubmit)="save()">
+  <agro-dialog
+    [title]="isEditMode() ? 'Editar rol' : 'Nuevo rol'"
+    [description]="
+      isEditMode() ? 'Modifica los datos del rol.' : 'Define un nuevo rol para el sistema.'
+    "
+    [saving]="saving()"
+    [btnSaveLabel]="isEditMode() ? 'Guardar cambios' : 'Crear'"
+    (cancel)="ref.close()"
+  >
+    <agro-input-text
+      formControlName="name"
+      label="Nombre"
+      placeholder="Ej. Administrador"
+      [maxlength]="60"
+      [required]="true"
+      [error]="form.controls.name | validationError"
+    />
+
+    <agro-input-textarea
+      formControlName="description"
+      label="Descripción"
+      placeholder="Describe las funciones de este rol"
+      [rows]="3"
+      [maxlength]="200"
+      [disabled]="true"
+      [error]="form.controls.description | validationError"
+    />
+
+    <slide-toggle
+      titleLabel="Estado"
+      formControlName="status"
+      [activeValue]="STATUS.ACTIVE"
+      [inactiveValue]="STATUS.INACTIVE"
+      [label]="(v) => v === STATUS.ACTIVE ? 'Activo' : 'Inactivo'"
+    />
+  </agro-dialog>
+</form>
