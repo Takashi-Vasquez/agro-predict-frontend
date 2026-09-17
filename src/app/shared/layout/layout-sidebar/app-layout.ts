@@ -6,21 +6,21 @@ import { FormsModule } from '@angular/forms';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
-import { environment } from '../../../environments/environment';
+import { environment } from '../../../../environments/environment';
 import {
   AgroRepository,
   ApiAgroRepository,
   MockAgroRepository,
-} from '../../core/services/agro.repository';
-import { AuthService } from '../../core/services/auth.service';
-import { MenuService } from '../../core/services/menu.service';
-import { WorkspaceStore } from '../../core/services/workspace.store';
-import { Button } from '../../shared/directives/agro-button.directive';
-import { Empty } from '../../shared/ui/agro-empty/agro-empty.component';
-import { Loader } from '../../shared/ui/agro-loader/agro-loader.component';
-import { FooterComponent } from '../components/footer/footer.component';
-import { HeaderSidebarComponent } from './header-sidebar/header-sidebar.component';
-import { SidebarComponent } from './sidebar/sidebar.component';
+} from '../../../core/services/agro.repository';
+import { AuthService } from '../../../core/services/auth.service';
+import { MenuService } from '../../../core/services/menu.service';
+import { WorkspaceStore } from '../../../core/services/workspace.store';
+import { Button } from '../../directives/agro-button.directive';
+import { FooterComponent } from '../../layout/layout-sidebar/footer/footer.component';
+import { HeaderSidebarComponent } from '../../layout/layout-sidebar/header-sidebar/header-sidebar.component';
+import { SidebarComponent } from '../../layout/layout-sidebar/sidebar/sidebar.component';
+import { Empty } from '../../ui/agro-empty/agro-empty.component';
+import { Loader } from '../../ui/agro-loader/agro-loader.component';
 
 @Component({
   selector: 'agro-layout',
@@ -35,7 +35,7 @@ import { SidebarComponent } from './sidebar/sidebar.component';
     A11yModule,
     HeaderSidebarComponent,
     SidebarComponent,
-    FooterComponent
+    FooterComponent,
   ],
   providers: [
     WorkspaceStore,
@@ -63,12 +63,11 @@ export class AppLayoutComponent {
   readonly menu = computed(() => this.menuService.menuTree() ?? []);
 
   constructor() {
-
     const updateTitle = () => {
       const currentUrl = this.router.url.split('?')[0];
       const matchingItem = this.menuService.findMenuItem(currentUrl, this.menu());
       this.title.set(matchingItem?.name ?? 'AgroPredict');
-    }
+    };
 
     updateTitle();
 
@@ -87,5 +86,4 @@ export class AppLayoutComponent {
         if (!result.matches) this.drawer.set(false);
       });
   }
-
 }

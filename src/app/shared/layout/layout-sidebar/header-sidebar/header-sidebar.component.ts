@@ -5,34 +5,25 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { Router, RouterLink } from '@angular/router';
-import { AuthService } from '../../../core/services/auth.service';
-import { ThemeService } from '../../../core/services/theme.service';
-import { ConfirmDialog } from '../../../shared/ui/confirm-dialog/confirm-dialog.component';
-import { Icon } from '../../../shared/ui/icon';
-import { AppLayoutComponent } from '../app-layout';
+import { AuthService } from '../../../../core/services/auth.service';
+import { ThemeService } from '../../../../core/services/theme.service';
+import { AppLayoutComponent } from '../../../../shared/layout/layout-sidebar/app-layout';
+import { ConfirmDialog } from '../../../../shared/ui/confirm-dialog/confirm-dialog.component';
+import { Icon } from '../../../../shared/ui/icon';
 // import { ALL_NAV } from './navigation';
 
 @Component({
   selector: 'app-header-sidebar',
   templateUrl: './header-sidebar.component.html',
   styleUrls: ['./header-sidebar.component.scss'],
-  imports: [
-    RouterLink,
-    Icon,
-    MatTooltipModule,
-    FormsModule,
-    MatMenuModule,
-    A11yModule
-  ]
+  imports: [RouterLink, Icon, MatTooltipModule, FormsModule, MatMenuModule, A11yModule],
 })
-
 export class HeaderSidebarComponent implements OnInit {
   readonly authService = inject(AuthService);
   readonly appLayoutComponent = inject(AppLayoutComponent);
   readonly theme = inject(ThemeService);
   private readonly router = inject(Router);
   private readonly dialog = inject(MatDialog);
-
 
   readonly collapsed = this.appLayoutComponent.collapsed;
   readonly drawer = this.appLayoutComponent.drawer;
@@ -52,14 +43,9 @@ export class HeaderSidebarComponent implements OnInit {
         .toUpperCase() ?? 'AM',
   );
 
-  constructor(
-  ) {
+  constructor() {}
 
-  }
-
-  ngOnInit() {
-
-  }
+  ngOnInit() {}
 
   toggleMenu(): void {
     if (this.mobile()) this.drawer.update((value) => !value);

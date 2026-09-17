@@ -4,11 +4,10 @@ import { Component, computed, inject, OnInit } from '@angular/core';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { RouterLinkActive, RouterModule } from '@angular/router';
-import { AuthService } from '../../../core/services/auth.service';
-import { MenuService } from '../../../core/services/menu.service';
-import { Icon } from '../../../shared/ui/icon';
-import { AppLayoutComponent } from '../app-layout';
-
+import { AuthService } from '../../../../core/services/auth.service';
+import { MenuService } from '../../../../core/services/menu.service';
+import { AppLayoutComponent } from '../../../../shared/layout/layout-sidebar/app-layout';
+import { Icon } from '../../../../shared/ui/icon';
 
 @Component({
   selector: 'app-sidebar',
@@ -21,11 +20,10 @@ import { AppLayoutComponent } from '../app-layout';
     MatTooltipModule,
     Icon,
     A11yModule,
-    UpperCasePipe
-  ]
+    UpperCasePipe,
+  ],
 })
 export class SidebarComponent implements OnInit {
-
   readonly authService = inject(AuthService);
   readonly menuService = inject(MenuService);
   readonly appLayoutComponent = inject(AppLayoutComponent);
@@ -37,12 +35,7 @@ export class SidebarComponent implements OnInit {
   // menu: MenuItem[] = [];
   readonly menu = computed(() => this.menuService.menuTree() ?? []);
 
-  constructor(
-  ) {
+  constructor() {}
 
-  }
-
-  ngOnInit() {
-  }
-
+  ngOnInit() {}
 }

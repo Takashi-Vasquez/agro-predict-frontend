@@ -1,8 +1,8 @@
 import { Routes } from '@angular/router';
 import { authGuard, guestGuard } from './core/guards/auth.guard';
-import { AuthLayoutComponent } from './layout/auth-layout/auth-layout.component';
-import { BlankLayoutComponent } from './layout/blank-layout/blank-layout.component';
-import { AppLayoutComponent } from './layout/layout-sidebar/app-layout';
+import { AuthLayoutComponent } from './shared/layout/auth-layout/auth-layout.component';
+import { BlankLayoutComponent } from './shared/layout/blank-layout/blank-layout.component';
+import { AppLayoutComponent } from './shared/layout/layout-sidebar/app-layout';
 
 export const routes: Routes = [
   {
@@ -13,9 +13,7 @@ export const routes: Routes = [
       {
         path: 'auth',
         loadChildren: () =>
-          import('./core/auth/authentication.routes').then(
-            (m) => m.AuthenticationRoutes
-          ),
+          import('./core/auth/authentication.routes').then((m) => m.AuthenticationRoutes),
       },
     ],
   },
@@ -25,6 +23,12 @@ export const routes: Routes = [
     canActivate: [authGuard],
     canActivateChild: [authGuard],
     children: [
+      {
+        path: 'perfil',
+        title: 'Mi perfil · AgroPredict',
+        loadComponent: () =>
+          import('./features/security/profile/profile').then((m) => m.ProfileComponent),
+      },
       {
         path: 'panel-general',
         loadChildren: () =>
@@ -53,16 +57,12 @@ export const routes: Routes = [
     children: [
       {
         path: 'others',
-        loadChildren: () =>
-          import('./core/others/others.routes').then(
-            (m) => m.OtherRoutes
-          ),
+        loadChildren: () => import('./core/others/others.routes').then((m) => m.OtherRoutes),
       },
     ],
   },
   {
     path: '**',
-    redirectTo: 'others/404'
-  }
-
-]
+    redirectTo: 'others/404',
+  },
+];
