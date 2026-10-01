@@ -1,0 +1,67 @@
+<div class="batch-grid">
+  <agro-card>
+    <div class="card-header">
+      <div>
+        <h2>Predicción masiva</h2>
+        <p>Procesa hasta 20 parcelas en una sola demostración.</p>
+      </div>
+
+      <div class="flex gap-2">
+        <button
+          agroButton="primary"
+          type="button"
+          class="mr-4"
+          (click)="downloadFormat()"
+          [disabled]="downloading()"
+        >
+          <ng-icon name="matDownload" />
+          <span class="btn-label">
+            @if (downloading()) {
+              Descargando…
+            } @else {
+              Formato
+            }
+          </span>
+        </button>
+        <button agroButton="blue" type="button" (click)="uploadFile()" [disabled]="uploading()">
+          <ng-icon name="matCloudUpload" />
+          <span class="btn-label">
+            @if (uploading()) {
+              Subiendo…
+            } @else {
+              Subir
+            }
+          </span>
+        </button>
+      </div>
+    </div>
+
+    @if (uploading()) {
+      <agro-loader />
+    } @else if (uploadResult(); as result) {
+      @if (result.has_errors) {
+        <agro-data-table
+          [columns]="columns()"
+          [rows]="rows()"
+          [countRowView]="6"
+          [paginate]="true"
+          caption="Registros de entrenamiento"
+        />
+      } @else {
+        <agro-empty
+          title="Carga exitosa"
+          [description]="result.saved + ' de ' + result.total + ' registros guardados'"
+        />
+      }
+    } @else {
+      <agro-empty title="Sin datos" description="Sube un archivo para ver los resultados aquí." />
+    }
+
+    @if (batchError()) {
+      <div class="inline-error" aria-live="polite">
+        <ng-icon name="heroExclamationCircle" />
+        {{ batchError() }}
+      </div>
+    }
+  </agro-card>
+</div>

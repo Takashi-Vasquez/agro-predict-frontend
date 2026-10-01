@@ -1,0 +1,182 @@
+<div class="training-grid">
+  <agro-card>
+    <div class="card-header">
+      <div>
+        <h2>Registrar resultado histórico</h2>
+        <p>La cosecha real es la variable con la que aprende el modelo.</p>
+      </div>
+    </div>
+
+    <form class="panel-body" [formGroup]="form" (ngSubmit)="submit()">
+      <div class="form-grid three-columns">
+        <agro-select
+          formControlName="cropId"
+          label="Cultivo"
+          [options]="cropsOptions"
+          [error]="form.controls.cropId | validationError"
+        />
+
+        <agro-select
+          formControlName="campaign"
+          label="Campaña"
+          [options]="campaignSelectOptions()"
+          [uiDisabled]="isCampaignDisabled()"
+          [error]="form.controls.campaign | validationError"
+        />
+
+        <agro-select
+          formControlName="soilType"
+          label="Suelo"
+          [options]="soilTypeOptions"
+          [error]="form.controls.soilType | validationError"
+        />
+
+        <agro-input-number
+          formControlName="temperature"
+          label="Temperatura (°C)"
+          placeholder="Temperatura"
+          [min]="0"
+          [max]="45"
+          [error]="form.controls.temperature | validationError"
+        />
+
+        <agro-input-number
+          formControlName="humidity"
+          label="Humedad del suelo (%)"
+          placeholder="Humedad del suelo"
+          [min]="0"
+          [max]="100"
+          [error]="form.controls.humidity | validationError"
+        />
+
+        <agro-input-number
+          formControlName="phSoil"
+          label="pH del suelo"
+          placeholder="pH del suelo"
+          [min]="3"
+          [max]="10"
+          [error]="form.controls.phSoil | validationError"
+        />
+
+        <agro-input-number
+          formControlName="nitrogen"
+          label="Nitrógeno (kg/ha)"
+          placeholder="Nitrógeno"
+          [min]="3"
+          [max]="10"
+          [error]="form.controls.nitrogen | validationError"
+        />
+
+        <agro-input-number
+          formControlName="phosphorus"
+          label="Fósforo (kg/ha)"
+          placeholder="Fósforo"
+          [min]="3"
+          [max]="10"
+          [error]="form.controls.phosphorus | validationError"
+        />
+
+        <agro-input-number
+          formControlName="potassium"
+          label="Potasio (kg/ha)"
+          placeholder="Potasio"
+          [min]="3"
+          [max]="10"
+          [error]="form.controls.potassium | validationError"
+        />
+
+        <agro-input-number
+          formControlName="rainfall"
+          label="Precipitación (mm)"
+          placeholder="Precipitación"
+          [min]="0"
+          [max]="200"
+          [error]="form.controls.rainfall | validationError"
+        />
+
+        <agro-select
+          formControlName="irrigationType"
+          label="Tipo de riego"
+          [options]="irrigationTypeOptions"
+          [error]="form.controls.irrigationType | validationError"
+        />
+      </div>
+
+      <div class="target-field form-field actual-yield">
+        <div>
+          <label for="history-yield">Cosecha real obtenida (t/ha)</label>
+          <small>Dato objetivo confirmado al cierre de campaña.</small>
+        </div>
+
+        <agro-input-number
+          formControlName="targetYield"
+          id="history-yield"
+          placeholder="targetYield"
+          [min]="0.1"
+          [max]="500"
+          [error]="form.controls.targetYield | validationError"
+        />
+      </div>
+
+      <button agroButton="primary" class="generate" type="submit" [disabled]="saving()">
+        @if (saving()) {
+          <span class="spinner"></span>
+          Guardando…
+        } @else {
+          <ng-icon name="heroPlus" size="1.5rem" />
+          Agregar al histórico
+        }
+      </button>
+    </form>
+  </agro-card>
+
+  <agro-card class="training-status">
+    @let query = recordsStats();
+
+    @if (query.isLoading()) {
+      <agro-loader />
+    } @else if (query.error()) {
+      <p class="training-message" role="alert">No se pudo cargar el estado del modelo.</p>
+    } @else if (query.value(); as stats) {
+      @let mv = stats.modelVersion;
+      @let mae = mv?.metrics?.mae;
+
+      <span class="model-icon large mb-3"><ng-icon name="heroSparklesSolid" /></span>
+      <span class="eyebrow">ESTADO DEL MODELO</span>
+      <h2>{{ stats.isAllTrained ? 'Entrenado' : 'Reentrenamiento pendiente' }}</h2>
+
+      <p>
+        @if (mv) {
+          Última versión: {{ mv.version }}
+          @if (mae != null) {
+            <br />
+            Error medio: ±{{ mae | number: '1.2-2' }} t/ha
+          }
+        } @else {
+          Aún no hay una versión en producción.
+        }
+      </p>
+      <div class="training-count">
+        <strong>{{ stats.total | number }}</strong>
+        <span>registros disponibles</span>
+      </div>
+      @if (trainingMessage()) {
+        <div class="training-message" aria-live="polite">{{ trainingMessage() }}</div>
+      }
+      <button
+        agroButton="primary"
+        type="button"
+        (click)="trainModel()"
+        [disabled]="trainingPending() || stats.isAllTrained"
+      >
+        @if (trainingPending()) {
+          <span class="spinner"></span>
+          Entrenando…
+        } @else {
+          <ng-icon name="heroSparkles" />
+          Entrenar nueva versión
+        }
+      </button>
+    }
+  </agro-card>
+</div>

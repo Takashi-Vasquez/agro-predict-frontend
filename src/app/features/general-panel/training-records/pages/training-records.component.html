@@ -1,0 +1,43 @@
+<agro-page-header
+  title="Datos históricos de cultivo"
+  description="Registra campañas pasadas de siembra y cosecha para entrenar y mejorar el modelo predictivo."
+  eyebrow="ENTRENAMIENTO DEL MODELO"
+>
+  <a agroButton routerLink="/panel-general/datos-historicos/historial">
+    <ng-icon name="matHistory" />
+    Ver historial
+  </a>
+</agro-page-header>
+
+<div class="flex justify-between items-center mb-6">
+  <div class="view-tabs" role="tablist" aria-label="Operaciones del modelo">
+    <button
+      type="button"
+      role="tab"
+      [class.active]="view() === 'individual'"
+      [attr.aria-selected]="view() === 'individual'"
+      (click)="selectView('individual')"
+    >
+      <ng-icon name="heroSparklesSolid" />
+      Registro individual
+    </button>
+    <button
+      type="button"
+      role="tab"
+      [class.active]="view() === 'batch'"
+      [attr.aria-selected]="view() === 'batch'"
+      (click)="selectView('batch')"
+    >
+      <ng-icon name="heroSquare3Stack3d" />
+      Registro masiva
+    </button>
+  </div>
+</div>
+
+@if (view() === 'individual') {
+  <app-individual-training (recordAdded)="onRecordAdded()" [recordsStats]="trainingStatus" />
+}
+
+@if (view() === 'batch') {
+  <app-batch-training (recordsChanged)="onRecordsChanged()" />
+}

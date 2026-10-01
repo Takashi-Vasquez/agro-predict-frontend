@@ -1,10 +1,12 @@
 <div class="form-field">
-  <label [for]="id()">
-    {{ label() }}
-    @if (required()) {
-      <span class="required">*</span>
-    }
-  </label>
+  @if (label() != '') {
+    <label [for]="id()">
+      {{ label() }}
+      @if (required()) {
+        <span class="required">*</span>
+      }
+    </label>
+  }
   <textarea
     agroInput
     [id]="id()"

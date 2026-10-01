@@ -23,18 +23,69 @@
   box-shadow: var(--shadow);
 }
 
+/* --- Botones estilo status: backgrounds ~15-20% más oscuros que los --*-soft --- */
+/* Light mode: backgrounds más oscuros para mejor contraste */
 .button-primary {
-  background: var(--primary);
-  color: #fff;
+  background: #d8e8df;  /* ~15% más oscuro que --green-soft (#edf5ee) */
+  color: var(--green-text);
   border-color: transparent;
 }
 
 .dark .button-primary {
-  color: #15261b;
+  background: #1e3324;  /* ~15% más oscuro que dark --green-soft (#263e2d) */
+  color: var(--green-text);
 }
 
 .button-primary:hover:not(:disabled) {
-  background: var(--primary-hover);
+  filter: brightness(0.95);
+}
+
+/* --- Variante sólida: amber --- */
+.button-amber {
+  background: #ffda8b;  /* ~15% más oscuro que --amber-soft (#ffe3b2) */
+  color: var(--amber);
+  border-color: transparent;
+}
+
+.dark .button-amber {
+  background: #7e6334;  /* ~15% más oscuro que dark --amber-soft (#3c3222) */
+  color: var(--amber);
+}
+
+.button-amber:hover:not(:disabled) {
+  filter: brightness(0.95);
+}
+
+/* --- Variante sólida: blue --- */
+.button-blue {
+  background: #d0dff0;  /* ~15% más oscuro que --blue-soft (#edf3fc) */
+  color: var(--blue);
+  border-color: transparent;
+}
+
+.dark .button-blue {
+  background: #1d2a3c;  /* ~15% más oscuro que dark --blue-soft (#24344a) */
+  color: var(--blue);
+}
+
+.button-blue:hover:not(:disabled) {
+  filter: brightness(0.95);
+}
+
+/* --- Variante sólida: danger --- */
+.button-danger {
+  background: #f0c8c5;  /* ~15% más oscuro que --danger-soft (#ffe3e1) */
+  color: var(--danger);
+  border-color: transparent;
+}
+
+.dark .button-danger {
+  background: #4d1e1d;  /* ~15% más oscuro que dark --danger-soft (#41211f) */
+  color: var(--danger);
+}
+
+.button-danger:hover:not(:disabled) {
+  filter: brightness(0.95);
 }
 
 .button-ghost {
@@ -42,6 +93,79 @@
   border-color: transparent;
   color: var(--primary);
 }
+
+/* --- forma: rounded --- */
+.button-rounded {
+  border-radius: 999px;
+}
+
+/* --- forma: outline (independiente del color) --- */
+.button-outline {
+  background: transparent;
+  border-color: var(--border);
+  color: var(--text);
+}
+
+.button-outline:hover:not(:disabled) {
+  background: var(--surface-alt);
+}
+
+/* outline combinado con primary: borde y texto en color primary */
+.button-outline.button-primary {
+  background: transparent;
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.button-outline.button-primary:hover:not(:disabled) {
+  background: var(--green-soft, var(--surface-alt));
+}
+
+.dark .button-outline.button-primary {
+  color: var(--primary); // se mantiene, a diferencia de button-primary sólido que cambia a #15261b
+}
+
+
+/* outline combinado con amber */
+.button-outline.button-amber {
+  background: transparent;
+  border-color: var(--amber);
+  color: var(--amber);
+}
+
+.button-outline.button-amber:hover:not(:disabled) {
+  background: var(--amber-soft);
+}
+
+/* outline combinado con blue */
+.button-outline.button-blue {
+  background: transparent;
+  border-color: var(--blue);
+  color: var(--blue);
+}
+
+.button-outline.button-blue:hover:not(:disabled) {
+  background: var(--blue-soft);
+}
+
+/* outline combinado con danger */
+.button-outline.button-danger {
+  background: transparent;
+  border-color: var(--danger);
+  color: var(--danger);
+}
+
+.button-outline.button-danger:hover:not(:disabled) {
+  background: var(--danger-soft);
+}
+
+/* outline + ghost: ghost ya es transparente, outline solo le agrega borde visible */
+.button-outline.button-ghost {
+  border-color: var(--primary);
+}
+
+
+//estilo icon
 
 .button agro-icon {
   width: 16px;
@@ -65,6 +189,7 @@
   color: var(--primary);
 }
 
+//Estilo loader
 .has-loader {
   position: relative;
   display: inline-flex;

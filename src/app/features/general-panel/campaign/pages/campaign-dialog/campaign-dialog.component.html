@@ -1,0 +1,53 @@
+<form [formGroup]="form" (ngSubmit)="save()">
+  <agro-dialog
+    [title]="isEditMode() ? 'Editar campaña' : 'Nuevo campaña'"
+    [description]="isEditMode() ? 'Modifica los datos del campaña.' : 'Define una nueva campaña.'"
+    [saving]="saving()"
+    [btnSaveLabel]="isEditMode() ? 'Guardar cambios' : 'Crear'"
+    (cancel)="ref.close()"
+  >
+    <agro-input-text
+      formControlName="name"
+      label="Nombre"
+      placeholder="Campaña I - 2026"
+      [maxlength]="60"
+      [error]="form.controls.name | validationError"
+    />
+    <agro-input-text
+      formControlName="code"
+      label="Codigo"
+      placeholder="PHASS-01"
+      [maxlength]="20"
+      [error]="form.controls.code | validationError"
+    />
+
+    <div class="form-grid grid-cols-2">
+      <agro-input-date
+        formControlName="startDate"
+        label="Fecha inicio estimada"
+        [max]="form.controls.endDate.value"
+        [error]="form.controls.startDate | validationError"
+      />
+
+      <agro-input-date
+        formControlName="endDate"
+        label="Fecha fin estimada"
+        [min]="form.controls.startDate.value"
+        [error]="form.controls.endDate | validationError"
+      />
+    </div>
+
+    <agro-select
+      formControlName="cropId"
+      label="Cultivo"
+      [options]="cropsOptions"
+      [error]="form.controls.cropId | validationError"
+    />
+    <agro-select
+      formControlName="status"
+      label="Estado"
+      [options]="statusOptions"
+      [error]="form.controls.status | validationError"
+    />
+  </agro-dialog>
+</form>

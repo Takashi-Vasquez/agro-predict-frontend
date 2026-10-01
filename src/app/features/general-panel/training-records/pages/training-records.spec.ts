@@ -1,10 +1,10 @@
 import { TestBed } from '@angular/core/testing';
 import { ActivatedRoute, provideRouter } from '@angular/router';
 import { of } from 'rxjs';
-import { MOCK_WORKSPACE } from '../../../core/data/mock-data';
-import { AgroRepository } from '../../../core/services/agro.repository';
-import { WorkspaceStore } from '../../../core/services/workspace.store';
-import { PredictionsComponent } from './predictions';
+import { MOCK_WORKSPACE } from '../../../../core/data/mock-data';
+import { AgroRepository } from '../../../../core/services/agro.repository';
+import { WorkspaceStore } from '../../../../core/services/workspace.store';
+import { TrainingRecordsComponent } from './training-records.component';
 
 describe('Formulario de predicción', () => {
   beforeEach(() => {
@@ -24,7 +24,7 @@ describe('Formulario de predicción', () => {
     });
   });
   it('preselecciona la parcela de la URL y rechaza valores fuera de rango', () => {
-    const fixture = TestBed.createComponent(PredictionsComponent);
+    const fixture = TestBed.createComponent(TrainingRecordsComponent);
     fixture.detectChanges();
     expect(fixture.componentInstance.form.controls.plotId.value).toBe('PAR-001');
     fixture.componentInstance.form.controls.soilHumidity.setValue(101);
@@ -34,7 +34,7 @@ describe('Formulario de predicción', () => {
     expect(fixture.componentInstance.store.predictions()).toHaveLength(8);
   });
   it('completa una predicción y actualiza el historial compartido una sola vez', async () => {
-    const fixture = TestBed.createComponent(PredictionsComponent);
+    const fixture = TestBed.createComponent(TrainingRecordsComponent);
     fixture.detectChanges();
     const page = fixture.componentInstance;
     page.submit();
@@ -50,7 +50,7 @@ describe('Formulario de predicción', () => {
     expect(page.pending()).toBe(false);
   });
   it('valida y procesa varias parcelas en el modo masivo', async () => {
-    const fixture = TestBed.createComponent(PredictionsComponent);
+    const fixture = TestBed.createComponent(TrainingRecordsComponent);
     fixture.detectChanges();
     const page = fixture.componentInstance;
     page.batchForm.controls.rows.setValue('PAR-001,20,61,5.2,140,9,13\nPAR-003,21,60,6.3,150,8,16');
@@ -60,7 +60,7 @@ describe('Formulario de predicción', () => {
     expect(page.batchResults().every((item) => item.mode === 'Masiva')).toBe(true);
   });
   it('registra un dato real y habilita el reentrenamiento demo', () => {
-    const fixture = TestBed.createComponent(PredictionsComponent);
+    const fixture = TestBed.createComponent(TrainingRecordsComponent);
     fixture.detectChanges();
     const page = fixture.componentInstance;
     page.addHistoricalRecord();

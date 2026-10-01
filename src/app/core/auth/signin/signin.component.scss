@@ -278,28 +278,6 @@
   position: absolute;
   right: 16px;
 }
-.login-divider {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  color: var(--muted);
-  font-size: 0.75rem;
-  font-weight: 500;
-  letter-spacing: 1px;
-  margin: 28px 0 22px;
-}
-.login-divider span {
-  flex: 1;
-  height: 1px;
-  background: var(--border);
-}
-.demo-note {
-  margin-top: 20px;
-  font-size: 0.75rem;
-  background: var(--surface-alt);
-  color: var(--muted);
-  padding: 12px;
-}
 .login-footer {
   margin-top: 60px;
   display: flex;

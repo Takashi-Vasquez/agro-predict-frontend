@@ -1,0 +1,58 @@
+<agro-page-header
+  title="Gestión de Campañas"
+  description="Administra las campañas de los cultivos."
+  eyebrow="PLANIFICACIÓN"
+>
+  <button agroButton="primary" (click)="createOrUpdate()">
+    <ng-icon name="heroPlusMicro"></ng-icon>
+    Nuevo campaña
+  </button>
+</agro-page-header>
+
+<agro-card>
+  <div class="toolbar">
+    <agro-search-field
+      placeholder="Buscar campaña…"
+      ariaLabel="Buscar campaña"
+      (searchChange)="searchTerm.set($event)"
+    />
+
+    <div class="flex gap-2">
+      <button agroButton="ghost" class="mr-(2)" (click)="campaign.reload()">
+        <ng-icon name="heroArrowPathSolid"></ng-icon>
+      </button>
+      <span class="text-xs muted content-center">{{ rows().length }} registros</span>
+    </div>
+  </div>
+
+  @if (campaign.isLoading()) {
+    <agro-loader />
+  } @else if (campaign.error()) {
+    <agro-empty title="Error" description="No se pudieron cargar los datos" />
+  } @else {
+    <agro-data-table
+      [columns]="columns()"
+      [rows]="rows()"
+      [actionsTemplate]="actionsTpl"
+      [paginate]="true"
+      StatusOptionsKey="campaignStatus"
+      caption="Campaña"
+    />
+
+    @if (!campaign.value().length) {
+      <agro-empty
+        title="No encontramos campañas"
+        description="Aún no se han registrado campañas."
+      />
+    }
+  }
+</agro-card>
+
+<ng-template #actionsTpl let-row>
+  <button agroButton="ghost" (click)="createOrUpdate(row)" title="Editar">
+    <ng-icon name="heroPencil" agroColor="blue"></ng-icon>
+  </button>
+  <button agroButton="ghost" (click)="remove(row)" title="Eliminar">
+    <ng-icon name="heroTrash" agroColor="danger"></ng-icon>
+  </button>
+</ng-template>

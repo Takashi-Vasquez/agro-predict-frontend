@@ -1,0 +1,34 @@
+:host {
+  display: block;
+}
+
+.batch-grid {
+  display: grid;
+  gap: 22px;
+  margin-bottom: 22px;
+}
+
+.inline-error {
+  display: flex;
+  gap: 7px;
+  color: var(--danger);
+  background: color-mix(in srgb, var(--danger) 7%, var(--surface));
+  border: 1px solid color-mix(in srgb, var(--danger) 24%, var(--border));
+  border-radius: 7px;
+  padding: 11px 12px;
+  font-size: 0.75rem;
+  line-height: 1.55;
+  margin-bottom: 14px;
+}
+
+.inline-error agro-icon {
+  width: 15px;
+  height: 15px;
+  flex-shrink: 0;
+}
+
+@media (max-width: 1180px) {
+  .batch-grid {
+    grid-template-columns: 1fr;
+  }
+}

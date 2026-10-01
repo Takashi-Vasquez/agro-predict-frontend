@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
-import { rxResource } from '@angular/core/rxjs-interop';
 import { Observable } from 'rxjs';
 import { ApiService } from '../../../core/services/api.service';
+import { toResource } from '../../../shared/utils/to-resource';
 import { Crop } from './crop.model';
 
 @Injectable({ providedIn: 'root' })
@@ -26,8 +26,6 @@ export class CropsService {
   }
 
   listResource() {
-    return rxResource<Crop[], void>({
-      stream: () => this.list(),
-    });
+    return toResource(() => this.list());
   }
 }

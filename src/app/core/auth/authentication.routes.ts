@@ -15,7 +15,7 @@ export const AuthenticationRoutes: Routes = [
       {
         title: 'Iniciar sesión · AgroPredict',
         path: 'signin',
-        component: SigninComponent
+        component: SigninComponent,
       },
       // {
       //   path: 'forgot',

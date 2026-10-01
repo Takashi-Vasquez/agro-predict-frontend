@@ -13,7 +13,7 @@
       label="Nombre"
       placeholder="Ej. Administrador"
       [maxlength]="60"
-      [required]="true"
+      [required]="false"
       [error]="form.controls.name | validationError"
     />
 
@@ -21,9 +21,9 @@
       formControlName="description"
       label="Descripción"
       placeholder="Describe las funciones de este rol"
+      [required]="true"
       [rows]="3"
       [maxlength]="200"
-      [disabled]="true"
       [error]="form.controls.description | validationError"
     />
 

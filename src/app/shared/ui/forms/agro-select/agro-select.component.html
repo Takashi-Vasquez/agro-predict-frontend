@@ -1,0 +1,35 @@
+<!-- select.component.html -->
+<div class="form-field">
+  <label [for]="id()">
+    {{ label() }}
+    @if (required()) {
+      <span class="required">*</span>
+    }
+  </label>
+
+  <select
+    agroInput
+    [id]="id()"
+    [disabled]="isDisabled() || normalizedOptions().isLoading || normalizedOptions().error"
+    [value]="value()"
+    (change)="onChange($event)"
+    (blur)="onBlur()"
+  >
+    @if (normalizedOptions().isLoading) {
+      <option value="" [disabled] selected>Cargando cultivos...</option>
+    } @else if (normalizedOptions().error) {
+      <option value="" [disabled] selected>Error al cargar cultivos</option>
+    } @else {
+      <option value="" [disabled] [selected]="value() === null">{{ placeholder() }}</option>
+      @for (option of normalizedOptions().value; track option.value) {
+        <option [value]="option.value" [selected]="option.value === value()">
+          {{ option.label }}
+        </option>
+      }
+    }
+  </select>
+
+  @if (error()) {
+    <span class="field-error">{{ error() }}</span>
+  }
+</div>

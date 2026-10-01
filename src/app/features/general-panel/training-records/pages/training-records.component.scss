@@ -1,0 +1,49 @@
+:host {
+  display: block;
+}
+
+.view-tabs {
+  display: flex;
+  gap: 5px;
+  width: fit-content;
+  padding: 4px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface-alt);
+}
+
+.view-tabs button {
+  min-height: 38px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  border: 0;
+  border-radius: 7px;
+  padding: 0 14px;
+  color: var(--muted);
+  background: transparent;
+  font: inherit;
+  font-size: 0.8125rem;
+}
+
+.view-tabs button.active {
+  color: var(--text);
+  background: var(--surface);
+  box-shadow: 0 1px 4px #0a28120e;
+}
+
+.view-tabs agro-icon {
+  width: 15px;
+  height: 15px;
+}
+
+@media (max-width: 800px) {
+  .view-tabs {
+    width: 100%;
+    overflow-x: auto;
+  }
+  .view-tabs button {
+    flex: 1 0 max-content;
+    justify-content: center;
+  }
+}

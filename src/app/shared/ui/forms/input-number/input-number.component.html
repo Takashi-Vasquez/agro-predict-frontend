@@ -1,0 +1,30 @@
+<div class="form-field">
+  @if (label() != '') {
+    <label [for]="id()">
+      {{ label() }}
+      @if (required()) {
+        <span class="required">*</span>
+      }
+    </label>
+  }
+
+  <input
+    agroInput
+    only-numbers
+    [decimal]="decimal()"
+    [id]="id()"
+    type="number"
+    [step]="decimal() ? 0.1 : 1"
+    [placeholder]="placeholder()"
+    [value]="value()"
+    [disabled]="disabled()"
+    (input)="onInput($event)"
+    (blur)="onBlur()"
+    [min]="min()"
+    [max]="max()"
+  />
+
+  @if (error()) {
+    <span class="field-error">{{ error() }}</span>
+  }
+</div>

@@ -10,6 +10,7 @@ export const routes: Routes = [
     component: AuthLayoutComponent,
     canActivate: [guestGuard],
     children: [
+      { path: '', redirectTo: 'auth/signin', pathMatch: 'full' },
       {
         path: 'auth',
         loadChildren: () =>
@@ -54,6 +55,8 @@ export const routes: Routes = [
   {
     path: '',
     component: BlankLayoutComponent,
+    canActivate: [authGuard],
+    canActivateChild: [authGuard],
     children: [
       {
         path: 'others',

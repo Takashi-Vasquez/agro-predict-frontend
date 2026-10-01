@@ -19,6 +19,11 @@
   border-radius: 50%;
 }
 
+.status.orange {
+  background: var(--orange-soft);
+  color: var(--orange);
+}
+
 .status.success {
   background: var(--green-soft);
   color: var(--green-text);

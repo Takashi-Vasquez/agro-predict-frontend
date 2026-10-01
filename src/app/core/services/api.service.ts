@@ -1,4 +1,4 @@
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Observable, TimeoutError, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
@@ -31,11 +31,28 @@ export class ApiService {
     return this.request<T>('delete', path, undefined, opts);
   }
 
+  upload<T>(
+    path: string,
+    file: File,
+    opts?: { fieldName?: string; silent?: boolean },
+  ): Observable<T> {
+    const formData = new FormData();
+    formData.append(opts?.fieldName ?? 'file', file);
+    return this.request<T>('post', path, formData, { silent: opts?.silent });
+  }
+
+  download(path: string, params?: Record<string, string | number>): Observable<HttpResponse<Blob>> {
+    const url = `${this.base}/${path}`;
+    return this.http
+      .get(url, { params, responseType: 'blob', observe: 'response' })
+      .pipe(catchError((err) => throwError(() => this.toAppError(err))));
+  }
+
   private request<T>(
     method: 'get' | 'post' | 'put' | 'patch' | 'delete',
     path: string,
     body?: unknown,
-    opts?: { silent?: boolean },
+    opts?: { silent?: boolean; allowDataOnError?: boolean },
   ): Observable<T> {
     const url = `${this.base}/${path}`;
     const headers = opts?.silent ? { 'X-Suppress-Success': 'true' } : undefined;

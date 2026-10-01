@@ -1,4 +1,4 @@
-import { AgronomicInputs } from '../../../core/models/agro.models';
+import { AgronomicInputs } from '../../../../core/models/agro.models';
 import { simulateYield } from './simulation';
 
 describe('Contrato predictivo de demostración', () => {

@@ -1,0 +1,160 @@
+:host {
+  display: block;
+}
+
+.training-grid {
+  display: grid;
+  gap: 22px;
+  margin-bottom: 22px;
+}
+
+.training-grid {
+  grid-template-columns: minmax(0, 1.45fr) minmax(310px, 0.55fr);
+}
+
+.three-columns {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.target-field {
+  display: grid;
+  grid-template-columns: 1fr 130px;
+  align-items: center;
+  gap: 12px 18px;
+  background: var(--surface-alt);
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  padding: 14px 16px;
+  margin-bottom: 20px;
+}
+
+.target-field > div {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.target-field small {
+  color: var(--muted);
+  font-size: 0.75rem;
+}
+
+.target-field .field-error {
+  grid-column: 1 / -1;
+}
+
+.generate {
+  width: 100%;
+  min-height: 45px;
+}
+
+.training-status {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 28px;
+  background: linear-gradient(145deg, var(--surface), var(--green-soft));
+}
+
+.model-icon {
+  color: var(--primary);
+  background: var(--green-soft);
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 46px;
+  height: 46px;
+  border: 1px solid color-mix(in srgb, var(--primary) 18%, var(--border));
+  border-radius: 13px;
+}
+
+.model-icon.large {
+  width: 58px;
+  height: 58px;
+  border-radius: 17px;
+}
+
+.model-icon agro-icon {
+  width: 24px;
+  height: 24px;
+}
+
+.training-count {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 18px;
+  margin: 22px 0 16px;
+  border-radius: 9px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+}
+
+.training-count strong {
+  font-size: 1.6rem;
+}
+
+.training-count span,
+.safety-note {
+  color: var(--muted);
+  font-size: 0.75rem;
+}
+
+.training-message {
+  width: 100%;
+  color: var(--green-text);
+  background: var(--green-soft);
+  border-radius: 7px;
+  padding: 11px 12px;
+  font-size: 0.75rem;
+  line-height: 1.55;
+  margin-bottom: 14px;
+}
+
+.training-status button {
+  width: 100%;
+}
+
+.safety-note {
+  line-height: 1.6;
+  margin-top: 14px;
+}
+
+.actual-yield {
+  margin-top: 4px;
+}
+
+.form-error {
+  display: block;
+  margin: -8px 0 15px;
+}
+
+@media (max-width: 1180px) {
+  .training-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 800px) {
+  .three-columns {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .target-field {
+    grid-template-columns: 1fr;
+  }
+  .target-field input {
+    width: 100%;
+  }
+}
+
+@media (max-width: 560px) {
+  .three-columns {
+    grid-template-columns: 1fr;
+  }
+  .target-field {
+    grid-template-columns: 1fr;
+  }
+}

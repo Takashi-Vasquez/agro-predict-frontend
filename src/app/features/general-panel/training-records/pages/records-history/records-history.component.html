@@ -1,0 +1,57 @@
+<agro-page-header
+  title="Datos historicos"
+  description="Entrena con campañas históricas y proyecta la cosecha individual o masivamente."
+  eyebrow="INTELIGENCIA AGRÍCOLA"
+>
+  <a agroButton class="cursor-pointer" (click)="goBack()">
+    <ng-icon name="heroArrowLeftEndOnRectangleMicro" agroColor="blue"></ng-icon>
+    Volver
+  </a>
+</agro-page-header>
+
+<agro-card>
+  <div class="toolbar">
+    <agro-search-field
+      placeholder="Buscar registros…"
+      ariaLabel="Buscar registros"
+      (searchChange)="searchTerm.set($event)"
+    />
+
+    <div class="flex gap-2">
+      <button agroButton="ghost" class="mr-(2)" (click)="records.reload()">
+        <ng-icon name="heroArrowPathSolid"></ng-icon>
+      </button>
+      <span class="text-xs muted content-center">{{ rows().length }} registros</span>
+    </div>
+  </div>
+
+  @if (records.isLoading()) {
+    <agro-loader />
+  } @else if (records.error()) {
+    <agro-empty title="Error" description="No se pudieron cargar los datos" />
+  } @else {
+    <agro-data-table
+      [columns]="columns()"
+      [rows]="rows()"
+      [actionsTemplate]="actionsTpl"
+      [paginate]="true"
+      caption="Datos historicos de cultivos"
+    />
+
+    @if (!records.value().length) {
+      <agro-empty
+        title="No encontramos registros"
+        description="Aún no se han registrado datos historicos."
+      />
+    }
+  }
+</agro-card>
+
+<ng-template #actionsTpl let-row>
+  <button agroButton="ghost" (click)="createOrUpdate(row)" title="Editar">
+    <ng-icon name="heroPencil" agroColor="blue"></ng-icon>
+  </button>
+  <button agroButton="ghost" (click)="remove(row)" title="Eliminar">
+    <ng-icon name="heroTrash" agroColor="danger"></ng-icon>
+  </button>
+</ng-template>

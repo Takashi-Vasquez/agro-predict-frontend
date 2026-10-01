@@ -1,3 +1,4 @@
+/.agents
 /.vscode
 /node_modules
 /dist
@@ -7,6 +8,7 @@
 /.vs
 /.idea
 /.fleet
+skills-lock.json*
 
 # Resultados temporales de pruebas y herramientas
 /test-results
