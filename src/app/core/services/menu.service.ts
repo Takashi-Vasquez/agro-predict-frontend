@@ -3,6 +3,7 @@ import { MenuItem } from '../models/menu.models';
 import { readStorage } from './browser-storage';
 
 export const AUTH_SESSION_KEY = 'agro.auth-session';
+export type Permission = 'CREATE' | 'READ' | 'UPDATE' | 'DELETE' | 'EXPORT' | 'TEZT';
 
 @Injectable({ providedIn: 'root' })
 export class MenuService {
@@ -23,10 +24,11 @@ export class MenuService {
           this.setMenu(value.user.menus);
           return;
         }
-      } catch { /* ignore */ }
+      } catch {
+        /* ignore */
+      }
     }
   }
-
 
   setMenu(tree: MenuItem[]) {
     this.menuTree.set(tree);
@@ -36,7 +38,6 @@ export class MenuService {
   hasPermission(menuCode: string, permission: string): boolean {
     return this.permissionMap.get(menuCode)?.has(permission) ?? false;
   }
-
 
   private buildPermissionMap(items: MenuItem[]) {
     for (const item of items) {
@@ -55,9 +56,7 @@ export class MenuService {
         const found = this.findMenuItem(currentUrl, item.children);
         if (found) return found;
       }
-
     }
     return null;
   }
-
 }

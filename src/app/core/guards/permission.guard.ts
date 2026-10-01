@@ -9,7 +9,7 @@ function checkPermission(menuCode: string, permission: string): boolean {
   const hasAccess = menuService.hasPermission(menuCode, permission);
 
   if (!hasAccess) {
-    router.navigate(['/unauthorized']);
+    router.createUrlTree(['/unauthorized']);
     return false;
   }
 
