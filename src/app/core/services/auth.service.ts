@@ -8,6 +8,7 @@ import {
   LoginRequest,
   LoginResponse,
 } from '../models/auth.models';
+import { Company } from '../models/company.models';
 import { ApiService } from './api.service';
 import { readStorage, writeStorage } from './browser-storage';
 import { jwtExpiresAt } from './jwt';
@@ -27,6 +28,15 @@ export class AuthService {
   private expiryTimer: ReturnType<typeof setTimeout> | undefined;
 
   readonly user = computed(() => this._session()?.user ?? null);
+
+  private readonly _selectedCompany = signal<Company | null>(null);
+  readonly selectedCompany = this._selectedCompany.asReadonly();
+  readonly companyId = computed(() => this._selectedCompany()?.id ?? null);
+
+  selectCompany(company: Company): void {
+    this._selectedCompany.set(company);
+    this.save();
+  }
 
   constructor() {
     // Remove the obsolete demo identity format; the current demo uses the validated session shape.
@@ -63,7 +73,7 @@ export class AuthService {
           this.persistent = remember;
           this._session.set({
             accessToken: response.accessToken,
-            expiresAt
+            expiresAt,
           });
           this.save();
           this.scheduleExpiry();
@@ -88,37 +98,11 @@ export class AuthService {
           });
           const menus = this._session().user.menus ?? [];
           this.menuService.setMenu(menus);
+          this.hydrateCompany(result.companies);
           this.save();
         }
       }),
     );
-  }
-
-  /** Opens a short-lived, local-only session without calling or impersonating the API. */
-  startDemo(): void {
-    this.logout();
-    this.persistent = false;
-    const demoUser: AuthUser = {
-      id: 99999,
-      firstName: 'Invitado Demo',
-      lastName: '',
-      fullName: 'Invitado',
-      email: 'demo@agropredict.local',
-      photoUrl: null,
-      status: 'active',
-      isAdmin: false,
-      phone: "98885547",
-      age: 18,
-      roles: ['Explorador de negocio'],
-      menus: []
-    };
-    this._session.set({
-      accessToken: null,
-      expiresAt: Date.now() + 8 * 60 * 60 * 1000,
-      user: demoUser,
-    });
-    this.save();
-    this.scheduleExpiry();
   }
 
   isAuthenticated(): boolean {
@@ -151,6 +135,7 @@ export class AuthService {
   logout(): void {
     clearTimeout(this.expiryTimer);
     this._session.set(null);
+    this._selectedCompany.set(null);
     writeStorage(AUTH_SESSION_KEY, null);
     writeStorage(AUTH_SESSION_KEY, null, false);
   }
@@ -159,7 +144,9 @@ export class AuthService {
     const returnUrl = this.router.url;
     this.logout();
     if (!returnUrl.startsWith('/auth/signin')) {
-      void this.router.navigate(['/auth/signin'], { queryParams: { reason: 'expired', returnUrl } });
+      void this.router.navigate(['/auth/signin'], {
+        queryParams: { reason: 'expired', returnUrl },
+      });
     }
   }
 
@@ -173,6 +160,7 @@ export class AuthService {
         accessToken: current.accessToken,
         expiresAt: current.expiresAt,
         user: { ...current.user, avatar: null },
+        selectedCompanyId: this._selectedCompany()?.id ?? null,
       }),
       this.persistent,
     );
@@ -197,9 +185,7 @@ export class AuthService {
           typeof value.expiresAt === 'number'
         ) {
           const accessToken = typeof value.accessToken === 'string' ? value.accessToken : null;
-          const expiresAt = accessToken
-            ? jwtExpiresAt(accessToken)
-            : value.expiresAt;
+          const expiresAt = accessToken ? jwtExpiresAt(accessToken) : value.expiresAt;
           if (expiresAt && expiresAt > Date.now()) {
             this.persistent = persistent;
             this._session.set({
@@ -209,6 +195,11 @@ export class AuthService {
             });
             const menus = this._session().user.menus ?? [];
             this.menuService.setMenu(menus);
+            const persistedCompanyId =
+              'selectedCompanyId' in value && typeof value.selectedCompanyId === 'number'
+                ? value.selectedCompanyId
+                : null;
+            this.hydrateCompany((value.user as AuthUser).companies, persistedCompanyId);
             this.scheduleExpiry();
 
             return;
@@ -219,6 +210,20 @@ export class AuthService {
       }
       writeStorage(AUTH_SESSION_KEY, null, persistent);
     }
+  }
+
+  private hydrateCompany(
+    companies: Company[] | undefined,
+    preferredId: number | null = null,
+  ): void {
+    const list = companies ?? [];
+    const currentId = this._selectedCompany()?.id ?? preferredId;
+    this._selectedCompany.set(
+      list.find((company) => company.id === currentId) ??
+        list.find((company) => company.isDefault) ??
+        list[0] ??
+        null,
+    );
   }
 
   private scheduleExpiry(): void {

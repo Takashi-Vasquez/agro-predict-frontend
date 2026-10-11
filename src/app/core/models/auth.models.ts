@@ -1,4 +1,5 @@
-import { MenuItem } from "./menu.models";
+import { Company } from './company.models';
+import { MenuItem } from './menu.models';
 
 export interface LoginRequest {
   email: string;
@@ -24,7 +25,6 @@ export class AuthResponseError extends Error {
 
 // Backend response from GET /auth/user
 export interface AuthUser {
-
   id: number;
   email: string;
   status: string;
@@ -37,4 +37,5 @@ export interface AuthUser {
   age: number | null;
   roles: string[];
   menus: MenuItem[];
+  companies: Company[];
 }

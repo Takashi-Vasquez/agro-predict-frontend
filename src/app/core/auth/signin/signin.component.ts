@@ -85,12 +85,6 @@ export class SigninComponent {
       });
   }
 
-  startDemo(): void {
-    if (this.pending()) return;
-    this.auth.startDemo();
-    void this.router.navigateByUrl(this.returnUrl());
-  }
-
   private returnUrl(): string {
     const target = this.route.snapshot.queryParamMap.get('returnUrl');
     return target &&
