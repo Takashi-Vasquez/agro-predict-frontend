@@ -2,12 +2,7 @@
   title="Conoce lo que cultivas"
   description="Un catálogo de referencia para organizar tus campañas."
   eyebrow="CATÁLOGO DE CULTIVOS"
->
-  <a agroButton="primary" routerLink="/planificacion">
-    <agro-icon name="calendar" />
-    Planificar cultivo
-  </a>
-</agro-page-header>
+></agro-page-header>
 
 @if (crops.isLoading()) {
   <agro-loader />
@@ -55,10 +50,10 @@
               <dd>{{ 0 }}</dd>
             </div>
           </dl>
-          <a routerLink="/planificacion" class="crop-action">
+          <!-- <a routerLink="/planificacion" class="crop-action">
             Ver planificación
             <agro-icon name="arrow" />
-          </a>
+          </a> -->
         </div>
       </agro-card>
     }
