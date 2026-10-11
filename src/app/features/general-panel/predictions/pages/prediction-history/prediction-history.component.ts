@@ -28,7 +28,7 @@ import {
 import { SearchField } from '../../../../../shared/ui/search-field/search-field.component';
 import { filterBy } from '../../../../../shared/utils/filter.util';
 import { Utils } from '../../../../../shared/utils/utils';
-import { RoleDialog } from '../../../../security/roles/pages/role-dialog/role-dialog.component';
+// import { RoleDialog } from '../../../../security/roles/pages/role-dialog/role-dialog.component';
 import { TrainingRecordService } from '../../training-records.service';
 
 type PredictionView = 'individual' | 'batch' | 'training';
@@ -111,14 +111,14 @@ export class PredictionsHistoryComponent {
 
     if (row && !role) return;
 
-    this.dialog
-      .open(RoleDialog, {
-        data: role,
-      })
-      .afterClosed()
-      .subscribe((saved: boolean) => {
-        if (saved) this.records.reload();
-      });
+    // this.dialog
+    //   .open(RoleDialog, {
+    //     data: role,
+    //   })
+    //   .afterClosed()
+    //   .subscribe((saved: boolean) => {
+    //     if (saved) this.records.reload();
+    //   });
   }
 
   remove(row: TableRow) {

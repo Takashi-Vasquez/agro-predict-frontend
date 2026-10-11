@@ -48,9 +48,6 @@
 </agro-card>
 
 <ng-template #actionsTpl let-row>
-  <button agroButton="ghost" (click)="createOrUpdate(row)" title="Editar">
-    <ng-icon name="heroPencil" agroColor="blue"></ng-icon>
-  </button>
   <button agroButton="ghost" (click)="remove(row)" title="Eliminar">
     <ng-icon name="heroTrash" agroColor="danger"></ng-icon>
   </button>

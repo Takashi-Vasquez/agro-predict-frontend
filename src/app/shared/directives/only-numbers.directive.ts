@@ -11,7 +11,7 @@ export class OnlyNumbersDirective {
   constructor() {}
 
   @HostListener('keypress', ['$event']) onKeyPress(e: KeyboardEvent) {
-    if (this.isDocument) {
+    if (this.isDocument()) {
       const documentType = this.documentType() ? this.documentType().toUpperCase().trim() : 'OTROS';
       if (documentType == 'DNI' || documentType == 'RUC') {
         return this.onlyNumbers(e.key);
@@ -19,7 +19,7 @@ export class OnlyNumbersDirective {
         return /^[a-zA-Z0-9]*$/.test(e.key);
       }
     }
-    if (!this.decimal) return this.onlyNumbers(e.key);
+    if (!this.decimal()) return this.onlyNumbers(e.key);
     if (isNaN(parseInt(e.key))) return e.key == '.';
     else return parseInt(e.key) >= 0 && parseInt(e.key) <= 9;
   }

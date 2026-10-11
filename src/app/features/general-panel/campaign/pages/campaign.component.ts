@@ -111,24 +111,21 @@ export class CampaignComponent {
   }
 
   remove(row: TableRow) {
-    const role = this.campaign.value()?.find((r) => r.id === Number(row.id));
+    const campaign = this.campaign.value()?.find((r) => r.id === Number(row.id));
     this.dialog
       .open(ConfirmDialog, {
         width: '440px',
         data: {
           title: '¿Eliminar esta campaña?',
-          message: `Se eliminará ${role.name}. Esta acción no se puede deshacer.`,
+          message: `Se eliminará ${campaign.name}. Esta acción no se puede deshacer.`,
           confirm: 'Eliminar',
           cancel: 'Cancelar',
+          action: () => this.campaignService.delete(campaign.id),
         },
       })
       .afterClosed()
-      .subscribe((confirmed: boolean) => {
-        if (confirmed) {
-          this.campaignService.delete(role.id).subscribe(() => {
-            this.campaign.reload();
-          });
-        }
+      .subscribe((done) => {
+        if (done) this.campaign.reload();
       });
   }
 }

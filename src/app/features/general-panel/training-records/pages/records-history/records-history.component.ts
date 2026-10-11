@@ -28,7 +28,6 @@ import {
 import { SearchField } from '../../../../../shared/ui/search-field/search-field.component';
 import { filterBy } from '../../../../../shared/utils/filter.util';
 import { Utils } from '../../../../../shared/utils/utils';
-import { RoleDialog } from '../../../../security/roles/pages/role-dialog/role-dialog.component';
 import { TrainingRecordService } from '../../training-records.service';
 
 type PredictionView = 'individual' | 'batch' | 'training';
@@ -106,28 +105,13 @@ export class RecordsHistoryComponent {
     return filterBy(all, this.searchTerm(), ['status']);
   });
 
-  createOrUpdate(row?: TableRow) {
-    const role = row ? this.records.value()?.find((r) => r.id === Number(row.id)) : undefined;
-
-    if (row && !role) return;
-
-    this.dialog
-      .open(RoleDialog, {
-        data: role,
-      })
-      .afterClosed()
-      .subscribe((saved: boolean) => {
-        if (saved) this.records.reload();
-      });
-  }
-
   remove(row: TableRow) {
-    const role = this.records.value()?.find((r) => r.id === Number(row.id));
+    const record = this.records.value()?.find((r) => r.id === Number(row.id));
     this.dialog
       .open(ConfirmDialog, {
         width: '440px',
         data: {
-          title: '¿Eliminar este rol?',
+          title: '¿Eliminar este registro?',
           message: `Se eliminará el registro. Esta acción no se puede deshacer.`,
           confirm: 'Eliminar',
           cancel: 'Cancelar',
@@ -136,7 +120,7 @@ export class RecordsHistoryComponent {
       .afterClosed()
       .subscribe((confirmed: boolean) => {
         if (confirmed) {
-          this.trainingRecordService.delete(role.id).subscribe(() => {
+          this.trainingRecordService.delete(record.id).subscribe(() => {
             this.records.reload();
           });
         }
