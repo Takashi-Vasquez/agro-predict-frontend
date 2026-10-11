@@ -6,12 +6,12 @@
       [attr.aria-label]="mobile() ? 'Abrir menú' : 'Colapsar o expandir menú'"
       [attr.aria-expanded]="mobile() ? drawer() : !collapsed()"
     >
-      <agro-icon [name]="mobile() ? 'menu' : 'panel'" />
+      <ng-icon [name]="mobile() ? 'matMenu' : 'matViewSidebarOutline'" />
     </button>
     <span class="header-divider"></span>
     <nav class="breadcrumbs" aria-label="Ruta de navegación">
       <span>Workspace</span>
-      <agro-icon name="chevron" />
+      <ng-icon name="matKeyboardArrowRight" />
       <strong aria-current="page">{{ title() }}</strong>
     </nav>
   </div>
@@ -22,14 +22,14 @@
       [attr.aria-label]="theme.dark() ? 'Activar modo claro' : 'Activar modo oscuro'"
       [matTooltip]="theme.dark() ? 'Modo claro' : 'Modo oscuro'"
     >
-      <agro-icon [name]="theme.dark() ? 'sun' : 'moon'" />
+      <ng-icon [name]="theme.dark() ? 'heroSun' : 'heroMoon'" />
     </button>
     <button
       class="icon-button messages-button"
       [matMenuTriggerFor]="messagesMenu"
       aria-label="Mensajes"
     >
-      <agro-icon name="message" />
+      <ng-icon name="matMessageRound" />
     </button>
     <button
       class="icon-button notification-button"
@@ -37,7 +37,7 @@
       (menuOpened)="unread.set(false)"
       aria-label="Notificaciones"
     >
-      <agro-icon name="bell" />
+      <ng-icon name="heroBell" />
       @if (unread()) {
         <span class="notification-dot"></span>
       }
@@ -55,15 +55,66 @@
       }
     </button>
   </div>
-  <mat-menu #userMenu="matMenu">
-    <a mat-menu-item routerLink="/perfil">Mi perfil</a>
-    <button mat-menu-item (click)="logout()">Cerrar sesión</button>
+  <mat-menu #userMenu="matMenu" panelClass="user-menu-panel">
+    <div class="user-menu-header">
+      <span class="avatar">
+        @if (authService.user()?.photoUrl) {
+          <img [src]="authService.user()?.photoUrl" alt="Foto de perfil" />
+        } @else {
+          {{ initials() }}
+        }
+      </span>
+      <span class="user-menu-identity">
+        <strong>{{ authService.user()?.fullName }}</strong>
+        <small>{{ authService.user()?.email }}</small>
+      </span>
+    </div>
+    @if (authService.user()?.companies?.length) {
+      <p class="user-menu-section-label">Empresa</p>
+      @for (company of authService.user()?.companies; track company.id) {
+        <button class="company-option" mat-menu-item (click)="authService.selectCompany(company)">
+          <div class="flex items-center">
+            @if (company.logoPath && !logoBroken(company.logoPath)) {
+              <img
+                class="company-logo mr-2"
+                [src]="companyLogo(company.logoPath)"
+                [alt]="company.name"
+                (error)="onLogoError(company.logoPath)"
+              />
+            } @else {
+              <span class="company-logo company-logo-fallback mr-2">
+                {{ company.name.charAt(0) }}
+              </span>
+            }
+            <span class="company-name">{{ company.name }}</span>
+            @if (authService.selectedCompany()?.id === company.id) {
+              <ng-icon class="ml-2" name="heroCheckBadgeMicro" color="var(--green-text)" />
+            }
+          </div>
+        </button>
+      }
+      <span class="user-menu-divider"></span>
+    }
+    <a class="user-menu-link" mat-menu-item routerLink="/perfil">
+      <div class="flex items-center w-full">
+        <ng-icon class="mr-2" name="heroUser" />
+        <span>Mi perfil</span>
+      </div>
+    </a>
+    <button class="user-menu-link user-menu-danger" mat-menu-item (click)="logout()">
+      <div class="flex items-center w-full">
+        <ng-icon class="mr-2" name="matLogOut" />
+        <span>Cerrar sesión</span>
+      </div>
+    </button>
   </mat-menu>
+
   <mat-menu #notificationsMenu="matMenu">
     <div class="popover-title">Notificaciones · Demo</div>
     <a mat-menu-item routerLink="/clima">Lluvias previstas para el sábado</a>
     <a mat-menu-item routerLink="/sensores">Un sensor requiere atención</a>
   </mat-menu>
+
   <mat-menu #messagesMenu="matMenu">
     <div class="popover-title">Mensajes</div>
     <button mat-menu-item disabled>No tienes mensajes nuevos.</button>

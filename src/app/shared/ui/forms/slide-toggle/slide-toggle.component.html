@@ -10,6 +10,7 @@
       <input
         [id]="id()"
         type="checkbox"
+        [disabled]="disabled()"
         [checked]="isChecked()"
         (change)="toggle()"
         (blur)="onTouched()"

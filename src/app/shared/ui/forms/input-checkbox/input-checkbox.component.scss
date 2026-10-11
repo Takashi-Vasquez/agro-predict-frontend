@@ -1,0 +1,93 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
+.form-field .option {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  cursor: pointer;
+}
+
+.option-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.option-title {
+  font-size: 0.875rem;
+  font-weight: 550;
+  color: var(--text);
+}
+
+.option-desc {
+  font-size: 0.75rem;
+  font-weight: 400;
+  color: var(--muted);
+}
+
+.check {
+  appearance: none;
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  margin-top: 2px;
+  border: 1.5px solid var(--border, #d9d9d9);
+  border-radius: 4px;
+  background: var(--surface);
+  cursor: pointer;
+  position: relative;
+  transition:
+    background-color 0.2s,
+    border-color 0.2s;
+}
+
+.check:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px var(--check-soft, var(--green-soft));
+}
+
+.check:checked {
+  background-color: var(--check-color, var(--primary));
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='5 13 9 18 20 6'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 13px 13px;
+  border-color: var(--check-color, var(--primary));
+}
+
+.check:indeterminate {
+  background-color: var(--check-color, var(--primary));
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='4' stroke-linecap='round'%3E%3Cline x1='5' y1='12' x2='19' y2='12'%3E%3C/line%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 11px 11px;
+  border-color: var(--check-color, var(--primary));
+}
+
+.check:disabled {
+  background: var(--surface-disabled, #f2f2f2);
+  border-color: var(--border, #d9d9d9);
+  cursor: not-allowed;
+}
+
+.check:disabled:checked {
+  background: var(--muted);
+  border-color: var(--muted);
+}
+
+.check:disabled:indeterminate {
+  background: var(--muted);
+  border-color: var(--muted);
+}
+
+.form-field .option:has(.check:disabled) {
+  cursor: not-allowed;
+
+  .option-title,
+  .option-desc {
+    color: var(--muted, #9a9a9a);
+  }
+}

@@ -10,12 +10,14 @@ import {
 import { Button } from '../../directives/agro-button.directive';
 import { StatusLabelPipe, StatusOptionsKey, StatusTypePipe } from '../../pipes/status.pipe';
 import { Empty } from '../agro-empty/agro-empty.component';
+export type TableCellContext = { $implicit: TableRow[keyof TableRow]; row: TableRow };
+
 export interface TableColumn {
   key: string;
   label: string;
   kind?: 'status' | 'emphasis' | 'actions';
   width?: string;
-  template?: TemplateRef<{ $implicit: TableRow[keyof TableRow]; row: TableRow }>;
+  template?: TemplateRef<TableCellContext>;
 }
 export interface TableRow {
   id: string;

@@ -154,6 +154,130 @@
   font-weight: 600;
 }
 
+// ── user-menu (menú del avatar) — bloque nuevo, revertir eliminando desde aquí hasta ──
+
+.user-menu-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--border);
+
+  .avatar {
+    width: 34px;
+    height: 34px;
+    font-size: 0.6875rem;
+  }
+}
+
+.user-menu-identity {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  line-height: 1.3;
+
+  strong {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  small {
+    font-size: 0.6875rem;
+    color: var(--muted);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+.user-menu-section-label {
+  margin: 0;
+  padding: 12px 16px 4px;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.company-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 40px;
+  border-radius: 6px;
+
+  &:hover {
+    background: var(--green-soft);
+  }
+}
+
+.company-logo {
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+  border-radius: 6px;
+  object-fit: cover;
+}
+
+.company-logo-fallback {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--green-soft);
+  color: var(--green-text);
+  font-size: 0.6875rem;
+  font-weight: 650;
+}
+
+.company-name {
+  min-width: 0;
+  font-size: 0.8125rem;
+  text-align: left;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.company-check {
+  width: 15px;
+  height: 15px;
+  flex-shrink: 0;
+  color: var(--green-text);
+}
+
+.user-menu-divider {
+  display: block;
+  height: 1px;
+  margin: 6px 16px;
+  background: var(--border);
+}
+
+.user-menu-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  agro-icon {
+    width: 16px;
+    height: 16px;
+    color: var(--muted);
+  }
+}
+
+.user-menu-danger {
+  color: var(--danger) !important;
+
+  agro-icon {
+    color: var(--danger);
+  }
+}
+
+// ── fin user-menu ──
+
 .compact-search {
   display: none;
 }

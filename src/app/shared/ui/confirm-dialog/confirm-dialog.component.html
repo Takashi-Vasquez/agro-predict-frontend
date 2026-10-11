@@ -3,8 +3,12 @@
   <p>{{ data.message }}</p>
   <div class="dialog-actions">
     @if (data.cancel) {
-    <button agroButton [mat-dialog-close]="false">{{ data.cancel }}</button>
+      <button agroButton (click)="ref.close(false)" [disabled]="loading()">
+        {{ data.cancel }}
+      </button>
     }
-    <button agroButton="primary" [mat-dialog-close]="true">{{ data.confirm }}</button>
+    <button agroButton="primary" (click)="confirm()" [disabled]="loading()">
+      {{ loading() ? 'Procesando...' : data.confirm }}
+    </button>
   </div>
 </div>

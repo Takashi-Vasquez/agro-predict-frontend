@@ -134,3 +134,12 @@ label.toggle-item {
 .form-field:has(input:checked) .status-value {
   color: var(--status-color-checked, var(--primary));
 }
+
+.toggle input:disabled + label.toggle-item {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.toggle input:disabled {
+  cursor: not-allowed;
+}

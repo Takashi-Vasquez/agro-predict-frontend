@@ -1,0 +1,29 @@
+<div class="form-field" [class]="customClass()">
+  <label class="option" [for]="id()">
+    <input
+      type="checkbox"
+      class="check"
+      [id]="id()"
+      [checked]="value()"
+      [disabled]="disabled()"
+      [indeterminate]="indeterminate()"
+      (change)="onChange($event)"
+      (blur)="onBlur()"
+    />
+    <span class="option-text">
+      <span class="option-title">
+        {{ label() }}
+        @if (required()) {
+          <span class="required">*</span>
+        }
+      </span>
+      @if (description() != '') {
+        <span class="option-desc">{{ description() }}</span>
+      }
+    </span>
+  </label>
+
+  @if (error()) {
+    <span class="field-error">{{ error() }}</span>
+  }
+</div>

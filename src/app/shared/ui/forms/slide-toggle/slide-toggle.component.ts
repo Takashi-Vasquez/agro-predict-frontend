@@ -13,7 +13,7 @@ export class SildeToggle implements FormValueControl<unknown> {
   readonly inactiveValue = input<unknown>(false);
   readonly label = input<(val: unknown) => string>((val) => (val ? 'Activo' : 'Inactivo'));
   readonly id = input<string>(`agro-toggle-${Math.random().toString(36).slice(2, 8)}`);
-
+  readonly disabled = input<boolean>(false);
   readonly value = model<unknown>(false);
   readonly isChecked = computed(() => this.value() === this.activeValue());
 
