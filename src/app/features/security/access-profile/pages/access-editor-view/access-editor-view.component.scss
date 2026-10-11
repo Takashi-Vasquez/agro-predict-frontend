@@ -1,0 +1,14 @@
+:host {
+  display: block;
+}
+
+.tree {
+  padding: 0 1.25rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+slide-toggle {
+  --status-color: var(--amber);
+}

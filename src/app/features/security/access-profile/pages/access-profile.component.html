@@ -1,33 +1,33 @@
 <agro-page-header
-  title="Gestión de Roles"
-  description="Administra los roles del sistema."
+  title="Gestión de Perfil de accesos"
+  description="Administra los permisos de usuario."
   eyebrow="SEGURIDAD"
 >
   <button agroButton="primary" (click)="createOrUpdate()">
     <ng-icon name="heroPlusMicro"></ng-icon>
-    Nuevo Rol
+    Nuevo Perfil
   </button>
 </agro-page-header>
 
 <agro-card>
   <div class="toolbar">
     <agro-search-field
-      placeholder="Buscar roles…"
-      ariaLabel="Buscar roles"
+      placeholder="Buscar permisos…"
+      ariaLabel="Buscar permisos"
       (searchChange)="searchTerm.set($event)"
     />
 
     <div class="flex gap-2">
-      <button agroButton="ghost" class="mr-(2)" (click)="roles.reload()">
+      <button agroButton="ghost" class="mr-(2)" (click)="accessProfile.reload()">
         <ng-icon name="heroArrowPathSolid"></ng-icon>
       </button>
       <span class="text-xs muted content-center">{{ rows().length }} registros</span>
     </div>
   </div>
 
-  @if (roles.isLoading()) {
+  @if (accessProfile.isLoading()) {
     <agro-loader />
-  } @else if (roles.error()) {
+  } @else if (accessProfile.error()) {
     <agro-empty title="Error" description="No se pudieron cargar los datos" />
   } @else {
     <agro-data-table
@@ -35,11 +35,14 @@
       [rows]="rows()"
       [actionsTemplate]="actionsTpl"
       [paginate]="true"
-      caption="Roles del sistema"
+      caption="Perfil de acceso del sistema"
     />
 
-    @if (!roles.value().length) {
-      <agro-empty title="No encontramos roles" description="Aún no se han registrado roles." />
+    @if (!accessProfile.value().length) {
+      <agro-empty
+        title="No encontramos permisos"
+        description="Aún no se han registrado permisos."
+      />
     }
   }
 </agro-card>

@@ -1,0 +1,96 @@
+<div class="training-grid">
+  <agro-card>
+    <div class="card-header">
+      <div>
+        <h2>Información personal</h2>
+        <p>Datos de la cuenta dentro de la plataforma.</p>
+      </div>
+    </div>
+
+    <form class="panel-body" [formGroup]="form()">
+      <div class="form-grid three-columns">
+        <agro-input-text
+          only-numbers
+          documentType="DNI"
+          formControlName="documentNumber"
+          label="N° DOCUMENTO"
+          [minlength]="1"
+          [maxlength]="8"
+          [required]="false"
+          [error]="form().controls['documentNumber'] | validationError"
+        />
+        <agro-input-text
+          formControlName="firstName"
+          label="Nombres"
+          [maxlength]="60"
+          [required]="false"
+          [error]="form().controls['firstName'] | validationError"
+        />
+        <agro-input-text
+          formControlName="lastName"
+          label="Apellidos"
+          [maxlength]="60"
+          [required]="false"
+          [error]="form().controls['lastName'] | validationError"
+        />
+
+        <agro-input-text
+          only-numbers
+          formControlName="phone"
+          label="Teléfono"
+          [minlength]="1"
+          [maxlength]="9"
+          [error]="form().controls['phone'] | validationError"
+        />
+
+        <agro-input-number
+          formControlName="age"
+          label="Edad"
+          [decimal]="false"
+          [min]="0"
+          [max]="100"
+          [error]="form().controls['age'] | validationError"
+        />
+      </div>
+    </form>
+
+    <div class="panel-body">
+      @if (companies.isLoading()) {
+        <agro-loader />
+      } @else if (companies.error()) {
+        <agro-empty title="Error" description="No se pudieron cargar los datos" />
+      } @else {
+        @if (companies.value().length) {
+          <agro-data-table
+            [columns]="columns()"
+            [rows]="rows()"
+            [paginate]="true"
+            StatusOptionsKey="campaignStatus"
+            caption="Empresas"
+          />
+        } @else {
+          <agro-empty
+            title="No encontramos empresas"
+            description="Aún no se han registrado empresas."
+          />
+        }
+      }
+    </div>
+  </agro-card>
+</div>
+
+<ng-template #selectTpl let-row="row">
+  <agro-input-checkbox
+    customClass="mb-0!"
+    [value]="isSelected(row.id)"
+    (valueChange)="toggleSelected(row.id)"
+  />
+</ng-template>
+
+<ng-template #defaultTpl let-row="row">
+  <agro-input-checkbox
+    customClass="mb-0!"
+    [value]="isDefault(row.id)"
+    (valueChange)="setDefault(row.id)"
+  />
+</ng-template>

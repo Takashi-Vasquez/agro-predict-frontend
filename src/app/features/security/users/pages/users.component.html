@@ -1,0 +1,62 @@
+<agro-page-header
+  title="Gestión de Usuario"
+  description="Administra los usuarios del sistema."
+  eyebrow="SEGURIDAD"
+>
+  <button agroButton="primary" (click)="createOrUpdate()">
+    <ng-icon name="heroPlusMicro"></ng-icon>
+    Nuevo Usuario
+  </button>
+</agro-page-header>
+
+<agro-card>
+  <div class="toolbar">
+    <agro-search-field
+      placeholder="Buscar usuarios…"
+      ariaLabel="Buscar usuarios"
+      (searchChange)="searchTerm.set($event)"
+    />
+
+    <div class="flex gap-2">
+      <button agroButton="ghost" class="mr-(2)" (click)="users.reload()">
+        <ng-icon name="heroArrowPathSolid"></ng-icon>
+      </button>
+      <span class="text-xs muted content-center">{{ rows().length }} registros</span>
+    </div>
+  </div>
+
+  @if (users.isLoading()) {
+    <agro-loader />
+  } @else if (users.error()) {
+    <agro-empty title="Error" description="No se pudieron cargar los datos" />
+  } @else {
+    <agro-data-table
+      [columns]="columns()"
+      [rows]="rows()"
+      [actionsTemplate]="actionsTpl"
+      [paginate]="true"
+      caption="Usuarios del sistema"
+    />
+
+    @if (!users.value().length) {
+      <agro-empty
+        title="No encontramos los usuarios"
+        description="Aún no se han registrado los usuarios."
+      />
+    }
+  }
+</agro-card>
+
+<ng-template #actionsTpl let-row>
+  <button
+    agroButton="ghost"
+    *appHasPermission="'UPDATE'"
+    (click)="createOrUpdate(row)"
+    title="Editar"
+  >
+    <ng-icon name="heroPencil" agroColor="blue"></ng-icon>
+  </button>
+  <button agroButton="ghost" *appHasPermission="'DELETE'" (click)="remove(row)" title="Eliminar">
+    <ng-icon name="heroTrash" agroColor="danger"></ng-icon>
+  </button>
+</ng-template>

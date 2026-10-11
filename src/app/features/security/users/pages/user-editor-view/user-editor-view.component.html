@@ -1,0 +1,60 @@
+<agro-page-header
+  title="Usuarios"
+  description="Administra las cuentas de acceso dentro de la plataforma."
+  eyebrow="SEGURIDAD"
+>
+  <a agroButton class="cursor-pointer" (click)="goBack()">
+    <ng-icon name="heroArrowLeftEndOnRectangleMicro" agroColor="blue"></ng-icon>
+    Volver
+  </a>
+</agro-page-header>
+
+<div class="flex justify-between items-center mb-6">
+  <div class="view-tabs" role="tablist" aria-label="Operaciones del modelo">
+    <button
+      type="button"
+      role="tab"
+      [class.active]="view() === 'general'"
+      [attr.aria-selected]="view() === 'general'"
+      (click)="selectView('general')"
+    >
+      <ng-icon name="heroSparklesSolid" />
+      Datos Generales
+    </button>
+    <button
+      type="button"
+      role="tab"
+      [class.active]="view() === 'web'"
+      [attr.aria-selected]="view() === 'web'"
+      (click)="selectView('web')"
+    >
+      <ng-icon name="heroSquare3Stack3d" />
+      Usuario Web
+    </button>
+  </div>
+
+  <div>
+    <button
+      agroButton="primary"
+      outline
+      [btnLoader]="saving()"
+      class="w-3xs"
+      (click)="save()"
+      type="submit"
+    >
+      <span class="btn-label">Guardar</span>
+    </button>
+  </div>
+</div>
+
+@if (loading()) {
+  <agro-loader />
+} @else if (loadError()) {
+  <agro-empty
+    title="No se pudo cargar el usuario"
+    description="Verifica que el usuario exista e inténtalo de nuevo."
+  />
+} @else {
+  <app-data-general [hidden]="view() !== 'general'" [form]="form" />
+  <app-user-web [hidden]="view() !== 'web'" [form]="form" />
+}

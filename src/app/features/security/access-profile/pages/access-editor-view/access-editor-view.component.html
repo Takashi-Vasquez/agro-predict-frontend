@@ -1,0 +1,106 @@
+<agro-page-header
+  title="Gestión de Perfil de accesos"
+  description="Administra los permisos de usuario."
+  eyebrow="SEGURIDAD"
+>
+  <a agroButton class="cursor-pointer" (click)="goBack()">
+    <ng-icon name="heroArrowLeftEndOnRectangleMicro" agroColor="blue"></ng-icon>
+    Volver
+  </a>
+
+  <button
+    agroButton="primary"
+    outline
+    [btnLoader]="saving()"
+    class="w-3xs"
+    (click)="save()"
+    type="submit"
+  >
+    <span class="btn-label">Guardar</span>
+  </button>
+</agro-page-header>
+
+<form [formGroup]="form" (ngSubmit)="save()">
+  <div class="grid grid-cols-6 gap-2">
+    <agro-input-text
+      class="col-span-2"
+      formControlName="name"
+      label="Nombre"
+      placeholder="Ej. Administrador"
+      [maxlength]="60"
+      [required]="false"
+      [error]="form.controls.name | validationError"
+    />
+
+    <slide-toggle
+      class="col-span-1"
+      titleLabel="Estado"
+      formControlName="status"
+      [activeValue]="STATUS.ACTIVE"
+      [inactiveValue]="STATUS.INACTIVE"
+      [label]="(v) => v === STATUS.ACTIVE ? 'Activo' : 'Inactivo'"
+    />
+  </div>
+  <div class="grid grid-cols-2 gap-3">
+    <agro-card>
+      <div class="card-header">
+        <div>
+          <h2>Accesos disponibles</h2>
+          <p>Marca el menú o los permisos que deseas otorgar.</p>
+        </div>
+      </div>
+
+      @if (loading()) {
+        <agro-loader />
+      } @else if (loadError()) {
+        <agro-empty
+          title="No se pudieron cargar los accesos"
+          description="Revisa tu conexión e intenta de nuevo."
+        />
+      } @else {
+        <div class="tree">
+          @for (menu of menuTreee(); track menu.id) {
+            <agro-permission-node
+              [node]="menu"
+              [states]="nodeStates()"
+              [menuIds]="menuIds()"
+              [permIds]="permIds()"
+              (menuToggle)="onMenuToggle($event)"
+              (permToggle)="onPermToggle($event)"
+            />
+          }
+        </div>
+      }
+    </agro-card>
+
+    <agro-card>
+      <div class="card-header">
+        <div>
+          <h2>Accesos asignados</h2>
+          <p>Vista previa de lo que se guardará.</p>
+        </div>
+      </div>
+
+      @if (loading()) {
+        <agro-loader />
+      } @else if (!selectedTree().length) {
+        <agro-empty
+          title="Sin accesos asignados"
+          description="Marca menús o permisos en la lista de la izquierda."
+        />
+      } @else {
+        <div class="tree">
+          @for (menu of selectedTree(); track menu.id) {
+            <agro-permission-node
+              [node]="menu"
+              [states]="nodeStates()"
+              [menuIds]="menuIds()"
+              [permIds]="permIds()"
+              [readonly]="true"
+            />
+          }
+        </div>
+      }
+    </agro-card>
+  </div>
+</form>

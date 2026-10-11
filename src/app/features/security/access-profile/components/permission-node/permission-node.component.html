@@ -1,0 +1,56 @@
+<div class="node" [style.--indent]="depth() + 'rem'">
+  <div class="node-row">
+    @if (hasNested()) {
+      <button
+        type="button"
+        class="chevron"
+        [class.open]="expanded()"
+        [attr.aria-expanded]="expanded()"
+        [attr.aria-label]="expanded() ? 'Colapsar' : 'Expandir'"
+        (click)="toggleExpanded()"
+      >
+        <ng-icon name="heroChevronRightMini" />
+      </button>
+    } @else {
+      <span class="chevron-spacer"></span>
+    }
+
+    <agro-input-checkbox
+      class="node-check"
+      [label]="node().name"
+      [value]="menuState().checked"
+      [indeterminate]="menuState().indeterminate"
+      [disabled]="readonly()"
+      (valueChange)="onMenuToggle($event)"
+    />
+  </div>
+
+  @if (expanded()) {
+    <div class="node-children">
+      @for (perm of node().permissions; track perm.id) {
+        <agro-input-checkbox
+          class="perm-check"
+          [label]="perm.name"
+          [description]="perm.description"
+          color="blue"
+          [value]="permIds().has(permKey(node().id, perm.id))"
+          [disabled]="readonly()"
+          (valueChange)="onPermToggle(perm, $event)"
+        />
+      }
+
+      @for (child of node().children; track child.id) {
+        <agro-permission-node
+          [node]="child"
+          [depth]="depth() + 1"
+          [states]="states()"
+          [menuIds]="menuIds()"
+          [permIds]="permIds()"
+          [readonly]="readonly()"
+          (menuToggle)="menuToggle.emit($event)"
+          (permToggle)="permToggle.emit($event)"
+        />
+      }
+    </div>
+  }
+</div>

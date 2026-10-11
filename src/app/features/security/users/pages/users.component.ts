@@ -3,12 +3,12 @@ import {
   Component,
   computed,
   inject,
-  OnInit,
   signal,
   TemplateRef,
   ViewChild,
 } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { Router } from '@angular/router';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { heroMagnifyingGlassMicro, heroPlusMicro } from '@ng-icons/heroicons/micro';
 import { heroPencil, heroTrash } from '@ng-icons/heroicons/outline';
@@ -16,6 +16,7 @@ import { heroArrowPathSolid } from '@ng-icons/heroicons/solid';
 import { Button } from '../../../../shared/directives/agro-button.directive';
 import { Card } from '../../../../shared/directives/agro-card.directive';
 import { AgroColorDirective } from '../../../../shared/directives/agro-color.directive';
+import { HasPermissionDirective } from '../../../../shared/directives/has-permission.directive';
 import { Empty } from '../../../../shared/ui/agro-empty/agro-empty.component';
 import { Loader } from '../../../../shared/ui/agro-loader/agro-loader.component';
 import { PageHeader } from '../../../../shared/ui/agro-page-header/agro-page-header.component';
@@ -27,10 +28,9 @@ import {
 } from '../../../../shared/ui/data-table/data-table.component';
 import { SearchField } from '../../../../shared/ui/search-field/search-field.component';
 import { filterBy } from '../../../../shared/utils/filter.util';
-import { RolesService } from '../roles.service';
-import { RoleDialog } from './role-dialog/role-dialog.component';
+import { UserService } from '../user.service';
 @Component({
-  selector: 'agro-roles',
+  selector: 'agro-user',
   imports: [
     SearchField,
     NgIcon,
@@ -41,6 +41,7 @@ import { RoleDialog } from './role-dialog/role-dialog.component';
     PageHeader,
     DataTable,
     AgroColorDirective,
+    HasPermissionDirective,
   ],
   providers: [
     provideIcons({
@@ -51,72 +52,68 @@ import { RoleDialog } from './role-dialog/role-dialog.component';
       heroArrowPathSolid,
     }),
   ],
-  templateUrl: './roles.component.html',
-  styleUrls: ['./roles.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush, // OnPush ya es el default en Angular 22.
+  templateUrl: './users.component.html',
+  styleUrls: ['./users.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class RolesComponent implements OnInit {
-  private readonly rolesService = inject(RolesService);
+export class UsersComponent {
+  private readonly userService = inject(UserService);
+  private readonly router = inject(Router);
+
   private readonly dialog = inject(MatDialog);
   readonly searchTerm = signal('');
 
-  roles = this.rolesService.listResource();
+  users = this.userService.listResource();
   @ViewChild('actionsTpl', { static: true }) actionsTpl!: TemplateRef<{ $implicit: TableRow }>;
-
-  ngOnInit() {}
-
   readonly columns = computed<TableColumn[]>(() => [
-    { key: 'name', label: 'NOMBRE' },
-    { key: 'description', label: 'DESCRIPCIÓN' },
+    { key: 'documentNumber', label: 'N° DOCUMENTO' },
+    { key: 'firstName', label: 'NOMBRES' },
+    { key: 'lastName', label: 'APELLIDOS' },
+    { key: 'email', label: 'CORREO' },
     { key: 'status', label: 'ESTADO', kind: 'status', width: '15%' },
     { key: 'actions', label: 'ACCIONES', kind: 'actions', width: '20%' },
   ]);
 
   // Rows:
   readonly rows = computed<TableRow[]>(() => {
-    const all = (this.roles.value() ?? []).map((role) => ({
+    const all = (this.users.value() ?? []).map((role) => ({
       id: String(role.id),
-      name: role.name,
-      description: role.description,
+      documentNumber: role.documentNumber,
+      firstName: role.firstName,
+      lastName: role.lastName,
+      email: role.email,
       status: role.status,
     }));
-    return filterBy(all, this.searchTerm(), ['name', 'description']);
+    return filterBy(all, this.searchTerm(), ['documentNumber', 'firstName', 'lastName', 'email']);
   });
 
   createOrUpdate(row?: TableRow) {
-    const role = row ? this.roles.value()?.find((r) => r.id === Number(row.id)) : undefined;
-
-    if (row && !role) return;
-
-    this.dialog
-      .open(RoleDialog, {
-        data: role,
-      })
-      .afterClosed()
-      .subscribe((saved: boolean) => {
-        if (saved) this.roles.reload();
-      });
+    if (!row) {
+      this.router.navigate(['/seguridad', 'usuarios', 'nuevo']);
+      return;
+    }
+    const user = this.users.value()?.find((r) => r.id === Number(row.id));
+    if (user.id > 0) {
+      this.router.navigate(['/seguridad', 'usuarios', user.id, 'edit']);
+    }
   }
 
   remove(row: TableRow) {
-    const role = this.roles.value()?.find((r) => r.id === Number(row.id));
+    const user = this.users.value()?.find((r) => r.id === Number(row.id));
     this.dialog
       .open(ConfirmDialog, {
         width: '440px',
         data: {
-          title: '¿Eliminar este rol?',
-          message: `Se eliminará ${role.name}. Esta acción no se puede deshacer.`,
+          title: '¿Eliminar este usuario?',
+          message: `Se eliminará ${user.firstName} ${user.lastName}. Esta acción no se puede deshacer.`,
           confirm: 'Eliminar',
           cancel: 'Cancelar',
+          action: () => this.userService.delete(user.id),
         },
       })
       .afterClosed()
-      .subscribe((confirmed: boolean) => {
-        if (confirmed) {
-          this.rolesService.delete(role.id).subscribe(() => {
-            this.roles.reload();
-          });
-        }
+      .subscribe((done) => {
+        if (done) this.users.reload();
       });
   }
 }

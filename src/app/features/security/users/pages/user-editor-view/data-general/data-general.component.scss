@@ -1,0 +1,25 @@
+:host {
+  display: block;
+}
+
+.training-grid {
+  display: grid;
+  gap: 22px;
+  margin-bottom: 22px;
+}
+
+.three-columns {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+@media (max-width: 800px) {
+  .three-columns {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 560px) {
+  .three-columns {
+    grid-template-columns: 1fr;
+  }
+}

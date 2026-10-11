@@ -1,0 +1,100 @@
+<div class="grid grid-cols-5 gap-3">
+  <agro-card class="col-span-3">
+    <div class="card-header">
+      <div>
+        <h2>Acceso web</h2>
+        <p>Credenciales y estado de la cuenta.</p>
+      </div>
+    </div>
+    <form class="panel-body" [formGroup]="form()">
+      <div class="grid grid-cols-2 gap-x-5">
+        <agro-input-text
+          formControlName="email"
+          label="Correo"
+          placeholder="..."
+          [maxlength]="60"
+          [required]="false"
+          [error]="form().controls['email'] | validationError"
+        />
+        <agro-input-text
+          formControlName="password"
+          label="Contraseña"
+          type="password"
+          placeholder="..."
+          [maxlength]="60"
+          [required]="false"
+          [error]="form().controls['password'] | validationError"
+        />
+        <agro-input-checkbox
+          class="col-start-2 mb-4 self-start"
+          color="primary"
+          formControlName="changePassword"
+          label="Cambiar contraseña"
+          [required]="true"
+          [error]="form().controls['terminos'] | validationError"
+        />
+      </div>
+      <slide-toggle
+        titleLabel="Estado"
+        formControlName="status"
+        [activeValue]="STATUS.ACTIVE"
+        [inactiveValue]="STATUS.INACTIVE"
+        [label]="(v) => (v === STATUS.ACTIVE ? 'Activo' : 'Inactivo')"
+      />
+    </form>
+  </agro-card>
+
+  <agro-card class="col-span-2">
+    <div class="card-header">
+      <div>
+        <h2>Roles asignados</h2>
+        <p>Permisos del usuario en el sistema.</p>
+      </div>
+    </div>
+    <form class="panel-body" [formGroup]="form()">
+      <div class="grid grid-cols-4 gap-3">
+        <agro-select
+          class="col-span-2"
+          formControlName="selectRoles"
+          label="Roles"
+          [options]="availableRoles()"
+          [error]="form().controls['selectRoles'] | validationError"
+        />
+        <div class="flex items-center">
+          <button
+            type="button"
+            agroButton="amber"
+            outline
+            (click)="addRol()"
+            title="Agregar rol"
+            class="col-span-1"
+          >
+            <ng-icon name="heroPlusCircleMini" agroColor="blue"></ng-icon>
+            Agregar
+          </button>
+        </div>
+      </div>
+
+      @if (rows().length) {
+        <agro-data-table
+          [columns]="columns()"
+          [rows]="rows()"
+          [actionsTemplate]="actionsTpl"
+          [paginate]="true"
+          caption="Roles del sistema"
+        />
+      } @else {
+        <agro-empty
+          title="Sin roles asignados"
+          description="Selecciona un rol y presiona el botón para agregarlo."
+        />
+      }
+    </form>
+  </agro-card>
+</div>
+
+<ng-template #actionsTpl let-row>
+  <button type="button" agroButton="ghost" (click)="removeRol(row)" title="Eliminar">
+    <ng-icon name="heroTrash" agroColor="danger"></ng-icon>
+  </button>
+</ng-template>
