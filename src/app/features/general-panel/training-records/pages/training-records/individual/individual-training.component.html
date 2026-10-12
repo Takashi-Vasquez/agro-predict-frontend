@@ -118,7 +118,13 @@
         />
       </div>
 
-      <button agroButton="primary" class="generate" type="submit" [disabled]="saving()">
+      <button
+        agroButton="primary"
+        *appHasPermission="'CREATE'"
+        class="generate"
+        type="submit"
+        [disabled]="saving()"
+      >
         @if (saving()) {
           <span class="spinner"></span>
           Guardando…
@@ -165,6 +171,7 @@
       }
       <button
         agroButton="primary"
+        *appHasPermission="'CREATE'"
         type="button"
         (click)="trainModel()"
         [disabled]="trainingPending() || stats.isAllTrained"

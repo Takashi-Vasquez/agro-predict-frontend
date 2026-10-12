@@ -17,6 +17,7 @@ export interface TrainingRecords extends TrainingRecordsDto {
   location: any;
   extraData: any;
   source: string;
+  isTrained: boolean;
   rowNumber: any;
   importBatchId: any;
   errorMessage: any;

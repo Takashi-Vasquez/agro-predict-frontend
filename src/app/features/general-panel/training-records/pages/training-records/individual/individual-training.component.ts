@@ -16,6 +16,7 @@ import { heroSparklesSolid } from '@ng-icons/heroicons/solid';
 import { CoreService } from '../../../../../../core/services/core.service';
 import { Button } from '../../../../../../shared/directives/agro-button.directive';
 import { Card } from '../../../../../../shared/directives/agro-card.directive';
+import { HasPermissionDirective } from '../../../../../../shared/directives/has-permission.directive';
 import { ValidationErrorPipe } from '../../../../../../shared/pipes/validation-error.pipe';
 import { Loader } from '../../../../../../shared/ui/agro-loader/agro-loader.component';
 import {
@@ -40,6 +41,7 @@ import { TrainingRecordService } from '../../../training-records.service';
     SelectComponent,
     ValidationErrorPipe,
     DecimalPipe,
+    HasPermissionDirective,
   ],
   providers: [
     provideIcons({

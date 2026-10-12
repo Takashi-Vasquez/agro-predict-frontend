@@ -18,9 +18,19 @@
     />
 
     <div class="flex gap-2">
+      <button
+        agroButton="ghost"
+        class="mr-(2)"
+        *appHasPermission="'EXPORT'"
+        (click)="exportTable()"
+      >
+        <ng-icon name="matDownloading" />
+        Exportar
+      </button>
       <button agroButton="ghost" class="mr-(2)" (click)="records.reload()">
         <ng-icon name="heroArrowPathSolid"></ng-icon>
       </button>
+
       <span class="text-xs muted content-center">{{ rows().length }} registros</span>
     </div>
   </div>
@@ -48,7 +58,15 @@
 </agro-card>
 
 <ng-template #actionsTpl let-row>
-  <button agroButton="ghost" (click)="remove(row)" title="Eliminar">
-    <ng-icon name="heroTrash" agroColor="danger"></ng-icon>
-  </button>
+  @if (row.status == 'ACTIVE') {
+    <button agroButton="ghost" *appHasPermission="'DELETE'" (click)="remove(row)" title="Eliminar">
+      <ng-icon name="heroTrash" agroColor="danger"></ng-icon>
+    </button>
+  }
+</ng-template>
+
+<ng-template #isTrainedTpl let-row="row">
+  <span class="status" [class.success]="isTrained(row)" [class.danger]="!isTrained(row)">
+    {{ row.isTrained }}
+  </span>
 </ng-template>

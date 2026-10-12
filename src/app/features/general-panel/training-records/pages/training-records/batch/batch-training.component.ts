@@ -9,9 +9,10 @@ import {
 } from '@angular/core';
 import { NgIcon, provideIcons, provideNgIconsConfig } from '@ng-icons/core';
 import { heroPlus, heroSquare3Stack3d } from '@ng-icons/heroicons/outline';
-import { matCloudUpload, matDownload } from '@ng-icons/material-icons/baseline';
+import { matCloudUpload, matDownload, matDownloading } from '@ng-icons/material-icons/baseline';
 import { Button } from '../../../../../../shared/directives/agro-button.directive';
 import { Card } from '../../../../../../shared/directives/agro-card.directive';
+import { HasPermissionDirective } from '../../../../../../shared/directives/has-permission.directive';
 import { Empty } from '../../../../../../shared/ui/agro-empty/agro-empty.component';
 import { Loader } from '../../../../../../shared/ui/agro-loader/agro-loader.component';
 import {
@@ -20,6 +21,7 @@ import {
   TableRow,
 } from '../../../../../../shared/ui/data-table/data-table.component';
 import { triggerFileDownload } from '../../../../../../shared/utils/download';
+import { exportTable } from '../../../../../../shared/utils/export-table';
 import { pickFile } from '../../../../../../shared/utils/file-picker';
 import { UploadResult } from '../../../models/upload.model';
 import { TrainingRecordService } from '../../../training-records.service';
@@ -27,13 +29,14 @@ import { TrainingRecordService } from '../../../training-records.service';
 @Component({
   selector: 'app-batch-training',
   standalone: true,
-  imports: [NgIcon, Button, Card, Empty, Loader, DataTable],
+  imports: [NgIcon, Button, Card, Empty, Loader, DataTable, HasPermissionDirective],
   providers: [
     provideIcons({
       heroSquare3Stack3d,
       matDownload,
       matCloudUpload,
       heroPlus,
+      matDownloading,
     }),
     provideNgIconsConfig({
       size: '1.3em',
@@ -74,6 +77,8 @@ export class BatchTrainingComponent {
       ...r,
     })),
   );
+
+  exportTable = () => exportTable('xlsx', this.columns(), this.rows(), 'datos-historicos-cultivos');
 
   downloadFormat() {
     this.downloading.set(true);

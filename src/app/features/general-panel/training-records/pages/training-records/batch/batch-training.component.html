@@ -7,23 +7,42 @@
       </div>
 
       <div class="flex gap-2">
+        @if (uploadResult() ? uploadResult().has_errors : false) {
+          <button
+            agroButton="ghost"
+            class="mr-(2)"
+            *appHasPermission="'EXPORT'"
+            (click)="exportTable()"
+          >
+            <ng-icon name="matDownloading" />
+            Exportar
+          </button>
+        } @else {
+          <button
+            agroButton="primary"
+            type="button"
+            class="mr-4"
+            (click)="downloadFormat()"
+            [disabled]="downloading()"
+          >
+            <ng-icon name="matDownload" />
+            <span class="btn-label">
+              @if (downloading()) {
+                Descargando…
+              } @else {
+                Formato
+              }
+            </span>
+          </button>
+        }
+
         <button
-          agroButton="primary"
+          agroButton="blue"
+          *appHasPermission="'CREATE'"
           type="button"
-          class="mr-4"
-          (click)="downloadFormat()"
-          [disabled]="downloading()"
+          (click)="uploadFile()"
+          [disabled]="uploading()"
         >
-          <ng-icon name="matDownload" />
-          <span class="btn-label">
-            @if (downloading()) {
-              Descargando…
-            } @else {
-              Formato
-            }
-          </span>
-        </button>
-        <button agroButton="blue" type="button" (click)="uploadFile()" [disabled]="uploading()">
           <ng-icon name="matCloudUpload" />
           <span class="btn-label">
             @if (uploading()) {
