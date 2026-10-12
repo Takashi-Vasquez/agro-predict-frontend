@@ -1,0 +1,146 @@
+<agro-page-header
+  title="El clima, de tu lado"
+  description="Visualiza las condiciones del campo y anticipa cambios en tu planificación."
+  eyebrow="MONITOREO CLIMÁTICO"
+>
+  <span class="location-label">
+    <agro-icon name="location" />
+    {{ current.value()?.ubicacion }}
+  </span>
+</agro-page-header>
+<div class="weather-overview">
+  <section class="current-weather">
+    @if (current.isLoading()) {
+      <agro-loader />
+    } @else if (current.error()) {
+      <agro-empty title="Sin datos" description="No se pudo cargar el clima actual" />
+    } @else {
+      <div class="current-top">
+        <span>
+          <agro-icon name="location" />
+          {{ current.value()?.ubicacion }}
+        </span>
+        <span class="weather-demo">{{ formatFecha(current.value()?.fecha) }}</span>
+      </div>
+      <div class="current-temperature">
+        <div>
+          {{ current.value()?.temperatura_actual }}
+          <span>°C</span>
+          <p>{{ current.value()?.descripcion }}</p>
+        </div>
+        <agro-icon [name]="current.value()?.icono" />
+      </div>
+      <div class="current-bottom">
+        <span>
+          Máxima
+          <strong>{{ current.value()?.maxima }}°</strong>
+        </span>
+        <span>
+          Mínima
+          <strong>{{ current.value()?.minima }}°</strong>
+        </span>
+        <span>
+          Sensación
+          <strong>{{ current.value()?.sensacion_termica }}°</strong>
+        </span>
+      </div>
+    }
+  </section>
+  <div class="weather-metrics">
+    @for (metric of current.value()?.metrics ?? []; track metric.label) {
+      <agro-card>
+        <span class="weather-metric-icon"><agro-icon [name]="metric.icon" /></span>
+        <div>
+          <p>{{ metric.label }}</p>
+          <strong>
+            {{ metric.value }}
+            <small>{{ metric.unit }}</small>
+          </strong>
+          <span>{{ metric.detail }}</span>
+        </div>
+      </agro-card>
+    }
+  </div>
+</div>
+<agro-card class="forecast-card">
+  <div class="card-header">
+    <div>
+      <h2>Los próximos 7 días</h2>
+      <p>{{ pronosticoSubtitulo() }}</p>
+    </div>
+    <span class="status neutral">Pronóstico</span>
+  </div>
+  @if (forecast.isLoading()) {
+    <agro-loader />
+  } @else if (forecast.error()) {
+    <agro-empty title="Sin datos" description="No se pudo cargar el pronóstico" />
+  } @else {
+    <div class="forecast-grid">
+      @for (day of forecast.value()?.dias ?? []; track day.date) {
+        <div [class.today]="$first">
+          <strong>{{ labelDia(day) }}</strong>
+          <span>{{ formatDiaFecha(day.date) }}</span>
+          <agro-icon [name]="day.icon" />
+          <div class="forecast-temperatures">
+            <strong>{{ day.high }}°</strong>
+            <span>{{ day.low }}°</span>
+          </div>
+          <small>
+            <agro-icon name="drop" />
+            {{ day.rain }}%
+          </small>
+        </div>
+      }
+    </div>
+  }
+</agro-card>
+<div class="weather-bottom">
+  <agro-card>
+    <div class="card-header">
+      <div>
+        <h2>Temperatura durante el día</h2>
+        <p>Curva de temperatura en grados Celsius</p>
+      </div>
+      <agro-icon name="thermometer" />
+    </div>
+    @if (curve.isLoading()) {
+      <agro-loader />
+    } @else if (curve.error()) {
+      <agro-empty title="Sin datos" description="No se pudo cargar la curva del día" />
+    } @else {
+      <div class="temperature-chart">
+        <agro-line-chart
+          [values]="curve.value()?.values ?? []"
+          [max]="curve.value()?.max ?? 32"
+          [labels]="curve.value()?.labels ?? []"
+          [label]="chartLabel()"
+        />
+      </div>
+    }
+  </agro-card>
+  <agro-card>
+    <div class="card-header">
+      <h2>Alertas del campo</h2>
+      <span class="status amber">{{ alertasLabel() }}</span>
+    </div>
+    @if (alerts.isLoading()) {
+      <agro-loader />
+    } @else if (alerts.error()) {
+      <agro-empty title="Sin datos" description="No se pudieron cargar las alertas" />
+    } @else {
+      @for (alert of alerts.value()?.alertas ?? []; track alert.titulo) {
+        <div class="weather-alert">
+          <span><agro-icon [name]="alert.icon" /></span>
+          <div>
+            <strong>{{ alert.titulo }}</strong>
+            <p>{{ alert.detalle }}</p>
+            <small>{{ alert.nivel }}</small>
+          </div>
+        </div>
+      }
+      @if (!alerts.value()?.alertas.length) {
+        <agro-empty title="Sin alertas" description="No hay alertas climáticas por ahora." />
+      }
+    }
+  </agro-card>
+</div>

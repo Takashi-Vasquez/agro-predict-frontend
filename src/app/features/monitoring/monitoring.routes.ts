@@ -8,7 +8,8 @@ export const MonitoringRoutes: Routes = [
       {
         path: 'clima',
         title: 'Clima · AgroPredict',
-        loadComponent: () => import('../monitoring/weather/weather').then((m) => m.Weather),
+        loadComponent: () =>
+          import('../monitoring/weather/pages/weather.component').then((m) => m.WeatherComponent),
         canActivate: [permissionGuard],
         canMatch: [permissionMatchGuard],
         data: { menuCode: 'MONITORING.WEATHER', permission: 'READ' },

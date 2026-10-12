@@ -80,14 +80,6 @@ export interface Sensor {
   online: boolean;
   history: number[];
 }
-export interface WeatherDay {
-  day: string;
-  date: string;
-  high: number;
-  low: number;
-  icon: string;
-  rain: number;
-}
 export interface Activity {
   id: string;
   title: string;

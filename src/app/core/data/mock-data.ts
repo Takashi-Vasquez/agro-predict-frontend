@@ -1,16 +1,6 @@
-import { WeatherDay, WorkspaceData } from '../models/agro.models';
+import { WorkspaceData } from '../models/agro.models';
 
 export const MOCK_TODAY = '2026-09-03';
-
-export const WEATHER: WeatherDay[] = [
-  { day: 'Hoy', date: '03 sep', high: 22, low: 16, icon: 'cloud', rain: 8 },
-  { day: 'Vie', date: '04 sep', high: 23, low: 16, icon: 'sun', rain: 5 },
-  { day: 'Sáb', date: '05 sep', high: 21, low: 15, icon: 'cloud', rain: 12 },
-  { day: 'Dom', date: '06 sep', high: 22, low: 15, icon: 'cloud', rain: 10 },
-  { day: 'Lun', date: '07 sep', high: 24, low: 16, icon: 'sun', rain: 4 },
-  { day: 'Mar', date: '08 sep', high: 24, low: 17, icon: 'sun', rain: 3 },
-  { day: 'Mié', date: '09 sep', high: 23, low: 16, icon: 'cloud', rain: 7 },
-];
 
 const moistureRecommendations = [
   'Elevar gradualmente la humedad del suelo hasta el rango objetivo del cultivo.',
