@@ -3,7 +3,7 @@
   description="Administra los usuarios del sistema."
   eyebrow="SEGURIDAD"
 >
-  <button agroButton="primary" (click)="createOrUpdate()">
+  <button agroButton="primary" *appHasPermission="'CREATE'" (click)="createOrUpdate()">
     <ng-icon name="heroPlusMicro"></ng-icon>
     Nuevo Usuario
   </button>

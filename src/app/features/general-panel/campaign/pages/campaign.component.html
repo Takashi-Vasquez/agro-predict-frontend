@@ -3,7 +3,7 @@
   description="Administra las campañas de los cultivos."
   eyebrow="PLANIFICACIÓN"
 >
-  <button agroButton="primary" (click)="createOrUpdate()">
+  <button agroButton="primary" *appHasPermission="'CREATE'" (click)="createOrUpdate()">
     <ng-icon name="heroPlusMicro"></ng-icon>
     Nuevo campaña
   </button>
@@ -49,10 +49,15 @@
 </agro-card>
 
 <ng-template #actionsTpl let-row>
-  <button agroButton="ghost" (click)="createOrUpdate(row)" title="Editar">
+  <button
+    agroButton="ghost"
+    *appHasPermission="'UPDATE'"
+    (click)="createOrUpdate(row)"
+    title="Editar"
+  >
     <ng-icon name="heroPencil" agroColor="blue"></ng-icon>
   </button>
-  <button agroButton="ghost" (click)="remove(row)" title="Eliminar">
+  <button agroButton="ghost" *appHasPermission="'DELETE'" (click)="remove(row)" title="Eliminar">
     <ng-icon name="heroTrash" agroColor="danger"></ng-icon>
   </button>
 </ng-template>

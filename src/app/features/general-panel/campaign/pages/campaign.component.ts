@@ -16,6 +16,7 @@ import { CoreService } from '../../../../core/services/core.service';
 import { Button } from '../../../../shared/directives/agro-button.directive';
 import { Card } from '../../../../shared/directives/agro-card.directive';
 import { AgroColorDirective } from '../../../../shared/directives/agro-color.directive';
+import { HasPermissionDirective } from '../../../../shared/directives/has-permission.directive';
 import { Empty } from '../../../../shared/ui/agro-empty/agro-empty.component';
 import { Loader } from '../../../../shared/ui/agro-loader/agro-loader.component';
 import { PageHeader } from '../../../../shared/ui/agro-page-header/agro-page-header.component';
@@ -42,6 +43,7 @@ import { CampaignDialog } from './campaign-dialog/campaign-dialog.component';
     PageHeader,
     DataTable,
     AgroColorDirective,
+    HasPermissionDirective,
   ],
   providers: [
     provideIcons({
